@@ -1,1 +1,1 @@
-# GOAT
+# GOAT (Golf Overkill Annihilation Tournament)
