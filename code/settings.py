@@ -1,0 +1,3 @@
+import pygame
+
+COLOURS=["5B2C6F","E74C3C","3498DB","F39C12","E91E63","EEEEEE"]
