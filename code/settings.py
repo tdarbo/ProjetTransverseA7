@@ -1,0 +1,57 @@
+from unittest.mock import DEFAULT
+import pygame
+from pygame.math import Vector2 as Vector
+import pygame_gui
+import sys
+
+GAME_NAME = "GOAT"
+GAME_VERSION = "1.0"
+
+WINDOW_WIDTH = 1080
+WINDOW_HEIGHT = 720
+FPS = 60
+
+DEFAULT_MENU_WIDTH = 400
+DEFAULT_MENU_HEIGHT = WINDOW_HEIGHT
+DEFAULT_MENU_LAYOUT = pygame.Rect(
+    (WINDOW_WIDTH - DEFAULT_MENU_WIDTH) // 2,
+    0,
+    DEFAULT_MENU_WIDTH,
+    DEFAULT_MENU_HEIGHT
+)
+
+TILE_SIZE = 50
+BALL_RADIUS = 30
+
+BALL_MASS = 0.05
+DEFAULT_TIME_DELTA = 0
+
+UI_THEME_PATH = "../data/ui-theme.json"
+UI_DEBUG_MODE = True
+DEBUG_MODE = True
+
+FONT_PATH = "../asset/font/PressStart2P-Regular.ttf"
+
+BLACK = (0, 0, 0)
+WHITE = (255, 255, 255)
+RED = (255, 0, 0)
+GREEN = (0, 255, 0)
+BLUE = (0, 0, 255)
+YELLOW = (255, 255, 0)
+CYAN = (0, 255, 255)
+MAGENTA = (255, 0, 255)
+GRAY = (128, 128, 128)
+DARK_GRAY = (64, 64, 64)
+LIGHT_GRAY = (192, 192, 192)
+ORANGE = (255, 165, 0)
+PINK = (255, 192, 203)
+PURPLE = (128, 0, 128)
+BROWN = (139, 69, 19)
+GOLD = (255, 215, 0)
+SILVER = (192, 192, 192)
+LIME = (50, 205, 50)
+NAVY = (0, 0, 128)
+TEAL = (0, 128, 128)
+INDIGO = (75, 0, 130)
+VIOLET = (238, 130, 238)
+TURQUOISE = (64, 224, 208)
