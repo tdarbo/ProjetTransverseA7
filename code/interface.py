@@ -1,77 +1,37 @@
-from settings import *
+import pygame
+from PIL import Image, ImageSequence
 
+# Charger le GIF avec Pillow
+gif_path = "../asset/GIF/Cactus.gif"
+img = Image.open(gif_path)
 
-class InterfaceManager:
-    """
-    Menu manager to handle multiple instances of Menu.
-    Allows adding, removing, showing, hiding, and toggling menus,
-    and easily transmitting events to managed menus.
-    """
+# Extraire toutes les frames
+frames = [pygame.image.fromstring(frame.convert("RGBA").tobytes(), frame.size, "RGBA")
+          for frame in ImageSequence.Iterator(img)]
 
-    def __init__(self):
-        self.interfaces = {}  # Dictionary of menus by identifier
+# Initialisation de Pygame
+pygame.init()
 
-    def add(self, interface_name, menu):
-        """
-        Adds a menu to the manager.
+# Définir la taille de la fenêtre en fonction du GIF
+screen = pygame.display.set_mode(img.size)
+clock = pygame.time.Clock()
 
-        :param interface_name: Identifier of the menu.
-        :type interface_name: str
-        :param menu: Instance of Menu.
-        :type menu: Menu
-        """
-        self.interfaces[interface_name] = menu
+running = True
+frame_index = 0
 
-        if DEBUG_MODE:
-            print(f"[InterfaceManager] Interface {interface_name} added to the menu list.")
+while running:
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            running = False
 
-    def remove(self, interface_name):
-        """
-        Removes and destroys a menu.
+    # Afficher la frame actuelle
+    screen.blit(frames[frame_index], (0, 0))
+    pygame.display.flip()
 
-        :param interface_name: Identifier of the menu to remove.
-        :type interface_name: str
-        """
-        if interface_name in self.interfaces:
-            self.interfaces[interface_name].kill()  # Destroys the UI panel
-            del self.interfaces[interface_name]
+    # Passer à la frame suivante
+    frame_index = (frame_index + 1) % len(frames)
 
-            if DEBUG_MODE:
-                print(f"[InterfaceManager] Interface {interface_name} removed.")
+    # Définir la vitesse d'animation (ajustez selon le GIF)
+    clock.tick(10)  # 10 FPS
 
-    def show(self, interface_name):
-        """
-        Shows the identified menu.
-
-        :param interface_name: Identifier of the menu to show.
-        :type interface_name: str
-        """
-        if interface_name in self.interfaces:
-            self.interfaces[interface_name].show()
-
-    def hide(self, interface_name):
-        """
-        Hides the identified menu.
-
-        :param interface_name: Identifier of the menu to hide.
-        :type interface_name: str
-        """
-        if interface_name in self.interfaces:
-            self.interfaces[interface_name].hide()
-
-    def toggle(self, interface_name):
-        """
-        Toggles the visibility of the identified menu.
-
-        :param interface_name: Identifier of the menu to toggle.
-        :type interface_name: str
-        """
-        if interface_name in self.interfaces:
-            if self.interfaces[interface_name].is_visible:
-                self.hide(interface_name)
-                if DEBUG_MODE:
-                    print(f"[InterfaceManager] Interface {interface_name} hidden.")
-            else:
-                self.show(interface_name)
-                if DEBUG_MODE:
-                    print(f"[InterfaceManager] Interface {interface_name} shown.")
+pygame.quit()
