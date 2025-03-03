@@ -1,16 +1,11 @@
 from settings import *
-from pygame_gui.elements.ui_panel import UIPanel
-from pygame_gui.elements.ui_button import UIButton
-from pygame_gui.elements.ui_label import UILabel
 
 
 class SceneManager:
-    """Allows to add and manage multiple scenes."""
+    """Allows adding and managing multiple scenes."""
 
     def __init__(self):
-        """
-        Initializes the scene manager.
-        """
+        """Initializes the scene manager."""
         self.scenes = {}
         self.current_scene = None
 
@@ -32,14 +27,13 @@ class SceneManager:
         """
         if scene_name in self.scenes:
             self.current_scene = self.scenes[scene_name]
-
             if DEBUG_MODE:
-                print(f"[SceneManager] Changing scene: {scene_name}")
+                print(f"[SceneManager] Changing scene {scene_name}")
         else:
             if DEBUG_MODE:
-                print(f"[SceneManager] Unknown scene: {scene_name}")
+                print(f"[SceneManager] Unknown scene {scene_name}")
 
-    # Basic pygame methods ---
+    # Basic Pygame methods ---
     def process_event(self, event):
         """
         Processes an event.
@@ -69,12 +63,12 @@ class Scene:
     def __init__(self):
         pass
 
-    # Basic methods to create a scene---
+    # Basic methods to create a scene ---
     def process_event(self, event):
         """
         Processes an event.
         :param event: The event to process.
-        :type event : pygame.event.Event
+        :type event: pygame.event.Event
         """
         pass
 
@@ -95,4 +89,117 @@ class Scene:
         pass
 
 
+class MainMenuScene(Scene):
+    def __init__(self, game):
+        super().__init__()
 
+        # Game instance
+        self.game = game
+
+        # UI manager with pygame_gui
+        self.ui_manager = pygame_gui.UIManager((WINDOW_WIDTH, WINDOW_HEIGHT), theme_path="../data/ui-theme.json")
+        self.ui_manager.set_visual_debug_mode(UI_DEBUG_MODE)
+
+        # UI elements
+        self.panel = pygame_gui.elements.UIPanel(
+            relative_rect=DEFAULT_MENU_LAYOUT,
+            manager=self.ui_manager,
+            margins={
+                'top': 100,
+                'left': 50,
+                'right': 50,
+                'bottom': 50
+            }
+        )
+        self.game_name_label = pygame_gui.elements.UILabel(
+            text=GAME_NAME,
+            manager=self.ui_manager,
+            container=self.panel,
+            relative_rect=pygame.Rect((0, 0, -1, 30)),
+            anchors={
+                'centerx': 'centerx',
+            }
+        )
+        self.singleplayer_btn = pygame_gui.elements.UIButton(
+            relative_rect=pygame.Rect((0, 20), (300, 50)),
+            text='Solo',
+            manager=self.ui_manager,
+            container=self.panel,
+            anchors={
+                'top': 'top',
+                'bottom': 'top',
+                'centerx': 'centerx',
+                'top_target': self.game_name_label
+            }
+        )
+        self.multiplayer_btn = pygame_gui.elements.UIButton(
+            relative_rect=pygame.Rect((0, 20), (300, 50)),
+            text='Multiplayer',
+            manager=self.ui_manager,
+            container=self.panel,
+            anchors={
+                'top': 'top',
+                'bottom': 'top',
+                'centerx': 'centerx',
+                'top_target': self.singleplayer_btn
+            }
+        )
+        self.rules_btn = pygame_gui.elements.UIButton(
+            relative_rect=pygame.Rect((0, 20), (300, 50)),
+            text='Rules',
+            manager=self.ui_manager,
+            container=self.panel,
+            anchors={
+                'top': 'top',
+                'bottom': 'top',
+                'centerx': 'centerx',
+                'top_target': self.multiplayer_btn
+            }
+        )
+        self.settings_btn = pygame_gui.elements.UIButton(
+            relative_rect=pygame.Rect((0, 20), (300, 50)),
+            text='Settings',
+            manager=self.ui_manager,
+            container=self.panel,
+            anchors={
+                'top': 'top',
+                'bottom': 'top',
+                'centerx': 'centerx',
+                'top_target': self.rules_btn
+            }
+        )
+        self.exit_btn = pygame_gui.elements.UIButton(
+            relative_rect=pygame.Rect((0, 20), (300, 50)),
+            text='Exit',
+            manager=self.ui_manager,
+            container=self.panel,
+            anchors={
+                'top': 'top',
+                'bottom': 'top',
+                'centerx': 'centerx',
+                'top_target': self.settings_btn
+            }
+        )
+
+    def process_event(self, event):
+        if event.type == pygame_gui.UI_BUTTON_PRESSED:
+            if event.ui_element == self.singleplayer_btn:
+                print("SinglePlayer")
+            elif event.ui_element == self.multiplayer_btn:
+                print("Multiplayer")
+            elif event.ui_element == self.rules_btn:
+                print("Rules")
+            elif event.ui_element == self.settings_btn:
+                print("Settings")
+            elif event.ui_element == self.exit_btn:
+                print("Exit")
+                self.game.running = False
+
+        self.ui_manager.process_events(event)
+
+    def update(self, delta_time):
+        self.ui_manager.update(delta_time)
+
+    def draw(self, screen):
+        screen.fill('red')
+        self.ui_manager.draw_ui(screen)
