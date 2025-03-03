@@ -28,6 +28,9 @@ while running:
     screen.blit(frames[frame_index], (0, 0))
     pygame.display.flip()
 
+    # On efface l'écran poour éviter la superposition de frames
+    screen.fill((0,0,0))
+
     # Passer à la frame suivante
     frame_index = (frame_index + 1) % len(frames)
 
