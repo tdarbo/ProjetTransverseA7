@@ -1,5 +1,5 @@
 from settings import *
-from scene import *
+from scene_v2 import *
 
 class Game:
     def __init__(self):
@@ -13,12 +13,20 @@ class Game:
         self.clock = pygame.time.Clock()
         self.time_delta = DEFAULT_TIME_DELTA
 
+        # UI manager with pygame_gui
+        self.ui_manager = pygame_gui.UIManager((WINDOW_WIDTH, WINDOW_HEIGHT), theme_path="../data/ui-theme.json")
+        self.ui_manager.set_visual_debug_mode(UI_DEBUG_MODE)
+
         # Initialize the scene manager
         self.scene_manager = SceneManager()
 
         # Create and add the scenes
         main_menu_scene = MainMenuScene(self)
         self.scene_manager.add("main_menu_scene", main_menu_scene)
+        ##
+        game_scene = GameScene(self)
+        self.scene_manager.add("game_scene", game_scene)
+
         self.scene_manager.change("main_menu_scene")
 
     def run(self):
