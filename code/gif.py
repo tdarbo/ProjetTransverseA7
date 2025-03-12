@@ -1,5 +1,6 @@
-from settings import *
 from PIL import Image, ImageSequence
+
+from settings import *
 
 # Charger le GIF avec Pillow
 gif_path = "../asset/GIF/Cactus.gif"
