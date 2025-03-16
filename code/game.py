@@ -18,7 +18,7 @@ class Game:
         self.screen = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
         self.running = True
         self.clock = pygame.time.Clock()
-        self.time_delta = TIME_DELTA
+        self.time_delta = DELTA_TIME
 
         # UI manager with pygame_gui
         self.ui_manager = pygame_gui.UIManager((WINDOW_WIDTH, WINDOW_HEIGHT), theme_path="../data/ui-theme.json")
