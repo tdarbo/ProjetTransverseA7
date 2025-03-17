@@ -1,3 +1,5 @@
+from PIL.ImageChops import difference
+
 from settings import *
 from player import Player
 from tile import Tile
@@ -54,7 +56,25 @@ class Engine:
 
     def resolve_player_player_collision(self, player1, player2):
         """collision entre deux joueurs."""
-        pass
+        diff=player1.position-player2.position
+        distance=diff.length()
+        if (distance<=player2.radius+player1.radius) and (player1.velocity!=0 or player2.velocity!=0):
+            if player1.velocity.x!=0 and player2.velocity.x==0:
+                player2.velocity.x=player1.velocity.x//2
+                player1.velocity.x=-(player1.velocity.x//2)
+            elif player1.velocity.x==0 and player2.velocity.x!=0:
+                player1.velocity.x=player2.velocity.x//2
+                player2.velocity.x=-(player2.velocity.x//2)
+            else:
+                player2.velocity.x,player1.velocity.x=player1.velocity.x,player2.velocity.x
+            if player1.velocity.y!=0 and player2.velocity.y==0:
+                player2.velocity.y=player1.velocity.y//2
+                player1.velocity.y=-(player1.velocity.y//2)
+            elif player1.velocity.y==0 and player2.velocity.y!=0:
+                player1.velocity.y=player2.velocity.y//2
+                player2.velocity.y=-(player2.velocity.y//2)
+            else:
+                player2.velocity.y,player1.velocity.y=player1.velocity.y,player2.velocity.y
 
     def resolve_player_tile_collision(self, player, tile):
         """collision entre un joueur et une tile obstacle."""
@@ -131,8 +151,8 @@ class Level:
 
     def update(self, dt):
         self.engine.update(dt)
-        for player in self.players:
-            player.update()
+        #for player in self.players:
+            #player.update()
         self.check_turn_end()
 
     def check_turn_end(self):
@@ -166,7 +186,7 @@ def main():
 
     # Création des joueurs
     player1 = Player((255, 0, 0), (100, 100), BALL_RADIUS, BALL_MASS)
-    player2 = Player((0, 0, 255), (200, 200), BALL_RADIUS, BALL_MASS)
+    player2 = Player((0, 0, 255), (100, 200), BALL_RADIUS, BALL_MASS)
     players = [player1, player2]
 
     # Création des tiles
