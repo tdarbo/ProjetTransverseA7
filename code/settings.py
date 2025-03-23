@@ -10,6 +10,16 @@ WINDOW_HEIGHT = 720
 FPS = 60
 DELTA_TIME = 0
 
+# Physic
+VELOCITY_THRESHOLD = 10
+FORCE_MULTIPLIER = 5
+BALL_RADIUS = 15
+TILE_SIZE = 32
+BALL_MASS = 0.05
+GROUND_GRASS_FRICTION = 0.06
+GROUND_SAND_FRICTION = 0.30
+GROUND_ICE_FRICTION = 0.02
+
 INPUT_WIDTH = 300
 INPUT_HEIGHT = 52
 INPUTS_GAP = 20
@@ -30,9 +40,6 @@ PANEL_MARGINS = {
 
 SCENE_BG_IMAGE = loadingScreen = pygame.transform.scale(pygame.image.load('../asset/image/terrain_bg.jpg'),
                                                         (WINDOW_WIDTH, WINDOW_HEIGHT))
-TILE_SIZE = 50
-BALL_RADIUS = 30
-BALL_MASS = 0.05
 
 DEBUG_MODE = True
 

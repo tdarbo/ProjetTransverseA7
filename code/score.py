@@ -26,7 +26,7 @@ class ScoreManager:
         Increase the score of the player at the end of his turn
         """
 
-        self.score[player][hole] += 1
+        self.score[player][hole-1] += 1
 
     def score_calculation(self, players, hole_number):
         """
@@ -37,7 +37,8 @@ class ScoreManager:
         for player in players:
             for i in range(hole_number):
                 total += self.score[player][i]
-            self.score[player][hole_number + 1] = total
+            self.score[player][hole_number] = total
+            total = 0
 
     def score_reset(self, players, hole_number):
         """
@@ -47,3 +48,21 @@ class ScoreManager:
         for player in players:
             tab = [0] * (hole_number + 1)  # Adding a line to remove the total
             self.score[player] = tab
+
+
+if __name__ == '__main__':
+    players = ['Louis','Mathias']
+    hole_number = 1
+    score_manager = ScoreManager(players, hole_number)
+    score_manager.create_dictionary(players,hole_number)
+    print(score_manager.score,"initialisé")
+    score_manager.add_points('Louis',hole_number)
+    print(score_manager.score,"calcul score")
+    score_manager.add_points('Louis', hole_number)
+    print(score_manager.score, "calcul score")
+    score_manager.add_points( 'Louis', hole_number)
+    print(score_manager.score, "calcul score")
+    score_manager.score_calculation(players,hole_number)
+    print(score_manager.score,"calcul score total")
+    score_manager.score_reset(players,hole_number)
+    print(score_manager.score,"après reset")
