@@ -1,5 +1,6 @@
 from pygame import *
 
+
 from settings import *
 from player import Player
 from tile import Tile
@@ -9,7 +10,8 @@ from map import *
 
 def main():
     pygame.init()
-    screen = pygame.display.set_mode((500, 500), pygame.NOFRAME)
+    w, h = pygame.display.list_modes()[0]
+    screen = pygame.display.set_mode((w, h), pygame.NOFRAME)
     pygame.display.set_caption("GOAT")
     clock = pygame.time.Clock()
 
@@ -33,8 +35,7 @@ def main():
 
         #map.camera.update(pygame.event.get())
 
-        if DEBUG_MODE:
-            map01.debug(screen)
+
 
         for event in pygame.event.get():
             map01.camera.update(event)

@@ -48,9 +48,7 @@ class Level:
             return
 
         # Correction : on applique l'inverse de l'offset ET du zoom correctement
-        adjusted_x = (event.pos[0] / self.map.camera.zoom_factor) - self.map.camera.offset_X
-        adjusted_y = (event.pos[1] / self.map.camera.zoom_factor) - self.map.camera.offset_Y
-        adjusted_pos = (adjusted_x, adjusted_y)
+        adjusted_pos = self.map.camera.getAbsoluteCoord(event.pos)
 
         print(f"🖱️ Position souris : {event.pos}")
         print(f"📐 Position ajustée : {adjusted_pos}")
@@ -70,7 +68,7 @@ class Level:
         """
         if self.dragging:
             # Ajuste la position avec l'inverse de l'offset de la caméra
-            adjusted_pos = (event.pos[0] - self.map.camera.offset_X, event.pos[1] - self.map.camera.offset_Y)
+            adjusted_pos = self.map.camera.getAbsoluteCoord(event.pos)
             self.drag_current = Vector(adjusted_pos)
 
     def on_mouse_up(self, event):
@@ -79,7 +77,7 @@ class Level:
         """
         if self.dragging:
             # Ajuste la position avec l'inverse de l'offset de la caméra
-            adjusted_pos = (event.pos[0] - self.map.camera.offset_X, event.pos[1] - self.map.camera.offset_Y)
+            adjusted_pos = self.map.camera.getAbsoluteCoord(event.pos)
             pos = Vector(adjusted_pos)
 
             # Calcul de la force : différence entre le point de départ et le point relâché

@@ -31,18 +31,11 @@ def load_tiled_map(map_path, tile_size):
 class Map:
 
     def __init__(self,path,surf):
-        self.camera = Camera()
+        self.camera = Camera(surf)
         self.tiles = load_tiled_map(path,TILE_SIZE)
         self.surface = surf
 
-    def debug(self,screen):
-        mouse_x,mouse_y = pygame.mouse.get_pos()
-        text = f"""
-            Souris : ({mouse_x},{mouse_y})
-            Camera : offset (x:{self.camera.offset_X},y:{self.camera.offset_Y})
-                     Zoom : {self.camera.zoom_factor}
-        """
-        #print(text)
+
 
 
 
