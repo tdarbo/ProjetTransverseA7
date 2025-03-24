@@ -1,3 +1,4 @@
+from camera_animator import *
 from settings import *
 import pygame
 
@@ -11,6 +12,7 @@ class Camera:
         self.prev_mouse_x = 0
         self.prev_mouse_y = 0
         self.screen = screen
+        self.animator = CameraAnimator()
 
 
 
@@ -29,7 +31,7 @@ class Camera:
         new_zoom = old_zoom + k
 
         # Limite le zoom entre 0.1x et 4x
-        if not (0.1 <= new_zoom <= 4.0):
+        if not (0.5 <= new_zoom <= 4.0):
             return
 
         self.zoom_factor = new_zoom
@@ -44,8 +46,8 @@ class Camera:
         zoom = self.zoom_factor
 
         # Limite le déplacement
-        self.offset_X = max(-1000*zoom, min(1000*zoom, final_X))
-        self.offset_Y = max(-500*zoom, min(500*zoom, final_Y))
+        self.offset_X = max(-2000*zoom, min(2000*zoom, final_X))
+        self.offset_Y = max(-2000*zoom, min(2000*zoom, final_Y))
 
     def getAbsoluteCoord(self, screen_coord):
         """
@@ -102,6 +104,7 @@ class Camera:
 
                 # Mise à jour des coordonnées précédentes
                 self.prev_mouse_x, self.prev_mouse_y = mouse_x, mouse_y
+
 
     def resetCamera(self):
         """

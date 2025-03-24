@@ -1,5 +1,7 @@
+from player import Player
 from settings import *
 from math import exp
+
 
 class Engine:
     """Gestion de la physique et des collisions"""
@@ -26,9 +28,9 @@ class Engine:
             friction = GROUND_GRASS_FRICTION  # Par défaut, herbe
             for tile in self.level.map_tiles:
                 if tile.rect.collidepoint(player.position.x, player.position.y):
-                    if tile.id == "grass":
+                    if tile.id == "Grass":
                         friction = GROUND_GRASS_FRICTION
-                    elif tile.id == "sand":
+                    elif tile.id == "Sand":
                         friction = GROUND_SAND_FRICTION
                     elif tile.id == "ice":
                         friction = GROUND_ICE_FRICTION
@@ -38,7 +40,8 @@ class Engine:
             player.velocity = player.velocity * exp(-(friction / BALL_MASS) * dt)
 
             # Gestion des collisions avec les murs
-            self.resolve_player_wall_collision(player)
+            #self.resolve_player_wall_collision(player)
+            self.resolve_out_of_bounds()
             player.update()
 
         # Gestion des collisions entre joueurs
@@ -51,6 +54,42 @@ class Engine:
             for tile in self.level.map_tiles:
                 if tile.id == "Collision" and player.rect.colliderect(tile.rect):
                     self.resolve_player_obstacle_collision(player, tile)
+
+    def resolve_out_of_bounds(self) -> None:
+        """
+        Gère les joueurs en dehors des limites de la carte.
+        """
+        for player in self.level.players:
+            if self.is_out_of_bounds(player):
+                self.level.map.teleportPlayerToSpawn(player)
+                player.velocity = Vector(0, 0)
+                print(f"Player:{player.name} is out of bounds")
+
+    def is_out_of_bounds(self, player: Player) -> bool:
+        """
+        Vérifie si un joueur est en dehors des limites de la carte.
+        @param player: Joueur vérifié
+        @return: Si le joueur est en dehors des limites de la carte
+        """
+        for tile in self.level.map_tiles:
+            if player.rect.colliderect(tile.rect):
+                return False
+        return True
+
+    def resolve_finish(self) -> None:
+        for player in self.level.players:
+            if self.is_on_finish(player):
+                print(f"Player:{player.name} is on finish")
+        pass
+
+    def is_on_finish(self, player: Player) -> bool:
+        """
+        Vérifie si un joueur est sur un objet de la carte.
+        @param player: Joueur vérifié
+        @return: Si le joueur est sur l'objet de la carte
+        """
+        if player.rect.collideobjects(self.level.map.hole):
+            return True
 
     def resolve_player_wall_collision(self, player):
         """

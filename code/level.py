@@ -1,3 +1,5 @@
+from tkinter.constants import CENTER
+
 from settings import *
 from engine import Engine
 
@@ -40,6 +42,7 @@ class Level:
         elif event.type == pygame.MOUSEBUTTONUP and event.button == 1:
             self.on_mouse_up(event)
 
+
     def on_mouse_down(self, event):
         """
         Gère l'événement associé au clic, en prenant en compte l'offset et le zoom de la caméra.
@@ -49,12 +52,6 @@ class Level:
 
         # Correction : on applique l'inverse de l'offset ET du zoom correctement
         adjusted_pos = self.map.camera.getAbsoluteCoord(event.pos)
-
-        print(f"🖱️ Position souris : {event.pos}")
-        print(f"📐 Position ajustée : {adjusted_pos}")
-        print(f"🎯 Position joueur : {self.current_player.rect.center}")
-        print(f"📸 Offset : ({self.map.camera.offset_X}, {self.map.camera.offset_Y})")
-        print(f"🔍 Zoom : {self.map.camera.zoom_factor}")
 
         # Vérifie si le clic est sur la balle du joueur
         if self.current_player.rect.collidepoint(adjusted_pos):
@@ -90,6 +87,8 @@ class Level:
             self.drag_start = None
             self.drag_current = None
 
+
+
     def update(self, dt):
         """
         Met à jour l'état du niveau en fonction du temps écoulé.
@@ -105,8 +104,12 @@ class Level:
         """
         Vérifie si le tour du joueur est terminé et passe au joueur suivant si nécessaire.
         """
+        if self.shot_taken:
+            self.centerOnPlayers()
+
         if self.shot_taken and self.current_player.velocity.length() < VELOCITY_THRESHOLD:
             self.next_turn()
+
 
     def next_turn(self):
         """
@@ -116,6 +119,7 @@ class Level:
         self.current_player_index = (self.current_player_index + 1) % len(self.players)
         self.current_player = self.players[self.current_player_index]
         print(f"Tour du joueur {self.current_player_index + 1}")
+        self.centerOnCurrentPlayer()
 
     def draw(self, screen):
         """
@@ -176,7 +180,27 @@ class Level:
             current_x = center_x + (self.drag_current[0] - self.map.camera.offset_X - center_x) * zoom
             current_y = center_y + (self.drag_current[1] - self.map.camera.offset_Y - center_y) * zoom
 
-            #pygame.draw.line(screen, pygame.Color("black"), (start_x, start_y),
-            #                 (current_x, current_y), 3)
+            pygame.draw.line(screen, pygame.Color("black"), (start_x, start_y),
+                             (current_x, current_y), 3)
 
 
+    def centerOnCurrentPlayer(self):
+        player = self.current_player
+        x = player.position.x
+        y = player.position.y
+
+        camera = self.map.camera
+        camera.animator.posToPosAndZoom(camera, (x, y), 1.0, 120)
+
+    def centerOnPlayers(self):
+        camera = self.map.camera
+        x,y = 0,0
+        for player in self.players:
+            x += player.position.x
+            y += player.position.y
+
+        p_count = len(self.players)
+        x /= p_count
+        y /= p_count
+
+        camera.animator.posToPosAndZoom(camera, (x, y), 0.5, 15)

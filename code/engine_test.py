@@ -1,6 +1,6 @@
 from pygame import *
 
-
+from camera_animator import *
 from settings import *
 from player import Player
 from tile import Tile
@@ -29,6 +29,8 @@ def main():
     # Création du niveau
     level = Level(map01, players, score_manager)
 
+    map01.teleportPlayersToSpawn(players)
+
     running = True
     while running:
         dt = clock.tick(FPS) / 1000.0
@@ -41,8 +43,13 @@ def main():
             map01.camera.update(event)
             if event.type == pygame.QUIT:
                 running = False
+            elif event.type == pygame.KEYDOWN:  # Si une touche est pressée
+                if event.key == pygame.K_SPACE:  # Si c'est la barre espace
+                    level.centerOnCurrentPlayer()
             else:
                 level.process_event(event)
+
+        level.map.camera.animator.update()
 
         level.update(dt)
         screen.fill(pygame.Color("#BDDFFF"))

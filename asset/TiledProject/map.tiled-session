@@ -1,0 +1,42 @@
+{
+    "Map/SizeTest": {
+        "height": 4300,
+        "width": 2
+    },
+    "activeFile": "maps/hole1.tmx",
+    "expandedProjectPaths": [
+        "maps",
+        "."
+    ],
+    "fileStates": {
+        "maps/hole1.tmx": {
+            "scale": 0.5,
+            "selectedLayer": 3,
+            "viewCenter": {
+                "x": 1948,
+                "y": 747
+            }
+        },
+        "tileSet.tsx": {
+            "dynamicWrapping": true,
+            "scaleInDock": 1,
+            "scaleInEditor": 4
+        }
+    },
+    "last.imagePath": "D:/DEV/WOKRSPACE/Pycharm/ProjetTransverseA7/asset/image/tiles",
+    "map.fixedSize": false,
+    "map.lastUsedFormat": "tmx",
+    "map.tileHeight": 64,
+    "map.tileWidth": 64,
+    "openFiles": [
+        "maps/hole1.tmx",
+        "tileSet.tsx"
+    ],
+    "project": "map.tiled-project",
+    "recentFiles": [
+        "tileSet.tsx",
+        "maps/hole1.tmx"
+    ],
+    "tileset.lastUsedFormat": "tsx",
+    "tileset.type": 1
+}
