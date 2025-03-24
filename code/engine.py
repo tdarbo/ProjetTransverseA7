@@ -49,7 +49,7 @@ class Engine:
         # Gestion des collisions avec les obstacles
         for player in self.level.players:
             for tile in self.level.map_tiles:
-                if tile.id == "obstacle" and player.rect.colliderect(tile.rect):
+                if tile.id == "Collision" and player.rect.colliderect(tile.rect):
                     self.resolve_player_obstacle_collision(player, tile)
 
     def resolve_player_wall_collision(self, player):

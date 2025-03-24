@@ -4,7 +4,7 @@ from engine import Engine
 class Level:
     """Gestion de la map, des tours et des événements"""
 
-    def __init__(self, map_tiles, players, score_manager):
+    def __init__(self, tiled_map, players, score_manager):
         """
         Initialise le niveau
 
@@ -12,7 +12,8 @@ class Level:
         :param players: Les joueurs du niveau.
         :param score_manager: Le gestionnaire de score.
         """
-        self.map_tiles = map_tiles
+        self.map = tiled_map
+        self.map_tiles = self.map.tiles
         self.players = players
         self.engine = Engine(self)
         self.score_manager = score_manager
@@ -41,34 +42,51 @@ class Level:
 
     def on_mouse_down(self, event):
         """
-        Gère l'événement associé au clic.
+        Gère l'événement associé au clic, en prenant en compte l'offset et le zoom de la caméra.
         """
-        # Empêche le drag & drop si le coup a déjà été joué
         if self.shot_taken:
             return
+
+        # Correction : on applique l'inverse de l'offset ET du zoom correctement
+        adjusted_x = (event.pos[0] / self.map.camera.zoom_factor) - self.map.camera.offset_X
+        adjusted_y = (event.pos[1] / self.map.camera.zoom_factor) - self.map.camera.offset_Y
+        adjusted_pos = (adjusted_x, adjusted_y)
+
+        print(f"🖱️ Position souris : {event.pos}")
+        print(f"📐 Position ajustée : {adjusted_pos}")
+        print(f"🎯 Position joueur : {self.current_player.rect.center}")
+        print(f"📸 Offset : ({self.map.camera.offset_X}, {self.map.camera.offset_Y})")
+        print(f"🔍 Zoom : {self.map.camera.zoom_factor}")
+
         # Vérifie si le clic est sur la balle du joueur
-        if self.current_player.rect.collidepoint(event.pos):
+        if self.current_player.rect.collidepoint(adjusted_pos):
             self.dragging = True
-            # Fixe le point de départ au centre de la balle
-            self.drag_start = Vector(self.current_player.rect.center)
-            self.drag_current = Vector(event.pos)
+            self.drag_start = Vector(self.current_player.rect.center)  # Centre réel de la balle
+            self.drag_current = Vector(adjusted_pos)  # Point de départ ajusté
 
     def on_mouse_motion(self, event):
         """
-        Gère l'événement de mouvement de la souris.
+        Gère l'événement de mouvement de la souris, ajusté pour la caméra.
         """
         if self.dragging:
-            self.drag_current = Vector(event.pos)
+            # Ajuste la position avec l'inverse de l'offset de la caméra
+            adjusted_pos = (event.pos[0] - self.map.camera.offset_X, event.pos[1] - self.map.camera.offset_Y)
+            self.drag_current = Vector(adjusted_pos)
 
     def on_mouse_up(self, event):
         """
-        Gère l'événement associé au relâchement du clic de souris.
+        Gère l'événement associé au relâchement du clic de souris, ajusté pour la caméra.
         """
         if self.dragging:
-            pos = Vector(event.pos)
-            # Calcul de la force à appliquer : différence entre le centre de la balle et le point relâché
+            # Ajuste la position avec l'inverse de l'offset de la caméra
+            adjusted_pos = (event.pos[0] - self.map.camera.offset_X, event.pos[1] - self.map.camera.offset_Y)
+            pos = Vector(adjusted_pos)
+
+            # Calcul de la force : différence entre le point de départ et le point relâché
             force = (self.drag_start - pos) * self.force_multiplier
             self.current_player.velocity += force
+
+            # Réinitialise l'état de drag
             self.dragging = False
             self.shot_taken = True
             self.drag_start = None
@@ -103,17 +121,64 @@ class Level:
 
     def draw(self, screen):
         """
-        Dessine le niveau sur l'écran.
+        Dessine le niveau sur l'écran avec la gestion de la caméra.
 
         :param screen: La surface sur laquelle dessiner.
         """
+        zoom = self.map.camera.zoom_factor
+
+        # Centre de l'écran pour ajuster le zoom
+        center_x = screen.get_width() / 2
+        center_y = screen.get_height() / 2
+
+        # Appliquer l'offset et le zoom à chaque tuile
         for tile in self.map_tiles:
-            tile.draw(screen)
+            if tile.id == "Collision" and not DEBUG_MODE:
+                continue
+
+            # Appliquer le zoom aux dimensions
+            zoomed_width = int(tile.rect.width * zoom)
+            zoomed_height = int(tile.rect.height * zoom)
+
+            # Calcul des nouvelles coordonnées centrées avec le zoom
+            zoomed_x = center_x + (tile.rect.x - self.map.camera.offset_X - center_x) * zoom
+            zoomed_y = center_y + (tile.rect.y - self.map.camera.offset_Y - center_y) * zoom
+
+            # Redimensionner l'image
+            zoomed_image = pygame.transform.scale(tile.image, (zoomed_width+1, zoomed_height+1))
+
+            # Dessiner la tuile avec l'offset et le zoom
+            screen.blit(zoomed_image, (zoomed_x+1, zoomed_y+1))
+
+        # Appliquer l'offset et le zoom aux joueurs
         for player in self.players:
-            player.draw(screen)
-        # Indique le joueur qui doit jouer avec un cercle blanc
+            zoomed_width = int(player.rect.width * zoom)
+            zoomed_height = int(player.rect.height * zoom)
+
+            zoomed_x = center_x + (player.rect.x - self.map.camera.offset_X - center_x) * zoom
+            zoomed_y = center_y + (player.rect.y - self.map.camera.offset_Y - center_y) * zoom
+
+            zoomed_image = pygame.transform.scale(player.image, (zoomed_width, zoomed_height))
+
+            screen.blit(zoomed_image, (zoomed_x, zoomed_y))
+
+        # Indique le joueur actif avec un cercle blanc
         if not self.shot_taken:
-            pygame.draw.circle(screen, pygame.Color("white"), self.current_player.rect.center, self.current_player.radius + 5, 2)
+            player = self.current_player
+            pygame.draw.circle(screen, pygame.Color("white"),
+                               (center_x + (player.rect.centerx - self.map.camera.offset_X - center_x) * zoom,
+                                center_y + (player.rect.centery - self.map.camera.offset_Y - center_y) * zoom),
+                               int((player.radius + 5) * zoom), 2)
+
         # Affiche la ligne de visée
         if self.dragging and self.drag_start and self.drag_current:
-            pygame.draw.line(screen, pygame.Color("black"), self.drag_start, self.drag_current, 3)
+            start_x = center_x + (self.drag_start[0] - self.map.camera.offset_X - center_x) * zoom
+            start_y = center_y + (self.drag_start[1] - self.map.camera.offset_Y - center_y) * zoom
+
+            current_x = center_x + (self.drag_current[0] - self.map.camera.offset_X - center_x) * zoom
+            current_y = center_y + (self.drag_current[1] - self.map.camera.offset_Y - center_y) * zoom
+
+            #pygame.draw.line(screen, pygame.Color("black"), (start_x, start_y),
+            #                 (current_x, current_y), 3)
+
+
