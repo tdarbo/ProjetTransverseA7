@@ -1,5 +1,6 @@
 from settings import *
 
+
 class Player(pygame.sprite.Sprite):
     def __init__(self, color, position, radius=BALL_RADIUS, mass=BALL_MASS, name=""):
         super().__init__()
@@ -15,8 +16,6 @@ class Player(pygame.sprite.Sprite):
         pygame.draw.circle(self.image, self.color, (self.radius, self.radius), self.radius)
         self.rect = self.image.get_rect(center=position)
 
-        self.score = {}
-
     def get_velocity(self):
         return self.velocity.length()
 
@@ -25,5 +24,3 @@ class Player(pygame.sprite.Sprite):
 
     def draw(self, surface):
         surface.blit(self.image, self.rect)
-
-

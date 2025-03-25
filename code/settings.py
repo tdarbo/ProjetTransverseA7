@@ -38,14 +38,16 @@ PANEL_MARGINS = {
     "bottom": 50
 }
 
-SCENE_BG_IMAGE = loadingScreen = pygame.transform.scale(pygame.image.load('../asset/image/terrain_bg.jpg'),
-                                                        (WINDOW_WIDTH, WINDOW_HEIGHT))
+SCENE_BG_IMAGE = loadingScreen = pygame.transform.scale(
+    pygame.image.load('../asset/image/terrain_bg.jpg'),
+    (WINDOW_WIDTH, WINDOW_HEIGHT)
+)
 
-DEBUG_MODE = True
+DEBUG_MODE = False
 
 ASSET_PATH = "../asset"
 UI_THEME_PATH = "../data/ui-theme.json"
 FONT_PATH = "../asset/font/PressStart2P-Regular.ttf"
 
 MAX_ZOOM = 4
-MIN_ZOOM = 0.1
+MIN_ZOOM = 0.5

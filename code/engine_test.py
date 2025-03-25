@@ -11,7 +11,7 @@ from map import *
 def main():
     pygame.init()
     w, h = pygame.display.list_modes()[0]
-    screen = pygame.display.set_mode((w, h), pygame.NOFRAME)
+    screen = pygame.display.set_mode((w, h), pygame.FULLSCREEN)
     pygame.display.set_caption("GOAT")
     clock = pygame.time.Clock()
 
@@ -23,36 +23,24 @@ def main():
     # Initalisation du nombre de tours
     hole_number = 3 # Modifier après création des niveaux
 
-    map01 = Map("D:/DEV/WOKRSPACE/Pycharm/ProjetTransverseA7/asset/TiledProject/maps/hole1.tmx", screen)
+    map01 = Map("../asset/TiledProject/maps/hole1.tmx", screen)
 
-    score_manager = ScoreManager(players,hole_number)
+    score_manager = ScoreManager(players, hole_number)
     # Création du niveau
     level = Level(map01, players, score_manager)
-
-    map01.teleportPlayersToSpawn(players)
 
     running = True
     while running:
         dt = clock.tick(FPS) / 1000.0
 
-        #map.camera.update(pygame.event.get())
-
-
-
         for event in pygame.event.get():
-            map01.camera.update(event)
             if event.type == pygame.QUIT:
                 running = False
-            elif event.type == pygame.KEYDOWN:  # Si une touche est pressée
-                if event.key == pygame.K_SPACE:  # Si c'est la barre espace
-                    level.centerOnCurrentPlayer()
             else:
                 level.process_event(event)
 
-        level.map.camera.animator.update()
-
-        level.update(dt)
         screen.fill(pygame.Color("#BDDFFF"))
+        level.update(dt)
         level.draw(screen)
         pygame.display.flip()
 

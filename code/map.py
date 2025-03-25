@@ -1,12 +1,7 @@
-from pickletools import pyunicode
-
+from settings import *
 import pytmx
-import pygame
-
 from camera import Camera
 from tile import Tile
-
-from settings import TILE_SIZE
 
 
 def load_tiled_map(map_path, tile_size):
@@ -33,17 +28,20 @@ def load_tiled_map(map_path, tile_size):
                     continue
                 tile_image = tmx_data.get_tile_image_by_gid(gid)
                 if tile_image:
-                    tile = Tile(layer.name, x * tile_size, y * tile_size, tile_size, tile_size, image_surface=tile_image)
+                    tile = Tile(
+                        layer.name,
+                        x * tile_size,
+                        y * tile_size,
+                        tile_size,
+                        tile_size,
+                        image_surface=tile_image
+                    )
                     tiles.add(tile)
-
-
 
     return tiles,spawn,hole
 
 
-
 class Map:
-
     def __init__(self,path,surf):
         self.camera = Camera(surf)
         self.tiles, self.spawn, self.hole = load_tiled_map(path,TILE_SIZE)
@@ -57,7 +55,6 @@ class Map:
 
         self.map_width = map_width * tile_width
         self.map_height = map_height * tile_height
-
 
     def teleportPlayersToSpawn(self, players):
         for player in players:

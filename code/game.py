@@ -30,7 +30,6 @@ class Game:
         self.scene_manager.add("start_menu_scene", StartMenuScene(1, self))
         self.scene_manager.add("config_scene", ConfigurationScene(2, self))
         self.scene_manager.add("play_scene", PlayScene(3, self))
-        self.scene_manager.add("components_scene", ComponentsScene(4, self))
         # Display default scene
         self.scene_manager.change("start_menu_scene")
 

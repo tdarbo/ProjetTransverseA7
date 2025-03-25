@@ -23,19 +23,6 @@ class PlayScene(Scene):
             anchors={'centerx': 'centerx'},
             object_id="game_scene_game_name",
         )
-        back_btn = pygame_gui.elements.UIButton(
-            relative_rect=pygame.Rect((0, 20), (300, 50)),
-            text='Back',
-            manager=self.ui_manager,
-            container=self.ui_container,
-            anchors={
-                'top': 'top',
-                'bottom': 'top',
-                'centerx': 'centerx',
-                'top_target': game_name_label
-            },
-            object_id="game_scene_back_btn",
-        )
 
     def process_event(self, event):
         if event.type == pygame_gui.UI_BUTTON_PRESSED:

@@ -14,12 +14,9 @@ class Camera:
         self.screen = screen
         self.animator = CameraAnimator()
 
-
-
         # Point de référence fixe dans le monde (100,100)
         self.ref_world_x = 100.0
         self.ref_world_y = 100.0
-
 
     def addZoom(self, k, mouse_pos):
         """
@@ -31,7 +28,7 @@ class Camera:
         new_zoom = old_zoom + k
 
         # Limite le zoom entre 0.1x et 4x
-        if not (0.5 <= new_zoom <= 4.0):
+        if not (MIN_ZOOM <= new_zoom <= MAX_ZOOM):
             return
 
         self.zoom_factor = new_zoom
@@ -67,7 +64,7 @@ class Camera:
 
         return world_x, world_y
 
-    def update(self, event):
+    def process_event(self, event):
         """
         Met à jour la caméra en fonction des événements.
         """

@@ -7,15 +7,8 @@ class Level:
     """Gestion de la map, des tours et des événements"""
 
     def __init__(self, tiled_map, players, score_manager):
-        """
-        Initialise le niveau
-
-        :param map_tiles: Les tuiles de la carte.
-        :param players: Les joueurs du niveau.
-        :param score_manager: Le gestionnaire de score.
-        """
+        """Initialise le niveau"""
         self.map = tiled_map
-        self.map_tiles = self.map.tiles
         self.players = players
         self.engine = Engine(self)
         self.score_manager = score_manager
@@ -29,24 +22,26 @@ class Level:
         self.drag_current = None # Vector
         self.force_multiplier = FORCE_MULTIPLIER
 
-    def process_event(self, event):
-        """
-        Traite les événements pygame.
+        self.map.teleportPlayersToSpawn(self.players)
 
-        :param event: L'événement pygame à traiter.
-        """
-        if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
+    def process_event(self, event):
+        """Traite les événements pygame."""
+        self.map.camera.process_event(event)
+        if event.type == pygame.KEYDOWN:
+            # Si une touche est pressée
+            if event.key == pygame.K_SPACE:
+                # Si c'est la barre espace
+                self.centerOnCurrentPlayer()
+        elif event.type == pygame.MOUSEBUTTONDOWN:#and event.button == 1:
             self.on_mouse_down(event)
         elif event.type == pygame.MOUSEMOTION:
             self.on_mouse_motion(event)
-        elif event.type == pygame.MOUSEBUTTONUP and event.button == 1:
+        elif event.type == pygame.MOUSEBUTTONUP: #and event.button == 1:
             self.on_mouse_up(event)
 
 
     def on_mouse_down(self, event):
-        """
-        Gère l'événement associé au clic, en prenant en compte l'offset et le zoom de la caméra.
-        """
+        """Gère l'événement du clic"""
         if self.shot_taken:
             return
 
@@ -61,7 +56,7 @@ class Level:
 
     def on_mouse_motion(self, event):
         """
-        Gère l'événement de mouvement de la souris, ajusté pour la caméra.
+        Gère l'événement de mouvement de la souris.
         """
         if self.dragging:
             # Ajuste la position avec l'inverse de l'offset de la caméra
@@ -69,9 +64,7 @@ class Level:
             self.drag_current = Vector(adjusted_pos)
 
     def on_mouse_up(self, event):
-        """
-        Gère l'événement associé au relâchement du clic de souris, ajusté pour la caméra.
-        """
+        """Gère l'événement associé au relâchement du clic de souris."""
         if self.dragging:
             # Ajuste la position avec l'inverse de l'offset de la caméra
             adjusted_pos = self.map.camera.getAbsoluteCoord(event.pos)
@@ -87,29 +80,18 @@ class Level:
             self.drag_start = None
             self.drag_current = None
 
-
-
     def update(self, dt):
-        """
-        Met à jour l'état du niveau en fonction du temps écoulé.
-
-        :param dt: Le temps écoulé depuis la dernière mise à jour.
-        """
+        """Met à jour l'état du niveau en fonction du temps écoulé.."""
+        self.map.camera.animator.update()
         self.engine.update(dt)
-        for player in self.players:
-            player.update()
         self.check_turn_end()
 
     def check_turn_end(self):
-        """
-        Vérifie si le tour du joueur est terminé et passe au joueur suivant si nécessaire.
-        """
+        """Vérifie si le tour du joueur est terminé et passe au joueur suivant si nécessaire."""
         if self.shot_taken:
             self.centerOnPlayers()
-
         if self.shot_taken and self.current_player.velocity.length() < VELOCITY_THRESHOLD:
             self.next_turn()
-
 
     def next_turn(self):
         """
@@ -134,7 +116,7 @@ class Level:
         center_y = screen.get_height() / 2
 
         # Appliquer l'offset et le zoom à chaque tuile
-        for tile in self.map_tiles:
+        for tile in self.map.tiles:
             if tile.id == "Collision" and not DEBUG_MODE:
                 continue
 
@@ -167,10 +149,14 @@ class Level:
         # Indique le joueur actif avec un cercle blanc
         if not self.shot_taken:
             player = self.current_player
-            pygame.draw.circle(screen, pygame.Color("white"),
-                               (center_x + (player.rect.centerx - self.map.camera.offset_X - center_x) * zoom,
-                                center_y + (player.rect.centery - self.map.camera.offset_Y - center_y) * zoom),
-                               int((player.radius + 5) * zoom), 2)
+            pygame.draw.circle(
+                screen,
+                pygame.Color("white"),
+                (center_x + (player.rect.centerx - self.map.camera.offset_X - center_x) * zoom,
+                center_y + (player.rect.centery - self.map.camera.offset_Y - center_y) * zoom),
+                (player.radius + 5) * zoom,
+                2
+            )
 
         # Affiche la ligne de visée
         if self.dragging and self.drag_start and self.drag_current:
@@ -180,9 +166,13 @@ class Level:
             current_x = center_x + (self.drag_current[0] - self.map.camera.offset_X - center_x) * zoom
             current_y = center_y + (self.drag_current[1] - self.map.camera.offset_Y - center_y) * zoom
 
-            pygame.draw.line(screen, pygame.Color("black"), (start_x, start_y),
-                             (current_x, current_y), 3)
-
+            pygame.draw.line(
+                screen,
+                pygame.Color("black"),
+                (start_x, start_y),
+                (current_x, current_y),
+                3
+            )
 
     def centerOnCurrentPlayer(self):
         player = self.current_player

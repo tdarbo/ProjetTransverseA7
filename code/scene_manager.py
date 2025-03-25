@@ -56,10 +56,10 @@ class SceneManager:
         """
         Update the current scene.
 
-        :param dt: The time delta since the last update.
+        :param dt: The time delta since the last process_event.
         """
         if self.current_scene:
-            self.current_scene.update(dt)
+            self.current_scene.process_event(dt)
 
     def draw(self, screen):
         """
@@ -116,7 +116,7 @@ class Scene:
         """
         Update the scene.
 
-        :param dt: The time delta since the last update.
+        :param dt: The time delta since the last process_event.
         """
         pass
 

@@ -13,102 +13,37 @@ class Engine:
         :param level: Le niveau de jeu contenant les joueurs et la carte.
         """
         self.level = level
+        self.players = level.players
 
-    def update(self, dt):
-        """
-        Met à jour l'état du jeu en fonction du temps écoulé.
 
-        :param dt: Le temps écoulé depuis la dernière mise à jour.
-        """
-        for player in self.level.players:
-            # Met à jour la position du joueur en fonction de sa vitesse
+    def update_positions(self, dt):
+        for player in self.players:
+            # Formule pour modifier la position du joueur
             player.position += player.velocity * dt
-
-            # Détection du type de sol sous le joueur
-            friction = GROUND_GRASS_FRICTION  # Par défaut, herbe
-            for tile in self.level.map_tiles:
-                if tile.rect.collidepoint(player.position.x, player.position.y):
-                    if tile.id == "Grass":
-                        friction = GROUND_GRASS_FRICTION
-                    elif tile.id == "Sand":
-                        friction = GROUND_SAND_FRICTION
-                    elif tile.id == "ice":
-                        friction = GROUND_ICE_FRICTION
-                    break  # On sort dès qu'on a trouvé la bonne tuile
-
-            # Application de la friction
-            player.velocity = player.velocity * exp(-(friction / BALL_MASS) * dt)
-
-            # Gestion des collisions avec les murs
-            #self.resolve_player_wall_collision(player)
-            self.resolve_out_of_bounds()
             player.update()
 
-        # Gestion des collisions entre joueurs
-        for i in range(len(self.level.players)):
-            for j in range(i + 1, len(self.level.players)):
-                self.resolve_player_player_collision(self.level.players[i], self.level.players[j])
 
-        # Gestion des collisions avec les obstacles
-        for player in self.level.players:
-            for tile in self.level.map_tiles:
-                if tile.id == "Collision" and player.rect.colliderect(tile.rect):
-                    self.resolve_player_obstacle_collision(player, tile)
+    def apply_friction(self, dt):
+        """Applique la friction à chaque joueur"""
+        for player in self.players:
+            friction = self.get_friction_at_point(player.position)
+            # Formule exponentielle pour les frictions
+            player.velocity *= exp(-(friction / BALL_MASS) * dt)
 
-    def resolve_out_of_bounds(self) -> None:
-        """
-        Gère les joueurs en dehors des limites de la carte.
-        """
-        for player in self.level.players:
-            if self.is_out_of_bounds(player):
-                self.level.map.teleportPlayerToSpawn(player)
-                player.velocity = Vector(0, 0)
-                print(f"Player:{player.name} is out of bounds")
 
-    def is_out_of_bounds(self, player: Player) -> bool:
-        """
-        Vérifie si un joueur est en dehors des limites de la carte.
-        @param player: Joueur vérifié
-        @return: Si le joueur est en dehors des limites de la carte
-        """
-        for tile in self.level.map_tiles:
-            if player.rect.colliderect(tile.rect):
-                return False
-        return True
+    def get_friction_at_point(self, point):
+        """Donne le coefficient de friction du sol à une position."""
+        for tile in self.level.map.tiles:
+            if tile.rect.collidepoint(point):
+                if tile.id == "Grass":
+                    return GROUND_GRASS_FRICTION
+                elif tile.id == "Sand":
+                    return GROUND_SAND_FRICTION
+                elif tile.id == "ice":
+                    return GROUND_ICE_FRICTION
+        # Par défaut = friction de l'herbe
+        return GROUND_GRASS_FRICTION
 
-    def resolve_finish(self) -> None:
-        for player in self.level.players:
-            if self.is_on_finish(player):
-                print(f"Player:{player.name} is on finish")
-        pass
-
-    def is_on_finish(self, player: Player) -> bool:
-        """
-        Vérifie si un joueur est sur un objet de la carte.
-        @param player: Joueur vérifié
-        @return: Si le joueur est sur l'objet de la carte
-        """
-        if player.rect.collideobjects(self.level.map.hole):
-            return True
-
-    def resolve_player_wall_collision(self, player):
-        """
-        Gère les collisions entre un joueur et les bords de la fenêtre.
-
-        :param player: Le joueur à vérifier pour les collisions avec les murs.
-        """
-        if player.position.x - player.radius < 0:
-            player.position.x = player.radius
-            player.velocity.x = -player.velocity.x
-        if player.position.x + player.radius > WINDOW_WIDTH:
-            player.position.x = WINDOW_WIDTH - player.radius
-            player.velocity.x = -player.velocity.x
-        if player.position.y - player.radius < 0:
-            player.position.y = player.radius
-            player.velocity.y = -player.velocity.y
-        if player.position.y + player.radius > WINDOW_HEIGHT:
-            player.position.y = WINDOW_HEIGHT - player.radius
-            player.velocity.y = -player.velocity.y
 
     def resolve_player_player_collision(self, player1, player2):
         """
@@ -138,6 +73,65 @@ class Engine:
             # Formule de collision élastique
             player1.velocity += normal * (v2 - v1)
             player2.velocity += normal * (v1 - v2)
+
+
+    def update(self, dt):
+        """Met à jour l'état du jeu en fonction du temps écoulé."""
+
+        self.update_positions(dt)
+        self.apply_friction(dt)
+
+        # Gestion des collisions entre joueurs
+        num_players = len(self.players)
+        for i in range(num_players):
+            for j in range(i + 1, num_players):
+                self.resolve_player_player_collision(self.players[i], self.players[j])
+
+        # Gestion des collisions avec les obstacles
+        for player in self.level.players:
+            for tile in self.level.map.tiles:
+                if tile.id == "Collision" and player.rect.colliderect(tile.rect):
+                    self.resolve_player_obstacle_collision(player, tile)
+
+        self.resolve_out_of_bounds()
+        self.resolve_finish()
+
+    def resolve_out_of_bounds(self) -> None:
+        """
+        Gère les joueurs en dehors des limites de la carte.
+        """
+        for player in self.level.players:
+            if self.is_out_of_bounds(player):
+                self.level.map.teleportPlayerToSpawn(player)
+                player.velocity = Vector(0, 0)
+                print(f"Player:{player.name} is out of bounds")
+
+    def is_out_of_bounds(self, player: Player) -> bool:
+        """
+        Vérifie si un joueur est en dehors des limites de la carte.
+        @param player: Joueur vérifié
+        @return: Si le joueur est en dehors des limites de la carte
+        """
+        for tile in self.level.map.tiles:
+            if tile.rect.collidepoint(player.position):
+                return False
+        return True
+
+    def resolve_finish(self) -> None:
+        for player in self.level.players:
+            if self.is_on_finish(player):
+                print(f"Player:{player.name} is on finish")
+
+
+    def is_on_finish(self, player: Player) -> bool:
+        """
+        Vérifie si un joueur est sur un objet de la carte.
+        @param player: Joueur vérifié
+        @return: Si le joueur est sur l'objet de la carte
+        """
+        return False
+        # if player.rect.collideobjects(self.level.map.hole):
+        #     return True
 
     def resolve_player_obstacle_collision(self, player, tile):
         """
