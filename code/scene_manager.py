@@ -1,11 +1,8 @@
 from settings import *
 
-
 class SceneManager:
     def __init__(self):
-        """
-        Responsible for switching scenes
-        """
+        """Responsible for switching scenes"""
         self.scenes: dict = dict()  # Dictionary of scenes by name
         self.current_scene = None  # The currently active scene
 
@@ -73,9 +70,7 @@ class SceneManager:
 
 class Scene:
     def __init__(self, height_index: int, game):
-        """
-        Scene: Base class for scenes
-        """
+        """Base class for scenes"""
         self.game = game  # Reference to the game instance
         self.ui_manager = self.game.ui_manager  # UI manager from the game
         self.scene_manager = self.game.scene_manager  # Scene manager from the game
@@ -93,15 +88,11 @@ class Scene:
         self.ui_container.show()
 
     def on_enter(self):
-        """
-        Called when the scene is entered.
-        """
+        """Called when the scene is entered."""
         pass
 
     def on_exit(self):
-        """
-        Called when the scene is exited.
-        """
+        """Called when the scene is exited."""
         pass
 
     def process_event(self, event):
