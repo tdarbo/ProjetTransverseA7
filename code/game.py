@@ -1,15 +1,13 @@
-from components_scene import ComponentsScene
+from settings import *
 from scene_config import ConfigurationScene
-from scene_manager import *
+from scene_manager import SceneManager
 from scene_play import PlayScene
 from scene_start_menu import StartMenuScene
 
 
 class Game:
     def __init__(self):
-        """
-        Initialize the game.
-        """
+        """Initialize the game."""
         # Initialize Pygame
         pygame.init()
         pygame.display.set_caption(GAME_NAME)
@@ -18,7 +16,7 @@ class Game:
         self.screen = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
         self.running = True
         self.clock = pygame.time.Clock()
-        self.time_delta = DELTA_TIME
+        self.dt = DELTA_TIME
 
         # UI manager with pygame_gui
         self.ui_manager = pygame_gui.UIManager((WINDOW_WIDTH, WINDOW_HEIGHT), theme_path="../data/ui-theme.json")
@@ -36,13 +34,10 @@ class Game:
         self.error_window = None
 
     def run(self):
-        """
-        Main game loop.
-        """
         # Main game loop
         while self.running:
             # Calculate time delta
-            self.time_delta = self.clock.tick(FPS) / 1000
+            self.dt = self.clock.tick(FPS) / 1000
 
             # Event handling
             for event in pygame.event.get():
@@ -52,11 +47,11 @@ class Game:
                 self.ui_manager.process_events(event)
 
             # Update and draw the current scene
-            self.scene_manager.update(self.time_delta)
+            self.scene_manager.update(self.dt)
             self.scene_manager.draw(self.screen)
 
             # Update and draw the user interface
-            self.ui_manager.update(self.time_delta)
+            self.ui_manager.update(self.dt)
             self.ui_manager.draw_ui(self.screen)
 
             # Update the display
@@ -89,6 +84,6 @@ class Game:
 
 
 if __name__ == "__main__":
-    # Create a game instance and run it
+    # Create a game instance
     game = Game()
     game.run()
