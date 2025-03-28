@@ -1,9 +1,5 @@
-from pygame import *
-
-from camera_animator import *
 from settings import *
 from player import Player
-from tile import Tile
 from level import Level
 from score import ScoreManager
 from map import *
@@ -20,12 +16,15 @@ def main():
     player2 = Player((0, 0, 255), (200, 200), BALL_RADIUS, BALL_MASS)
     players = [player1, player2]
 
-    # Initalisation du nombre de tours
-    hole_number = 3 # Modifier après création des niveaux
+    # Initialisation du nombre de tours
+    hole_number = 3
 
+    # Initialisation de la carte
     map01 = Map("../asset/TiledProject/maps/hole1.tmx", screen)
 
+    # Initialisation du score
     score_manager = ScoreManager(players, hole_number)
+
     # Création du niveau
     level = Level(map01, players, score_manager)
 
