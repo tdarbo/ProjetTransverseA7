@@ -4,6 +4,7 @@ from level import Level
 from score import ScoreManager
 from map import *
 
+
 def main():
     pygame.init()
     w, h = pygame.display.list_modes()[0]
@@ -26,7 +27,7 @@ def main():
     score_manager = ScoreManager(players, hole_number)
 
     # Création du niveau
-    level = Level(map01, players, score_manager)
+    level = Level(map01, players, score_manager, w, h)
 
     running = True
     while running:
@@ -44,6 +45,7 @@ def main():
         pygame.display.flip()
 
     pygame.quit()
+
 
 if __name__ == '__main__':
     main()

@@ -2,6 +2,7 @@ from player import Player
 from settings import *
 from math import exp
 
+
 class Engine:
     """Gère la physique, les collisions, et les interactions entre les joueurs et le terrain."""
 
