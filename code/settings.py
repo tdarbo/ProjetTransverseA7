@@ -38,6 +38,8 @@ PANEL_MARGINS = {
     "bottom": 50
 }
 
+PLAYER_COLORS = [(255, 0, 0), (0, 0, 255), (0, 255, 0), (255, 255, 0)]
+
 SCENE_BG_IMAGE = loadingScreen = pygame.transform.scale(
     pygame.image.load('../asset/image/terrain_bg.jpg'),
     (WINDOW_WIDTH, WINDOW_HEIGHT)
