@@ -18,6 +18,12 @@ class Game:
         self.clock = pygame.time.Clock()
         self.dt = DELTA_TIME
 
+        self.maps = {
+            "map1": "../asset/TiledProject/maps/hole1.tmx",
+        }
+
+        self.game_info = dict()
+
         # UI manager with pygame_gui
         self.ui_manager = pygame_gui.UIManager((WINDOW_WIDTH, WINDOW_HEIGHT), theme_path="../data/ui-theme.json")
         self.ui_manager.set_visual_debug_mode(DEBUG_MODE)
