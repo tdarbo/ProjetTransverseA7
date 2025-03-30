@@ -24,3 +24,9 @@ class Player(pygame.sprite.Sprite):
 
     def draw(self, surface):
         surface.blit(self.image, self.rect)
+
+    def reset(self):
+        self.mass = BALL_MASS
+        self.position.x, self.position.y = 0, 0
+        self.velocity.x, self.velocity.y = 0, 0
+        self.radius = BALL_RADIUS
