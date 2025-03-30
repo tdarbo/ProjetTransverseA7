@@ -1,5 +1,6 @@
 from settings import *
 
+
 class SceneManager:
     def __init__(self):
         """Responsible for switching scenes"""
@@ -49,14 +50,14 @@ class SceneManager:
         if self.current_scene:
             self.current_scene.process_event(event)
 
-    def update(self, dt: int):
+    def update(self, dt):
         """
         Update the current scene.
 
-        :param dt: The time delta since the last process_event.
+        :param dt: The time delta since the last update.
         """
         if self.current_scene:
-            self.current_scene.process_event(dt)
+            self.current_scene.update(dt)
 
     def draw(self, screen):
         """
