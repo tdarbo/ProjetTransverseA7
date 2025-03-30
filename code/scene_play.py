@@ -1,35 +1,103 @@
-from interface_manager import *
-from scene_manager import *
+import random
+from settings import *
+from player import Player
+from level import Level
+from score import ScoreManager
+from map import Map
+from scene_manager import Scene
 
 
 class PlayScene(Scene):
+    """Gestion de la scène principale du jeu"""
+
     def __init__(self, height_index, game):
-        """
-        Initialize the game scene.
-        """
         super().__init__(height_index, game)
+        self.maps = game.maps
+        self.screen = game.screen
 
-        self.build_ui()
+        self.game_info = None
 
-    def build_ui(self):
-        """
-        Build the game UI elements.
-        """
-        game_name_label = pygame_gui.elements.UILabel(
-            text=GAME_NAME + " Game",
-            manager=self.ui_manager,
-            container=self.ui_container,
-            relative_rect=pygame.Rect((0, 0, -1, 30)),
-            anchors={'centerx': 'centerx'},
-            object_id="game_scene_game_name",
-        )
+        # Création des joueurs et init score
+        self.players = None
+        self.hole_number = None
+        self.score_manager = None
+
+        # Gestion des niveaux joués
+        self.levels_played = 0
+        self.total_levels = 0
+        self.current_level = None
+
+    def on_enter(self):
+        self.game_info = self.game.game_info
+        self.players = self.create_players()
+        self.hole_number = self.game_info.get("holes", 1)
+        self.score_manager = ScoreManager(self.players, self.hole_number)
+        self.levels_played = 0
+        self.total_levels = self.hole_number
+        self.current_level = None
+        # Chargement du premier niveau
+        self.load_next_level()
+
+    def create_players(self):
+        """Instancie les joueurs en utilisant les noms fournis."""
+        players = []
+        for i, name in enumerate(self.game_info.get("names", [])):
+            player = Player(
+                color=PLAYER_COLORS[i % len(PLAYER_COLORS)],
+                position=Vector(0, 0),
+                radius=BALL_RADIUS,
+                mass=BALL_MASS,
+                name=name
+            )
+            players.append(player)
+
+        return players
+
+    def create_level(self, map_path):
+        """Crée un niveau à partir du path de la map."""
+        map = Map(map_path, self.screen)
+        width, height = self.screen.get_size()
+
+        return Level(map, self.players, self.score_manager, width, height)
+
+    def load_next_level(self):
+        """Charge un niveau s'il en reste, sinon termine la partie."""
+        if self.levels_played < self.total_levels:
+            self.reset_players()
+            map_key = random.choice(list(self.maps.keys()))
+            self.current_level = self.create_level(self.maps[map_key])
+            self.levels_played += 1
+            print(f"Niveau {self.levels_played} chargé avec la map '{map_key}'.")
+        else:
+            self.current_level = None
+
+    def next_level(self):
+        """Passe au niveau suivant ou quitte le jeu."""
+        if self.levels_played < self.total_levels:
+            self.load_next_level()
+        else:
+            self.quit_game()
+
+    def reset_players(self):
+        for player in self.players:
+            player.reset()
 
     def process_event(self, event):
-        if event.type == pygame_gui.UI_BUTTON_PRESSED:
-            if event.ui_element.text == "Back":
-                if DEBUG_MODE:
-                    print(f"[{self.__class__.__name__}] Back button pressed.")
-                self.scene_manager.change("start_menu_scene")
+        if self.current_level:
+            self.current_level.process_event(event)
+
+    def update(self, dt):
+        if self.current_level:
+            self.current_level.update(dt)
+            if self.current_level.level_finished:
+                self.next_level()
 
     def draw(self, screen):
-        screen.fill('black')
+        screen.fill("#BDDFFF")
+        if self.current_level:
+            self.current_level.draw(screen)
+
+    def quit_game(self):
+        """Affiche les scores finaux et ferme le jeu."""
+        print("Partie terminée ! Scores finaux :")
+        self.score_manager.print_score()
