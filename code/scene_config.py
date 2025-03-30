@@ -11,6 +11,7 @@ class ConfigurationScene(Scene):
         Initialize the configuration scene.
         """
         super().__init__(height_index, game)
+        self.game = game
         # Create an interface manager specific to this scene
         self.interface_manager = InterfaceManager()
         # Dictionary to store configuration data (players, holes, names)
@@ -251,7 +252,10 @@ class ConfigurationScene(Scene):
     def start_game(self) -> None:
         """Tmp method"""
         print("Données de configuration de partie :", self.data)
+        self.game.game_info = self.data
+        print("Info Transmise")
         self.scene_manager.change("play_scene")
+        print("Scene affichée")
 
     def draw(self, screen) -> None:
         """Draw the scene background"""
