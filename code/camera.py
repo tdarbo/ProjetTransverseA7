@@ -4,109 +4,65 @@ import pygame
 
 
 class Camera:
-    def __init__(self,screen):
+    def __init__(self, screen):
         self.offset_X = 0.0
         self.offset_Y = 0.0
         self.zoom_factor = 1.0
-        self.is_dragging = False
-        self.prev_mouse_x = 0
-        self.prev_mouse_y = 0
         self.screen = screen
+        self.is_dragging = False
+        self.prev_mouse_pos = (0, 0)
         self.animator = CameraAnimator()
 
-        # Point de référence fixe dans le monde (100,100)
-        self.ref_world_x = 100.0
-        self.ref_world_y = 100.0
-
-    def addZoom(self, k, mouse_pos):
+    def addZoom(self, k):
         """
-        Ajuste le zoom en utilisant un point fixe du monde (100,100) comme référence
+        Ajuste le zoom en ajoutant k au facteur actuel.
+        On limite le zoom entre MIN_ZOOM et MAX_ZOOM (def dans settings).
         """
+        new_zoom = self.zoom_factor + k
+        if MIN_ZOOM <= new_zoom <= MAX_ZOOM:
+            self.zoom_factor = new_zoom
 
-        # Mise à jour du facteur de zoom
-        old_zoom = self.zoom_factor
-        new_zoom = old_zoom + k
-
-        # Limite le zoom entre 0.1x et 4x
-        if not (MIN_ZOOM <= new_zoom <= MAX_ZOOM):
-            return
-
-        self.zoom_factor = new_zoom
-
-
-    def addOffset(self, x, y):
-        """
-        Ajoute un décalage à la caméra en fonction des limites.
-        """
-        final_X = self.offset_X - x  # Inversé pour la convention
-        final_Y = self.offset_Y - y  # Inversé pour la convention
-        zoom = self.zoom_factor
-
-        # Limite le déplacement
-        self.offset_X = max(-2000*zoom, min(2000*zoom, final_X))
-        self.offset_Y = max(-2000*zoom, min(2000*zoom, final_Y))
+    def addOffset(self, dx, dy):
+        """Ajuste l'offset de la caméra. On ajoute le décalage sur l'axe x et y."""
+        self.offset_X -= dx / self.zoom_factor
+        self.offset_Y -= dy / self.zoom_factor
 
     def getAbsoluteCoord(self, screen_coord):
-        """
-        Convertit les coordonnées écran en coordonnées absolues dans le monde.
-
-        :param screen_coord: (x, y) coordonnées sur l'écran.
-        :param screen: la surface de l'écran, pour récupérer le centre.
-        :return: (world_x, world_y) coordonnées dans le monde.
-        """
-        # Calculer le centre de l'écran
+        """Convertit une coordonnée à l'écran en coordonnée sur la carte."""
         center_x = self.screen.get_width() / 2
         center_y = self.screen.get_height() / 2
-
-        # Inverser la transformation utilisée lors du dessin
-        world_x = self.offset_X + center_x + (screen_coord[0] - center_x) / self.zoom_factor
-        world_y = self.offset_Y + center_y + (screen_coord[1] - center_y) / self.zoom_factor
-
+        world_x = self.offset_X + (screen_coord[0] - center_x) / self.zoom_factor
+        world_y = self.offset_Y + (screen_coord[1] - center_y) / self.zoom_factor
         return world_x, world_y
 
     def process_event(self, event):
         """
         Met à jour la caméra en fonction des événements.
+        Gère zoom (molette) et déplacement (clic droit).
         """
         mouse_x, mouse_y = pygame.mouse.get_pos()
-        world_x, world_y = self.getAbsoluteCoord((mouse_x, mouse_y))
-
-        #print(
-        #    f"Mouse ({mouse_x},{mouse_y}) => ({world_x:.2f},{world_y:.2f}) | Camera offset: ({self.offset_X:.2f},{self.offset_Y:.2f}), Zoom: {self.zoom_factor:.2f}")
-
         if event.type == pygame.MOUSEBUTTONDOWN:
-            # Molette vers le haut (Zoom avant)
-            if event.button == 4:
-                self.addZoom(0.1, (mouse_x, mouse_y))
-            # Molette vers le bas (Zoom arrière)
-            elif event.button == 5:
-                self.addZoom(-0.1, (mouse_x, mouse_y))
-
-            # Début du clic droit pour déplacer la caméra
+            # Zoom avec la molette
+            if event.button == 4:  # Zoom avant
+                self.addZoom(0.1)
+            elif event.button == 5:  # Zoom arrière
+                self.addZoom(-0.1)
+            # Clic droit pour déplacer la caméra
             elif event.button == 3:
                 self.is_dragging = True
-                self.prev_mouse_x, self.prev_mouse_y = mouse_x, mouse_y
-
+                self.prev_mouse_pos = (mouse_x, mouse_y)
         elif event.type == pygame.MOUSEBUTTONUP:
-            # Fin du déplacement
             if event.button == 3:
                 self.is_dragging = False
-
         elif event.type == pygame.MOUSEMOTION:
-            # Déplacement de la caméra avec le clic droit enfoncé
             if self.is_dragging:
-                delta_x = mouse_x - self.prev_mouse_x
-                delta_y = mouse_y - self.prev_mouse_y
-                self.addOffset(delta_x, delta_y)
-
-                # Mise à jour des coordonnées précédentes
-                self.prev_mouse_x, self.prev_mouse_y = mouse_x, mouse_y
-
+                current_pos = (mouse_x, mouse_y)
+                dx = current_pos[0] - self.prev_mouse_pos[0]
+                dy = current_pos[1] - self.prev_mouse_pos[1]
+                self.addOffset(dx, dy)
+                self.prev_mouse_pos = current_pos
 
     def resetCamera(self):
-        """
-        Réinitialise la caméra à son état initial.
-        """
         self.offset_X = 0.0
         self.offset_Y = 0.0
         self.zoom_factor = 1.0
