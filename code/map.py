@@ -8,7 +8,7 @@ def load_tiled_map(map_path, tile_size):
     tmx_data = pytmx.load_pygame(map_path)
     tiles = pygame.sprite.Group()
 
-    spawn,hole = None,None
+    spawn, hole = None, None
 
     print(tmx_data.layers)
 
@@ -22,9 +22,9 @@ def load_tiled_map(map_path, tile_size):
                 elif obj.name == "hole":
                     hole = obj
 
-        if isinstance(layer,pytmx.TiledTileLayer):
-            for x,y,gid in layer:
-                if gid==0:
+        if isinstance(layer, pytmx.TiledTileLayer):
+            for x, y, gid in layer:
+                if gid == 0:
                     continue
                 tile_image = tmx_data.get_tile_image_by_gid(gid)
                 if tile_image:
@@ -38,13 +38,13 @@ def load_tiled_map(map_path, tile_size):
                     )
                     tiles.add(tile)
 
-    return tiles,spawn,hole
+    return tiles, spawn, hole
 
 
 class Map:
-    def __init__(self,path,surf):
+    def __init__(self, path, surf):
         self.camera = Camera(surf)
-        self.tiles, self.spawn, self.hole = load_tiled_map(path,TILE_SIZE)
+        self.tiles, self.spawn, self.hole = load_tiled_map(path, TILE_SIZE)
         self.surface = surf
 
         tmx_data = pytmx.TiledMap(path)
@@ -63,10 +63,3 @@ class Map:
     def teleportPlayerToSpawn(self, player):
         player.position.x = self.spawn.x
         player.position.y = self.spawn.y
-
-
-
-
-
-
-
