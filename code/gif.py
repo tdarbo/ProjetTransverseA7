@@ -1,3 +1,4 @@
+'''
 from PIL import Image, ImageSequence
 
 from settings import *
@@ -36,3 +37,4 @@ while running:
     clock.tick(10)  # 10 FPS
 
 pygame.quit()
+'''

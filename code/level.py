@@ -1,6 +1,13 @@
-from settings import *
-from engine import Engine
 
+from engine import Engine
+from math import *
+from settings import *
+
+
+def norme(v):
+    return hypot(v.x, v.y)
+
+distance = Vector(0, 0)
 
 class Level:
     """Gestion de la map, des tours et des événements"""
@@ -55,14 +62,19 @@ class Level:
             self.drag_current = Vector(adjusted_pos)
 
     def on_mouse_motion(self, event):
+        global distance
         if self.dragging:
             adjusted_pos = self.map.camera.getAbsoluteCoord(event.pos)
             self.drag_current = Vector(adjusted_pos)
+            distance = (self.drag_start - adjusted_pos) * self.force_multiplier
 
     def on_mouse_up(self, event):
+        max = Vector(1000, 1000)
         if self.dragging:
             adjusted_pos = self.map.camera.getAbsoluteCoord(event.pos)
             force = (self.drag_start - adjusted_pos) * self.force_multiplier
+            if norme(force) >= norme(max):
+                force = force.normalize() * norme(max)
             self.current_player.velocity += force
             self.dragging = False
             self.shot_taken = True
@@ -123,16 +135,68 @@ class Level:
             )
 
         # Dessin de la ligne de visé
-        if self.dragging and self.drag_current is not None:
+        if self.dragging and self.drag_current is not None and round(norme(distance)) <= norme(Vector(200, 200)) :
             start_screen = world_to_screen(self.current_player.position)
             end_screen = world_to_screen(self.drag_current)
             pygame.draw.line(
                 self.overlay_surf,
-                pygame.Color("black"),
+                pygame.Color("pink"),
+                start_screen,
+                end_screen,
+                width=1
+            )
+        elif self.dragging and self.drag_start and self.drag_current and round(norme(distance)) <= norme(Vector(400, 400)):
+            start_screen = world_to_screen(self.current_player.position)
+            end_screen = world_to_screen(self.drag_current)
+            pygame.draw.line(
+                self.overlay_surf,
+                pygame.Color("blue"),
+                start_screen,
+                end_screen,
+                width=2
+            )
+        elif self.dragging and self.drag_start and self.drag_current and round(norme(distance)) <= norme(Vector(600, 600)):
+            start_screen = world_to_screen(self.current_player.position)
+            end_screen = world_to_screen(self.drag_current)
+            pygame.draw.line(
+                self.overlay_surf,
+                pygame.Color("green"),
                 start_screen,
                 end_screen,
                 width=3
             )
+        elif self.dragging and self.drag_start and self.drag_current and round(norme(distance)) <= norme(Vector(800, 800)):
+            start_screen = world_to_screen(self.current_player.position)
+            end_screen = world_to_screen(self.drag_current)
+            pygame.draw.line(
+                self.overlay_surf,
+                pygame.Color("yellow"),
+                start_screen,
+                end_screen,
+                width=4
+            )
+        elif self.dragging and self.drag_start and self.drag_current and round(norme(distance)) <= norme(Vector(1000, 1000)):
+            start_screen = world_to_screen(self.current_player.position)
+            end_screen = world_to_screen(self.drag_current)
+            pygame.draw.line(
+                self.overlay_surf,
+                pygame.Color("orange"),
+                start_screen,
+                end_screen,
+                width=5
+            )
+        elif self.dragging and self.drag_start and self.drag_current and round(norme(distance)) > norme(Vector(1000, 1000)):
+            start_screen = world_to_screen(self.current_player.position)
+            end_screen = world_to_screen(self.drag_current)
+
+            pygame.draw.line(
+                self.overlay_surf,
+                pygame.Color("red"),
+                start_screen,
+                end_screen,
+                width=6
+            )
+
 
         # Application du zoom sur la map
         resize_size = (int(self.map_size[0] * zoom), int(self.map_size[1] * zoom))
