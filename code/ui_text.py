@@ -2,7 +2,7 @@ from settings import *
 
 
 class Text:
-    def __init__(self, text, pos, font_size=16, color=(0, 0, 0), font_name="../asset/font/font-regular-v2.ttf"):
+    def __init__(self, text, pos, font_size=16, color=(0, 0, 0), font_name=FONT_PATH):
         """
         Class pour gérer l'affichage du texte.
 
