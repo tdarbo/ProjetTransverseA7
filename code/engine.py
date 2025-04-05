@@ -84,26 +84,59 @@ class Engine:
         # À implémenter si nécessaire :
         # return player.rect.collideobjects(self.level.map.hole)
 
+    def resolve_player_wall_collision(self, player):
+        """
+        Gère les collisions entre un joueur et les bords de la fenêtre.
+        """
+        if player.position.x - player.radius < 0:
+            player.position.x = player.radius
+            player.velocity.x = -player.velocity.x
+        if player.position.x + player.radius > WINDOW_WIDTH:
+            player.position.x = WINDOW_WIDTH - player.radius
+            player.velocity.x = -player.velocity.x
+        if player.position.y - player.radius < 0:
+            player.position.y = player.radius
+            player.velocity.y = -player.velocity.y
+        if player.position.y + player.radius > WINDOW_HEIGHT:
+            player.position.y = WINDOW_HEIGHT - player.radius
+            player.velocity.y = -player.velocity.y
+
     def resolve_player_obstacle_collision(self, player: Player, tile) -> None:
-        """Gère la collision entre un joueur et une tuile obstacle."""
+        """
+        Gère la collision entre un joueur et une tuile obstacle.
+        """
         intersection = player.rect.clip(tile.rect)
 
+        # On vérifie s’il y a vraiment collision
         if intersection.width == 0 or intersection.height == 0:
-            return  # Pas de collision réelle
+            return
 
-        if intersection.width < intersection.height:
-            # Collision horizontale
+        # On calcule les superpositions sur X et Y
+        pen_x = intersection.width
+        pen_y = intersection.height
+
+        # Résolution de la collision en X
+        if pen_x < pen_y:
             if player.rect.centerx < tile.rect.centerx:
-                player.position.x -= intersection.width
+                # Le joueur est à gauche de la tile, on le décale vers la gauche
+                player.position.x -= pen_x
             else:
-                player.position.x += intersection.width
+                # Le joueur est à droite de la tile, on le décale vers la droite
+                player.position.x += pen_x
+
+            # On inverse la vélocité en X
             player.velocity.x = -player.velocity.x
+
+        # Résolution de la collision en Y
         else:
-            # Collision verticale
             if player.rect.centery < tile.rect.centery:
-                player.position.y -= intersection.height
+                # Le joueur est au-dessus de la tile, on le décale vers le haut
+                player.position.y -= pen_y
             else:
-                player.position.y += intersection.height
+                # Le joueur est en dessous de la tile, on le décale vers le bas
+                player.position.y += pen_y
+
+            # On Inverse la vélocité en Y
             player.velocity.y = -player.velocity.y
 
     def update(self, dt: float) -> None:
@@ -114,19 +147,27 @@ class Engine:
             # Mise à jour de la position du joueur
             self.update_position(player, dt)
 
+            player.update()
+
             # Application de la friction
             self.apply_friction(player, dt)
-
-            player.update()
 
             # Gestion des collisions entre joueurs
             for j in range(i + 1, self.num_players):
                 self.resolve_player_player_collision(player, self.players[j])
 
+            if False :
+                # Gestion des collisions avec les murs
+                self.resolve_player_wall_collision(player)
+
+            player.update()
+
             # Gestion des collisions avec la map
             for tile in self.level.map.tiles:
                 if tile.id == "Collision" and player.rect.colliderect(tile.rect):
                     self.resolve_player_obstacle_collision(player, tile)
+
+            player.update()
 
             self.resolve_out_of_bounds(player)
             self.resolve_finish(player)
