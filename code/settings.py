@@ -12,6 +12,7 @@ DELTA_TIME = 0
 
 # Physic
 VELOCITY_THRESHOLD = 10
+MAX_PLAYER_VELOCITY = Vector(1000, 1000)
 FORCE_MULTIPLIER = 5
 BALL_RADIUS = 15
 TILE_SIZE = 64
@@ -38,7 +39,7 @@ PANEL_MARGINS = {
     "bottom": 50
 }
 
-PLAYER_COLORS = [(255, 0, 0), (0, 0, 255), (0, 255, 0), (255, 255, 0)]
+PLAYER_COLORS = [(255, 0, 0), (0, 0, 255), (0, 255, 0), (255, 255, 0), (0, 255, 255), (255, 0, 255)]
 
 SCENE_BG_IMAGE = loadingScreen = pygame.transform.scale(
     pygame.image.load('../asset/image/terrain_bg.jpg'),
@@ -49,7 +50,7 @@ DEBUG_MODE = False
 
 ASSET_PATH = "../asset"
 UI_THEME_PATH = "../data/ui-theme.json"
-FONT_PATH = "../asset/font/PressStart2P-Regular.ttf"
+FONT_PATH = "../asset/font/font-regular-v2.ttf"
 
 MAX_ZOOM = 4
 MIN_ZOOM = 0.5

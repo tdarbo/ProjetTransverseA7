@@ -62,8 +62,12 @@ class Level:
     def on_mouse_up(self, event):
         if self.dragging:
             adjusted_pos = self.map.camera.getAbsoluteCoord(event.pos)
-            force = (self.drag_start - adjusted_pos) * self.force_multiplier
-            self.current_player.velocity += force
+
+            new_velocity = (self.drag_start - adjusted_pos) * self.force_multiplier
+            if new_velocity.length() >= MAX_PLAYER_VELOCITY.length():
+                new_velocity = new_velocity.normalize() * MAX_PLAYER_VELOCITY.length()
+
+            self.current_player.velocity += new_velocity
             self.dragging = False
             self.shot_taken = True
             self.drag_start = None
@@ -89,18 +93,34 @@ class Level:
         print(f"Tour du joueur {self.current_player_index + 1}")
         self.centerOnCurrentPlayer()
 
-    def draw_map(self, screen, players):
+    def world_to_screen_position(self, world_pos, center_point, camera_zoom):
+        return (
+            center_point[0] - self.map.camera.offset_X * camera_zoom + world_pos.x * camera_zoom,
+            center_point[1] - self.map.camera.offset_Y * camera_zoom + world_pos.y * camera_zoom
+        )
+
+    def get_line_color(self, line_length: int) -> str:
+        if line_length < 200 :
+            color = "pink"
+        elif line_length < 400 :
+            color = "blue"
+        elif line_length < 600 :
+            color = "green"
+        elif line_length < 800 :
+            color = "yellow"
+        elif line_length < 1000 :
+            color = "orange"
+        else :
+            color = "red"
+
+        return color
+
+    def draw_map(self, screen):
         zoom = self.map.camera.zoom_factor
         center = (screen.get_width() / 2, screen.get_height() / 2)
         # Réinitialise les surfaces
         self.overlay_surf.fill((0, 0, 0, 0))
         self.map_surf.fill("#BDDFFF")
-
-        def world_to_screen(world_pos):
-            return (
-                center[0] - self.map.camera.offset_X * zoom + world_pos.x * zoom,
-                center[1] - self.map.camera.offset_Y * zoom + world_pos.y * zoom
-            )
 
         # Dessin des tuiles (on peut ignorer les tuiles de collision en mode normal)
         for tile in self.map.tiles:
@@ -124,13 +144,12 @@ class Level:
 
         # Dessin de la ligne de visé
         if self.dragging and self.drag_current is not None:
-            start_screen = world_to_screen(self.current_player.position)
-            end_screen = world_to_screen(self.drag_current)
+            line_length = (self.current_player.position - self.drag_current).length()
             pygame.draw.line(
                 self.overlay_surf,
-                pygame.Color("black"),
-                start_screen,
-                end_screen,
+                pygame.Color(self.get_line_color(line_length)),
+                self.world_to_screen_position(self.current_player.position, center, zoom),
+                self.world_to_screen_position(self.drag_current, center, zoom),
                 width=3
             )
 
@@ -146,7 +165,7 @@ class Level:
 
     def draw(self, screen):
         """Dessine le niveau sur l'écran."""
-        self.draw_map(screen, self.players)
+        self.draw_map(screen)
 
     def centerOnCurrentPlayer(self):
         player = self.current_player
