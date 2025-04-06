@@ -33,12 +33,13 @@ PANEL_LAYOUT = pygame.Rect(
     PANEL_HEIGHT
 )
 PANEL_MARGINS = {
-    "top": 50,
+    "top": 100,
     "left": 50,
     "right": 50,
     "bottom": 50
 }
 
+DEFAULT_GAME_DICTIONARY = {"players": 1, "holes": 1, "names": []}
 PLAYER_COLORS = [(255, 0, 0), (0, 0, 255), (0, 255, 0), (255, 255, 0), (0, 255, 255), (255, 0, 255)]
 
 SCENE_BG_IMAGE = loadingScreen = pygame.transform.scale(
