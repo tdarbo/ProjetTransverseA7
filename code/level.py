@@ -161,11 +161,12 @@ class Level:
         m_y = center[1] - int(self.map.camera.offset_Y * zoom)
 
         screen.blit(map_surf_resized, (m_x, m_y))
-        screen.blit(self.overlay_surf, (0, 0))
 
     def draw(self, screen):
         """Dessine le niveau sur l'écran."""
         self.draw_map(screen)
+        self.score_manager.draw(self.overlay_surf)
+        screen.blit(self.overlay_surf, (0, 0))
 
     def centerOnCurrentPlayer(self):
         player = self.current_player
