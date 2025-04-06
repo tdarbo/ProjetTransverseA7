@@ -18,22 +18,25 @@ class PlayScene(Scene):
         self.game_info = None
 
         # Création des joueurs et init score
-        self.players = None
-        self.hole_number = None
+        self.players = []
+        self.hole_number = 0
         self.score_manager = None
 
         # Gestion des niveaux joués
+        self.hole_number = 0
         self.levels_played = 0
-        self.total_levels = 0
         self.current_level = None
 
     def on_enter(self):
         self.game_info = self.game.game_info
         self.players = self.create_players()
-        self.hole_number = self.game_info.get("holes", 1)
+        if self.game_info["holes"] :
+            self.hole_number = self.game_info["holes"]
+        else :
+            self.hole_number = 1
         self.score_manager = ScoreManager(self.players, self.hole_number)
         self.levels_played = 0
-        self.total_levels = self.hole_number
+        self.hole_number = self.hole_number
         self.current_level = None
         # Chargement du premier niveau
         self.load_next_level()
@@ -62,7 +65,7 @@ class PlayScene(Scene):
 
     def load_next_level(self):
         """Charge un niveau s'il en reste, sinon termine la partie."""
-        if self.levels_played < self.total_levels:
+        if self.levels_played < self.hole_number:
             self.reset_players()
             map_key = random.choice(list(self.maps.keys()))
             self.current_level = self.create_level(self.maps[map_key])
@@ -73,7 +76,7 @@ class PlayScene(Scene):
 
     def next_level(self):
         """Passe au niveau suivant ou quitte le jeu."""
-        if self.levels_played < self.total_levels:
+        if self.levels_played < self.hole_number:
             self.load_next_level()
         else:
             self.quit_game()
