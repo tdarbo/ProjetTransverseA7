@@ -60,7 +60,7 @@ class ConfigurationScene(Scene):
             text=text,
             manager=self.ui_manager,
             container=panel,
-            relative_rect=pygame.Rect((0, 0, PANEL_WIDTH, 50)),
+            relative_rect=pygame.Rect((0, 0), (-1, -1)),
             anchors={'top': 'top', 'centerx': 'centerx'},
             object_id=ObjectID(class_id='label_black', object_id=object_id)
         )
@@ -98,7 +98,7 @@ class ConfigurationScene(Scene):
         """Build the panel for the number of players."""
         panel = self.create_panel(self.ui_container, "#players_panel")
         # Create the title label for the panel
-        self.create_panel_title(panel, "Saisissez le nombre\n\nde joueurs\n\n(5 max.)", "#players_label")
+        self.create_panel_title(panel, "Nombre de joueurs (5 max.)", "#players_label")
         # Create navigation buttons
         self.create_previous_button(panel, "Retour au menu", "#players_previous")
         self.create_next_button(panel, "Suivant", "#players_next")
@@ -118,7 +118,7 @@ class ConfigurationScene(Scene):
     def build_holes_panel(self) -> None:
         """Build the panel for the number of holes."""
         panel = self.create_panel(self.ui_container, "#holes_panel")
-        self.create_panel_title(panel, "Saisissez le nombre de trous (5 max.)", "#holes_label")
+        self.create_panel_title(panel, "Nombre de trous (5 max.)", "#holes_label")
         self.create_previous_button(panel, "Précédent", "#holes_previous")
         self.create_next_button(panel, "Suivant", "#holes_next")
         # Create the text input for number of holes
@@ -210,7 +210,7 @@ class ConfigurationScene(Scene):
     # Data preparation
     def default_data_dictionary(self) -> dict:
         """Return the default configuration dictionary."""
-        return {"players": 1, "holes": 1, "names": []}
+        return DEFAULT_GAME_DICTIONARY
 
     def delete_names_fields(self):
         """Remove all existing player name input fields."""
