@@ -1,9 +1,9 @@
 {
    "text_box": {
       "font":{
-         "name":"PressStart2P-Regular",
+         "name":"font-regular-v2",
          "size":"12",
-         "regular_path":"../asset/font/PressStart2P-Regular.ttf"
+         "regular_path":"../asset/font/font-regular-v2.ttf"
       },
         "misc": {
             "shape": "rectangle",
@@ -15,16 +15,16 @@
     },
    "@label_small":{
       "font":{
-         "name":"PressStart2P-Regular",
+         "name":"font-regular-v2",
          "size":"9",
-         "regular_path":"../asset/font/PressStart2P-Regular.ttf"
+         "regular_path":"../asset/font/font-regular-v2.ttf"
       }
    },
    "label":{
       "font":{
-         "name":"PressStart2P-Regular",
+         "name":"font-regular-v2",
          "size":"11",
-         "regular_path":"../asset/font/PressStart2P-Regular.ttf"
+         "regular_path":"../asset/font/font-regular-v2.ttf"
       },
       "misc": {
          "line_spacing": 3
@@ -32,24 +32,24 @@
    },
    "@label_medium":{
       "font":{
-         "name":"PressStart2P-Regular",
+         "name":"font-regular-v2",
          "size":"13",
-         "regular_path":"../asset/font/PressStart2P-Regular.ttf"
+         "regular_path":"../asset/font/font-regular-v2.ttf"
       }
    },
    "@label_large":{
       "font":{
-         "name":"PressStart2P-Regular",
+         "name":"font-regular-v2",
          "size":"15",
-         "regular_path":"../asset/font/PressStart2P-Regular.ttf",
+         "regular_path":"../asset/font/font-regular-v2.ttf",
          "line_spacing": "3"
       }
    },
    "@label_big":{
       "font":{
-         "name":"PressStart2P-Regular",
+         "name":"font-regular-v2",
          "size":"24",
-         "regular_path":"../asset/font/PressStart2P-Regular.ttf"
+         "regular_path":"../asset/font/font-regular-v2.ttf"
       }
    },
    "label_black":{
@@ -124,9 +124,9 @@
    },
    "@button":{
       "font":{
-         "name":"PressStart2P-Regular",
+         "name":"font-regular-v2",
          "size":"11",
-         "regular_path":"../asset/font/PressStart2P-Regular.ttf"
+         "regular_path":"../asset/font/font-regular-v2.ttf"
       },
       "misc":{
          "border_width":"3",
@@ -188,9 +188,9 @@
              "text_cursor":"#FFFFFF"
          },
        "font":{
-         "name":"PressStart2P-Regular",
+         "name":"font-regular-v2",
          "size":"11",
-         "regular_path":"../asset/font/PressStart2P-Regular.ttf"
+         "regular_path":"../asset/font/font-regular-v2.ttf"
       },
          "misc":
          {
