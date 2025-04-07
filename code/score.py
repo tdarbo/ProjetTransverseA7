@@ -78,27 +78,29 @@ class ScoreManager:
         # Dimension des cellules
         cell_width = 100 # Largeur d'une cellule
         cell_height = 10 # Hauteur d'une cellule
-        cell_gap = 5 # Espace entre cellules
+        cell_gap = 15 # Espace entre cellules
 
         # Dimension du menu
-        menu_gap = 50
-        menu_height = (len(lines) - 1) * cell_gap + cell_height * len(lines)
-        menu_width = (len(lines[0]) - 1) * cell_gap + cell_width * len(lines[0])
+        menu_padding = 20
+        menu_margin = 25
+        menu_height = (len(lines) - 1) * cell_gap + cell_height * len(lines) + menu_padding * 2
+        menu_width = (len(lines[0]) - 1) * cell_gap + cell_width * len(lines[0]) + menu_padding * 2
 
         # Calcul de la position de la première cellule pour que notre menu soit positionné à partir du coin inférieur droit
-        start_x = screen.get_width() - menu_gap - menu_width
-        start_y = screen.get_height() - menu_gap - menu_height
+        start_x = screen.get_width() - menu_margin - menu_width
+        start_y = screen.get_height() - menu_margin - menu_height
 
         # On dessine un rectangle englobant le menu
-        pygame.draw.rect(screen, (255, 255, 255), (start_x, start_y, menu_width, menu_height), 3)
+        pygame.draw.rect(screen,(213, 85, 52),(start_x, start_y, menu_width, menu_height))
+        pygame.draw.rect(screen, '#3F170D', (start_x, start_y, menu_width, menu_height), 3)
 
         # On affiche le tableau du score ligne par ligne
         for row_index in range(len(lines)):
             row = lines[row_index]
             for col_index in range(len(lines[0])):
                 cell = row[col_index]
-                current_cell_x = start_x + col_index * (cell_width + cell_gap)
-                current_cell_y = start_y + row_index * (cell_height + cell_gap)
+                current_cell_x = start_x + col_index * (cell_width + cell_gap) + menu_padding
+                current_cell_y = start_y + row_index * (cell_height + cell_gap) + menu_padding
 
                 text_obj = Text(
                     text=str(cell),
