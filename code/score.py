@@ -14,6 +14,7 @@ class ScoreManager:
         self.players = players
         self.hole_number = hole_number
         self.score = self.create_dictionary()  # Dictionary that contains the scores of the players
+        self.collapsed = True
 
     def create_dictionary(self):
         score_dict = dict()
@@ -54,7 +55,13 @@ class ScoreManager:
         line = []
         line.append(str(hole + 1))
         for value in self.score.values():
-            line.append(str(value["score"][hole])) # Score du joueur au trou "hole"
+            # 'value' correspond à un objet Player
+            if value["score"][hole] == 0 :
+                # Si le score est nul, on affiche un '-' à la place du '0'
+                line.append('-')
+            else :
+                # On récupère le score du joueur pour le niveau associé au trou "hole"
+                line.append(str(value["score"][hole]))
 
         return line
 
@@ -62,7 +69,12 @@ class ScoreManager:
         line = []
         line.append("Total")
         for value in self.score.values():
-            line.append(str(value["total"])) # Récuperation du total du joueur
+            # 'value' correspond à un objet Player
+            if value["total"] == 0:
+                # Si le total est nul, on affiche un '-' à la place du '0'
+                line.append('-')
+            else:
+                line.append(str(value["total"])) # On récupère le score total du joueur
 
         return line
 
@@ -134,6 +146,3 @@ if __name__ == '__main__':
     print(score_manager.score, "après reset")
     score_manager.print_score()
     #score_manager.draw()
-
-    for i in range(4, -1, -1):
-        print(i)
