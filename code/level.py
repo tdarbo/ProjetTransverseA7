@@ -104,19 +104,25 @@ class Level:
         )
 
     def get_line_color(self, line_length: int) -> str:
-        if line_length < 200 :
+        global width_line
+        if line_length < 100 :
             color = "pink"
-        elif line_length < 400 :
+            width_line = 1
+        elif line_length < 200 :
             color = "blue"
-        elif line_length < 600 :
+            width_line = 2
+        elif line_length < 300 :
             color = "green"
-        elif line_length < 800 :
+            width_line = 3
+        elif line_length < 400 :
             color = "yellow"
-        elif line_length < 1000 :
+            width_line = 4
+        elif line_length < 500 :
             color = "orange"
+            width_line = 5
         else :
             color = "red"
-
+            width_line = 6
         return color
 
     def draw_map(self, screen):
@@ -154,8 +160,8 @@ class Level:
                 pygame.Color(self.get_line_color(line_length)),
                 self.world_to_screen_position(self.current_player.position, center, zoom),
                 self.world_to_screen_position(self.drag_current, center, zoom),
-                width=3
-            )
+                width = width_line
+                )
 
         # Application du zoom sur la map
         resize_size = (int(self.map_size[0] * zoom), int(self.map_size[1] * zoom))
