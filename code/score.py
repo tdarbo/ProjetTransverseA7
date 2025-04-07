@@ -134,7 +134,7 @@ class ScoreManager:
                         text=str(cell),
                         pos=(current_cell_x, current_cell_y),
                         color=(255, 255, 255),
-                        font_size=10
+                        font_size= 11
                     )
                     text_obj.draw(screen)
 
