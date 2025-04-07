@@ -62,8 +62,11 @@ class Level:
 
     def on_mouse_up(self, event):
         if self.dragging:
-            adjusted_pos = self.map.camera.getAbsoluteCoord(event.pos)
+            # On modifie le score du joueur
+            # Il vient de jouer donc on lui ajoute 1 point
+            self.score_manager.add_point(self.current_player, self.hole_number)
 
+            adjusted_pos = self.map.camera.getAbsoluteCoord(event.pos)
             new_velocity = (self.drag_start - adjusted_pos) * self.force_multiplier
             if new_velocity.length() >= MAX_PLAYER_VELOCITY.length():
                 new_velocity = new_velocity.normalize() * MAX_PLAYER_VELOCITY.length()
