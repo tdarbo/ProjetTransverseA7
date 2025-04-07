@@ -132,6 +132,15 @@ class Level:
         self.overlay_surf.fill((0, 0, 0, 0))
         self.map_surf.fill("#BDDFFF")
 
+        self.map.hole.x
+        self.map.hole.y
+        pygame.draw.circle(
+            surface=self.map_surf,
+            color=pygame.Color(noir),
+            center=(self.map.hole.x, self.map.hole.y),
+            radius= 15
+        )
+
         # Dessin des tuiles (on peut ignorer les tuiles de collision en mode normal)
         for tile in self.map.tiles:
             if tile.id == "Collision" and not DEBUG_MODE:
