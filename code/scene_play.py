@@ -58,17 +58,19 @@ class PlayScene(Scene):
 
     def create_level(self, hole_number, map_path):
         """Crée un niveau à partir du path de la map."""
-        map = Map(map_path, self.screen)
+        tiled_map = Map(map_path, self.screen)
         width, height = self.screen.get_size()
-
-        return Level(hole_number, map, self.players, self.score_manager, width, height)
+        level = Level(hole_number, tiled_map, self.players, self.score_manager, width, height)
+        print(level)
+        return level
 
     def load_next_level(self):
         """Charge un niveau s'il en reste, sinon termine la partie."""
         if self.levels_played < self.hole_number:
             self.reset_players()
             map_key = random.choice(list(self.maps.keys()))
-            self.current_level = self.create_level(self.maps[map_key], self.levels_played)
+            self.current_level = self.create_level(self.levels_played, self.maps[map_key])
+            print(self.maps[map_key])
             self.levels_played += 1
             print(f"Niveau {self.levels_played} chargé avec la map '{map_key}'.")
         else:
