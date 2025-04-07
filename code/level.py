@@ -64,7 +64,7 @@ class Level:
         if self.dragging:
             # On modifie le score du joueur
             # Il vient de jouer donc on lui ajoute 1 point
-            self.score_manager.add_point(self.current_player, self.hole_number)
+            self.score_manager.add_points(self.current_player, self.hole_number)
 
             adjusted_pos = self.map.camera.getAbsoluteCoord(event.pos)
             new_velocity = (self.drag_start - adjusted_pos) * self.force_multiplier
