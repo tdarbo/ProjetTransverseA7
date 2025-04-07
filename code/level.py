@@ -158,6 +158,13 @@ class Level:
                 continue
             tile.draw(self.map_surf)
 
+        pygame.draw.circle(
+            surface=self.map_surf,
+            color=pygame.Color("black"),
+            center=(self.map.hole.x, self.map.hole.y),
+            radius=20
+        )
+
         # Dessin des joueurs
         for player in self.players:
             if not player.hide:
