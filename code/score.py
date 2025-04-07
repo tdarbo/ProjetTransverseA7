@@ -28,6 +28,7 @@ class ScoreManager:
 
     def add_points(self, player, hole):
         self.score[player]["score"][hole] += 1
+        self.score_calculation()
 
     def score_calculation(self):
         for player in self.players:
