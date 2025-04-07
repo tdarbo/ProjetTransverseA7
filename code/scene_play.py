@@ -85,6 +85,7 @@ class PlayScene(Scene):
 
     def reset_players(self):
         for player in self.players:
+            player.hide = False
             player.reset()
 
     def process_event(self, event):
@@ -94,7 +95,7 @@ class PlayScene(Scene):
     def update(self, dt):
         if self.current_level:
             self.current_level.update(dt)
-            if self.current_level.level_finished:
+            if self.current_level.finished:
                 self.next_level()
 
     def draw(self, screen):

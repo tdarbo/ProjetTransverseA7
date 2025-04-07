@@ -1,6 +1,8 @@
+from pygame.examples.glcube import init_gl_stuff_old
+
 from player import Player
 from settings import *
-from math import exp
+from math import exp,sqrt
 
 
 class Engine:
@@ -37,6 +39,9 @@ class Engine:
 
     def resolve_player_player_collision(self, player1: Player, player2: Player) -> None:
         """Résout une collision entre deux joueurs."""
+        if player1.hide or player2.hide:
+            return
+
         diff = player1.position - player2.position
         distance = diff.length()
         min_distance = player1.radius + player2.radius
@@ -74,15 +79,25 @@ class Engine:
 
     def resolve_finish(self, player: Player) -> None:
         """Vérifie si un joueur a terminé le niveau."""
-        if self.is_on_finish(player):
-            # Gérer le reste
-            print(f"Player:{player.name} is on finish")
+        if not player.hide:
+            print(f"Player:{player.name} has finished in x shots")
+            player.velocity = Vector(0.0, 0.0)
+            player.hide = True
 
-    def is_on_finish(self, player: Player) -> bool:
+
+    def is_on_finish(self, player: Player) -> None:
         """Vérifie si un joueur a atteint le trou."""
-        return False
-        # À implémenter si nécessaire :
-        # return player.rect.collideobjects(self.level.map.hole)
+        hole = self.level.map.hole
+
+        diff_x,diff_y = player.position.x - hole.x, player.position.y - hole.y
+
+        distance = sqrt(diff_x ** 2 + diff_y ** 2)
+        if distance < (BALL_RADIUS + 1):
+            self.resolve_finish(player)
+
+
+    # À implémenter si nécessaire :
+    # return player.rect.collideobjects(self.level.map.hole)
 
     def resolve_player_wall_collision(self, player):
         """
@@ -141,6 +156,7 @@ class Engine:
 
     def update(self, dt: float) -> None:
         """Met à jour la physique du jeu pour tous les joueurs."""
+
         for i in range(self.num_players):
             player = self.players[i]
 
@@ -170,6 +186,6 @@ class Engine:
             player.update()
 
             self.resolve_out_of_bounds(player)
-            self.resolve_finish(player)
+            self.is_on_finish(player)
 
             player.update()
