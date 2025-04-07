@@ -1,3 +1,4 @@
+from player import Player
 from settings import *
 from ui_text import Text
 
@@ -29,6 +30,7 @@ class ScoreManager:
 
     def add_points(self, player, hole):
         self.score[player]["score"][hole] += 1
+        self.score_calculation()
 
     def score_calculation(self):
         for player in self.players:
@@ -46,13 +48,15 @@ class ScoreManager:
     def _get_table_header(self):
         line = []
         line.append("Trou n°")
-        for value in self.score.keys(): # Keys = Noms des joueurs
-            line.append(value.name)
+        for player in self.score.keys(): # Keys = Noms des joueurs
+            # On a besoin de la couleur du joueur et son nom
+            # On passe donc un tuple avec (nom, couleur)
+            line.append(player)
 
         return line
 
     def _get_table_line(self, hole):
-        line = []
+        line = list()
         line.append(str(hole + 1))
         for value in self.score.values():
             # 'value' correspond à un objet Player
@@ -66,7 +70,7 @@ class ScoreManager:
         return line
 
     def _get_table_footer(self):
-        line = []
+        line = list()
         line.append("Total")
         for value in self.score.values():
             # 'value' correspond à un objet Player
@@ -114,13 +118,25 @@ class ScoreManager:
                 current_cell_x = start_x + col_index * (cell_width + cell_gap) + menu_padding
                 current_cell_y = start_y + row_index * (cell_height + cell_gap) + menu_padding
 
-                text_obj = Text(
-                    text=str(cell),
-                    pos=(current_cell_x, current_cell_y),
-                    color=(255, 255, 255),
-                    font_size=10
-                )
-                text_obj.draw(screen)  # On affiche le texte de la cellule
+                if row_index == 0 and isinstance(cell, Player):
+                    # Si c'est la première ligne du tableau et que notre cellule correspond à un joueur
+                    # Alors on dessine un cercle de couleur devant le joueur associé
+                        pygame.draw.circle(screen, cell.color, (current_cell_x, current_cell_y + 5), 5)
+                        text_obj = Text(
+                            text=str(cell.name),
+                            pos=(15 + current_cell_x, current_cell_y),
+                            color=(255, 255, 255),
+                            font_size=10
+                        )
+                        text_obj.draw(screen)
+                else :
+                    text_obj = Text(
+                        text=str(cell),
+                        pos=(current_cell_x, current_cell_y),
+                        color=(255, 255, 255),
+                        font_size=10
+                    )
+                    text_obj.draw(screen)
 
     def print_score(self):
         print(self._get_table_header())
