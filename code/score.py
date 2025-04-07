@@ -1,3 +1,4 @@
+from player import Player
 from settings import *
 from ui_text import Text
 
@@ -14,6 +15,7 @@ class ScoreManager:
         self.players = players
         self.hole_number = hole_number
         self.score = self.create_dictionary()  # Dictionary that contains the scores of the players
+        self.collapsed = True
 
     def create_dictionary(self):
         score_dict = dict()
@@ -46,24 +48,37 @@ class ScoreManager:
     def _get_table_header(self):
         line = []
         line.append("Trou n°")
-        for value in self.score.keys(): # Keys = Noms des joueurs
-            line.append(value.name)
+        for player in self.score.keys(): # Keys = Noms des joueurs
+            # On a besoin de la couleur du joueur et son nom
+            # On passe donc un tuple avec (nom, couleur)
+            line.append(player)
 
         return line
 
     def _get_table_line(self, hole):
-        line = []
+        line = list()
         line.append(str(hole + 1))
         for value in self.score.values():
-            line.append(str(value["score"][hole])) # Score du joueur au trou "hole"
+            # 'value' correspond à un objet Player
+            if value["score"][hole] == 0 :
+                # Si le score est nul, on affiche un '-' à la place du '0'
+                line.append('-')
+            else :
+                # On récupère le score du joueur pour le niveau associé au trou "hole"
+                line.append(str(value["score"][hole]))
 
         return line
 
     def _get_table_footer(self):
-        line = []
+        line = list()
         line.append("Total")
         for value in self.score.values():
-            line.append(str(value["total"])) # Récuperation du total du joueur
+            # 'value' correspond à un objet Player
+            if value["total"] == 0:
+                # Si le total est nul, on affiche un '-' à la place du '0'
+                line.append('-')
+            else:
+                line.append(str(value["total"])) # On récupère le score total du joueur
 
         return line
 
@@ -79,35 +94,49 @@ class ScoreManager:
         # Dimension des cellules
         cell_width = 100 # Largeur d'une cellule
         cell_height = 10 # Hauteur d'une cellule
-        cell_gap = 5 # Espace entre cellules
+        cell_gap = 15 # Espace entre cellules
 
         # Dimension du menu
-        menu_gap = 50
-        menu_height = (len(lines) - 1) * cell_gap + cell_height * len(lines)
-        menu_width = (len(lines[0]) - 1) * cell_gap + cell_width * len(lines[0])
+        menu_padding = 20
+        menu_margin = 25
+        menu_height = (len(lines) - 1) * cell_gap + cell_height * len(lines) + menu_padding * 2
+        menu_width = (len(lines[0]) - 1) * cell_gap + cell_width * len(lines[0]) + menu_padding * 2
 
         # Calcul de la position de la première cellule pour que notre menu soit positionné à partir du coin inférieur droit
-        start_x = screen.get_width() - menu_gap - menu_width
-        start_y = screen.get_height() - menu_gap - menu_height
+        start_x = screen.get_width() - menu_margin - menu_width
+        start_y = screen.get_height() - menu_margin - menu_height
 
         # On dessine un rectangle englobant le menu
-        pygame.draw.rect(screen, (255, 255, 255), (start_x, start_y, menu_width, menu_height), 3)
+        pygame.draw.rect(screen,(213, 85, 52),(start_x, start_y, menu_width, menu_height))
+        pygame.draw.rect(screen, '#3F170D', (start_x, start_y, menu_width, menu_height), 3)
 
         # On affiche le tableau du score ligne par ligne
         for row_index in range(len(lines)):
             row = lines[row_index]
             for col_index in range(len(lines[0])):
                 cell = row[col_index]
-                current_cell_x = start_x + col_index * (cell_width + cell_gap)
-                current_cell_y = start_y + row_index * (cell_height + cell_gap)
+                current_cell_x = start_x + col_index * (cell_width + cell_gap) + menu_padding
+                current_cell_y = start_y + row_index * (cell_height + cell_gap) + menu_padding
 
-                text_obj = Text(
-                    text=str(cell),
-                    pos=(current_cell_x, current_cell_y),
-                    color=(255, 255, 255),
-                    font_size=10
-                )
-                text_obj.draw(screen)  # On affiche le texte de la cellule
+                if row_index == 0 and isinstance(cell, Player):
+                    # Si c'est la première ligne du tableau et que notre cellule correspond à un joueur
+                    # Alors on dessine un cercle de couleur devant le joueur associé
+                        pygame.draw.circle(screen, cell.color, (current_cell_x, current_cell_y + 5), 5)
+                        text_obj = Text(
+                            text=str(cell.name),
+                            pos=(15 + current_cell_x, current_cell_y),
+                            color=(255, 255, 255),
+                            font_size=10
+                        )
+                        text_obj.draw(screen)
+                else :
+                    text_obj = Text(
+                        text=str(cell),
+                        pos=(current_cell_x, current_cell_y),
+                        color=(255, 255, 255),
+                        font_size= 11
+                    )
+                    text_obj.draw(screen)
 
     def print_score(self):
         print(self._get_table_header())
@@ -133,6 +162,3 @@ if __name__ == '__main__':
     print(score_manager.score, "après reset")
     score_manager.print_score()
     #score_manager.draw()
-
-    for i in range(4, -1, -1):
-        print(i)

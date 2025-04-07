@@ -11,6 +11,8 @@ class Player(pygame.sprite.Sprite):
         self.radius = radius
         self.name = name
 
+        self.hide = False
+
         # Création d'une Surface pour représenter le joueur
         self.image = pygame.Surface((2 * self.radius, 2 * self.radius), pygame.SRCALPHA)
         pygame.draw.circle(self.image, self.color, (self.radius, self.radius), self.radius)
