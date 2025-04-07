@@ -1,3 +1,7 @@
+from time import sleep
+
+import pygame
+
 from settings import *
 from engine import Engine
 
@@ -15,6 +19,7 @@ class Level:
         self.current_player = players[0]
         self.shot_taken = False  # Indique si le joueur actif a joué
         self.hole_number = hole_number # Numéro du trou associé au level
+        self.finished = False
 
         # Variables pour le drag & drop
         self.dragging = False
@@ -39,6 +44,9 @@ class Level:
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_SPACE:
                 self.centerOnCurrentPlayer()
+            elif event.key == pygame.K_h:
+                self.current_player.position.x = self.map.hole.x
+                self.current_player.position.y = self.map.hole.y
         elif event.type == pygame.MOUSEBUTTONDOWN:
             self.on_mouse_down(event)
         elif event.type == pygame.MOUSEMOTION:
@@ -78,6 +86,9 @@ class Level:
             self.drag_current = None
 
     def update(self, dt):
+        if self.finished:
+            print("Level finished")
+
         self.map.camera.animator.update()
         self.engine.update(dt)
         self.check_turn_end()
@@ -89,13 +100,22 @@ class Level:
             if self.current_player.velocity.length() < VELOCITY_THRESHOLD:
                 self.next_turn()
 
-    def next_turn(self):
+    def next_turn(self, i = 0):
         """Passe au tour du joueur suivant."""
+        l = i
         self.shot_taken = False
+        if l > len(self.players):
+            self.finished = True
+            return
+
         self.current_player_index = (self.current_player_index + 1) % len(self.players)
         self.current_player = self.players[self.current_player_index]
-        print(f"Tour du joueur {self.current_player_index + 1}")
-        self.centerOnCurrentPlayer()
+        if self.current_player.hide:
+            self.next_turn(l+1)
+            print("skipped turn")
+        else:
+            print(f"Tour du joueur {self.current_player_index + 1}")
+            self.centerOnCurrentPlayer()
 
     def world_to_screen_position(self, world_pos, center_point, camera_zoom):
         return (
@@ -140,7 +160,8 @@ class Level:
 
         # Dessin des joueurs
         for player in self.players:
-            player.draw(self.map_surf)
+            if not player.hide:
+                player.draw(self.map_surf)
 
         # Cerclage du joueur actif s'il n'a pas encore joué
         if not self.shot_taken:
