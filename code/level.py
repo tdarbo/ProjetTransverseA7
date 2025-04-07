@@ -5,7 +5,7 @@ from engine import Engine
 class Level:
     """Gestion de la map, des tours et des événements"""
 
-    def __init__(self, tiled_map, players, score_manager, screen_width=1280, screen_height=720):
+    def __init__(self, hole_number, tiled_map, players, score_manager, screen_width=1280, screen_height=720):
         """Initialise le niveau."""
         self.map = tiled_map
         self.players = players
@@ -14,6 +14,7 @@ class Level:
         self.current_player_index = 0
         self.current_player = players[0]
         self.shot_taken = False  # Indique si le joueur actif a joué
+        self.hole_number = hole_number # Numéro du trou associé au level
 
         # Variables pour le drag & drop
         self.dragging = False
