@@ -1,5 +1,7 @@
+
 from settings import *
 from engine import Engine
+from broadcast import BroadcastManager
 
 
 class Level:
@@ -11,6 +13,7 @@ class Level:
         self.players = players
         self.engine = Engine(self)
         self.score_manager = score_manager
+        self.broadcast_manager = BroadcastManager()
         self.current_player_index = 0
         self.current_player = players[0]
         self.shot_taken = False  # Indique si le joueur actif a joué
@@ -176,6 +179,7 @@ class Level:
         """Dessine le niveau sur l'écran."""
         self.draw_map(screen)
         self.score_manager.draw(self.overlay_surf)
+        self.broadcast_manager.draw(self.overlay_surf)
         screen.blit(self.overlay_surf, (0, 0))
 
     def centerOnCurrentPlayer(self):
