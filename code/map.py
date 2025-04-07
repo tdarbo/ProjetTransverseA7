@@ -43,9 +43,13 @@ def load_tiled_map(map_path, tile_size):
 
 class Map:
     def __init__(self, path, surf):
-        self.camera = Camera(surf)
         self.tiles, self.spawn, self.hole = load_tiled_map(path, TILE_SIZE)
         self.surface = surf
+
+        self.camera = Camera(surf)
+        self.camera.offset_X = self.hole.x
+        self.camera.offset_Y = self.hole.y
+        self.camera.zoom_factor = 0.5
 
         tmx_data = pytmx.TiledMap(path)
         map_width = tmx_data.width  # Nombre de tuiles (colonnes)
