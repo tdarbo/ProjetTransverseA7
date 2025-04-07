@@ -156,6 +156,7 @@ class Engine:
 
     def update(self, dt: float) -> None:
         """Met à jour la physique du jeu pour tous les joueurs."""
+
         for i in range(self.num_players):
             player = self.players[i]
 

@@ -19,7 +19,6 @@ class Level:
         self.current_player = players[0]
         self.shot_taken = False  # Indique si le joueur actif a joué
         self.hole_number = hole_number # Numéro du trou associé au level
-        self.finished = False
 
         # Variables pour le drag & drop
         self.dragging = False
@@ -28,7 +27,7 @@ class Level:
 
         self.force_multiplier = FORCE_MULTIPLIER
 
-        self.level_finished = False
+        self.finished = False
 
         # Surfaces d'affichage
         self.overlay_surf = pygame.Surface((screen_width, screen_height), pygame.SRCALPHA)
@@ -86,6 +85,9 @@ class Level:
             self.drag_current = None
 
     def update(self, dt):
+        if self.current_player.hide:
+            self.shot_taken = True
+
         if self.finished:
             print("Level finished")
 
@@ -171,7 +173,7 @@ class Level:
                 player.draw(self.map_surf)
 
         # Cerclage du joueur actif s'il n'a pas encore joué
-        if not self.shot_taken:
+        if not self.shot_taken and not self.current_player.hide:
             pygame.draw.circle(
                 surface=self.map_surf,
                 color=pygame.Color("white"),
