@@ -1,202 +1,208 @@
 {
-   "text_box": {
-      "font":{
-         "name":"font-regular-v2",
-         "size":"12",
-         "regular_path":"../asset/font/font-regular-v2.ttf"
-      },
-        "misc": {
-            "shape": "rectangle",
-            "shape_corner_radius": "0",
-            "border_width": "0",
-            "shadow_width": "2",
-            "padding": "10, 10"
-        }
+  "text_box": {
+    "font": {
+      "name": "font-regular-v2",
+      "size": "12",
+      "regular_path": "../asset/font/font-regular-v2.ttf"
     },
-   "@label_small":{
-      "font":{
-         "name":"font-regular-v2",
-         "size":"9",
-         "regular_path":"../asset/font/font-regular-v2.ttf"
-      }
-   },
-   "label":{
-      "font":{
-         "name":"font-regular-v2",
-         "size":"11",
-         "regular_path":"../asset/font/font-regular-v2.ttf"
-      },
-      "misc": {
-         "line_spacing": 3
-      }
-   },
-   "@label_medium":{
-      "font":{
-         "name":"font-regular-v2",
-         "size":"13",
-         "regular_path":"../asset/font/font-regular-v2.ttf"
-      }
-   },
-   "@label_large":{
-      "font":{
-         "name":"font-regular-v2",
-         "size":"15",
-         "regular_path":"../asset/font/font-regular-v2.ttf",
-         "line_spacing": "3"
-      }
-   },
-   "@label_big":{
-      "font":{
-         "name":"font-regular-v2",
-         "size":"24",
-         "regular_path":"../asset/font/font-regular-v2.ttf"
-      }
-   },
-   "label_black":{
-      "prototype":"label",
-      "colours":{
-         "normal_text":"#000000"
-      }
-   },
-   "label_white":{
-      "prototype":"label",
-      "colours":{
-         "normal_text":"#FFFFFF"
-      }
-   },
-   "label_small_black":{
-      "prototype":"@label_small",
-      "colours":{
-         "normal_text":"#000000"
-      }
-   },
-   "label_small_white":{
-      "prototype":"@label_small",
-      "colours":{
-         "normal_text":"#FFFFFF"
-      }
-   },
-   "label_medium_black":{
-      "prototype":"@label_medium",
-      "colours":{
-         "normal_text":"#000000"
-      }
-   },
-   "label_medium_white":{
-      "prototype":"@label_medium",
-      "colours":{
-         "normal_text":"#FFFFFF"
-      }
-   },
-   "label_large_black":{
-      "prototype":"@label_large",
-      "colours":{
-         "normal_text":"#000000"
-      }
-   },
-   "label_large_white":{
-      "prototype":"@label_large",
-      "colours":{
-         "normal_text":"#FFFFFF"
-      }
-   },
-   "label_big_black":{
-      "prototype":"@label_big",
-      "colours":{
-         "normal_text":"#000000"
-      }
-   },
-   "label_big_white":{
-      "prototype":"@label_big",
-      "colours":{
-         "normal_text":"#FFFFFF"
-      }
-   },
-   "panel":{
-      "colours":{
-         "dark_bg":"#E1E1E1F0",
-         "normal_border":"#3E3E3E"
-      },
-      "misc":{
-         "border_width":"3",
-         "shadow_width":"0"
-      }
-   },
-   "@button":{
-      "font":{
-         "name":"font-regular-v2",
-         "size":"11",
-         "regular_path":"../asset/font/font-regular-v2.ttf"
-      },
-      "misc":{
-         "border_width":"3",
-         "shadow_width":"0",
-         "tool_tip_delay":"1.0",
-         "text_horiz_alignment":"center",
-         "text_vert_alignment":"center"
-      }
-   },
-   "button_primary":{
-      "prototype":"@button",
-      "colours":{
-         "normal_bg":"#D55534",
-         "hovered_bg":"#C44E30",
-         "disabled_bg":"#E59580",
-         "selected_bg":"#C44E30",
-         "active_bg":"#D55534",
-         "normal_text":"#FFFFFF",
-         "hovered_text":"#FFFFFF",
-         "selected_text":"#FFFFFF",
-         "disabled_text":"#F6DCD5",
-         "active_text":"#FFFFFF",
-         "normal_border":"#6A2B1A",
-         "hovered_border":"#6A2B1A",
-         "disabled_border":"#6A2B1A",
-         "selected_border":"#6A2B1A",
-         "active_border":"#6A2B1A"
-      }
-   },
-   "button_secondary":{
-      "prototype":"@button",
-      "colours":{
-         "normal_bg":"#7C7C7C",
-         "hovered_bg":"#727272",
-         "disabled_bg":"#ABABAB",
-         "selected_bg":"#727272",
-         "active_bg":"#7C7C7C",
-         "normal_text":"#FFFFFF",
-         "hovered_text":"#FFFFFF",
-         "selected_text":"#FFFFFF",
-         "disabled_text":"#EBEBEB",
-         "active_text":"#FFFFFF",
-         "normal_border":"#3E3E3E",
-         "hovered_border":"#3E3E3E",
-         "disabled_border":"#3E3E3E",
-         "selected_border":"#3E3E3E",
-         "active_border":"#3E3E3E"
-      }
-   },
-  "text_input":
-     {
-         "colours":
-         {
-             "dark_bg": "#7C7C7C",
-             "selected_bg": "#727272",
-             "normal_text": "#E5E5E5",
-             "selected_text": "#FFFFFF",
-             "normal_border": "#3E3E3E",
-             "text_cursor":"#FFFFFF"
-         },
-       "font":{
-         "name":"font-regular-v2",
-         "size":"11",
-         "regular_path":"../asset/font/font-regular-v2.ttf"
-      },
-         "misc":
-         {
-             "border_width": "3",
-             "shadow_width": "0",
-             "padding": "22,0"
-         }
-     }
+    "misc": {
+      "shape": "rectangle",
+      "shape_corner_radius": "0",
+      "border_width": "0",
+      "shadow_width": "2",
+      "padding": "10, 10"
+    }
+  },
+  "@label_small": {
+    "font": {
+      "name": "font-regular-v2",
+      "size": "9",
+      "regular_path": "../asset/font/font-regular-v2.ttf"
+    }
+  },
+  "label": {
+    "font": {
+      "name": "font-regular-v2",
+      "size": "11",
+      "regular_path": "../asset/font/font-regular-v2.ttf"
+    },
+    "misc": {
+      "line_spacing": 3
+    }
+  },
+  "@label_medium": {
+    "font": {
+      "name": "font-regular-v2",
+      "size": "13",
+      "regular_path": "../asset/font/font-regular-v2.ttf"
+    }
+  },
+  "@label_large": {
+    "font": {
+      "name": "font-regular-v2",
+      "size": "15",
+      "regular_path": "../asset/font/font-regular-v2.ttf",
+      "line_spacing": "3"
+    }
+  },
+  "@label_big": {
+    "font": {
+      "name": "font-regular-v2",
+      "size": "24",
+      "regular_path": "../asset/font/font-regular-v2.ttf"
+    }
+  },
+  "label_black": {
+    "prototype": "label",
+    "colours": {
+      "normal_text": "#000000"
+    }
+  },
+  "label_white": {
+    "prototype": "label",
+    "colours": {
+      "normal_text": "#FFFFFF"
+    }
+  },
+  "label_small_black": {
+    "prototype": "@label_small",
+    "colours": {
+      "normal_text": "#000000"
+    }
+  },
+  "label_small_white": {
+    "prototype": "@label_small",
+    "colours": {
+      "normal_text": "#FFFFFF"
+    }
+  },
+  "label_medium_black": {
+    "prototype": "@label_medium",
+    "colours": {
+      "normal_text": "#000000"
+    }
+  },
+  "label_medium_white": {
+    "prototype": "@label_medium",
+    "colours": {
+      "normal_text": "#FFFFFF"
+    }
+  },
+  "label_large_black": {
+    "prototype": "@label_large",
+    "colours": {
+      "normal_text": "#000000"
+    }
+  },
+  "label_large_white": {
+    "prototype": "@label_large",
+    "colours": {
+      "normal_text": "#FFFFFF"
+    }
+  },
+  "label_big_black": {
+    "prototype": "@label_big",
+    "colours": {
+      "normal_text": "#000000"
+    }
+  },
+  "label_big_white": {
+    "prototype": "@label_big",
+    "colours": {
+      "normal_text": "#FFFFFF"
+    }
+  },
+  "panel": {
+    "colours": {
+      "dark_bg": "#E1E1E1F0",
+      "normal_border": "#3E3E3E"
+    },
+    "misc": {
+      "border_width": "3",
+      "shadow_width": "0"
+    }
+  },
+  "@button": {
+    "font": {
+      "name": "font-regular-v2",
+      "size": "11",
+      "regular_path": "../asset/font/font-regular-v2.ttf"
+    },
+    "misc": {
+      "border_width": "3",
+      "shadow_width": "0",
+      "tool_tip_delay": "1.0",
+      "text_horiz_alignment": "center",
+      "text_vert_alignment": "center"
+    }
+  },
+  "button_primary": {
+    "prototype": "@button",
+    "colours": {
+      "normal_bg": "#D55534",
+      "hovered_bg": "#C44E30",
+      "disabled_bg": "#E59580",
+      "selected_bg": "#C44E30",
+      "active_bg": "#D55534",
+      "normal_text": "#FFFFFF",
+      "hovered_text": "#FFFFFF",
+      "selected_text": "#FFFFFF",
+      "disabled_text": "#F6DCD5",
+      "active_text": "#FFFFFF",
+      "normal_border": "#6A2B1A",
+      "hovered_border": "#6A2B1A",
+      "disabled_border": "#6A2B1A",
+      "selected_border": "#6A2B1A",
+      "active_border": "#6A2B1A"
+    }
+  },
+  "button_secondary": {
+    "prototype": "@button",
+    "colours": {
+      "normal_bg": "#7C7C7C",
+      "hovered_bg": "#727272",
+      "disabled_bg": "#ABABAB",
+      "selected_bg": "#727272",
+      "active_bg": "#7C7C7C",
+      "normal_text": "#FFFFFF",
+      "hovered_text": "#FFFFFF",
+      "selected_text": "#FFFFFF",
+      "disabled_text": "#EBEBEB",
+      "active_text": "#FFFFFF",
+      "normal_border": "#3E3E3E",
+      "hovered_border": "#3E3E3E",
+      "disabled_border": "#3E3E3E",
+      "selected_border": "#3E3E3E",
+      "active_border": "#3E3E3E"
+    }
+  },
+  "text_input": {
+    "colours": {
+      "dark_bg": "#7C7C7C",
+      "selected_bg": "#727272",
+      "normal_text": "#E5E5E5",
+      "selected_text": "#FFFFFF",
+      "normal_border": "#3E3E3E",
+      "text_cursor": "#FFFFFF"
+    },
+    "font": {
+      "name": "font-regular-v2",
+      "size": "11",
+      "regular_path": "../asset/font/font-regular-v2.ttf"
+    },
+    "misc": {
+      "border_width": "3",
+      "shadow_width": "0",
+      "padding": "22,0"
+    }
+  },
+  "window": {
+    "colours": {},
+    "misc": {
+      "border_width": "3",
+      "shadow_width": "0",
+      "title_bar_height": "40"
+    }
+  },
+  "window.button": {}
 }
