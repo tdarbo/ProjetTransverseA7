@@ -1,3 +1,5 @@
+import pygame.rect
+
 from settings import *
 from scene_config import ConfigurationScene
 from scene_manager import SceneManager
@@ -13,7 +15,7 @@ class Game:
         pygame.display.set_caption(GAME_NAME)
 
         # Set up the game window
-        self.screen = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
+        self.screen = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT), pygame.FULLSCREEN)
         self.running = True
         self.clock = pygame.time.Clock()
         self.dt = DELTA_TIME
@@ -63,7 +65,7 @@ class Game:
             # Update the display
             pygame.display.flip()
 
-    def manage_error(self, error_message, title="Error"):
+    def manage_error(self, error_message, title="Erreur"):
         """
         Affiche une fenêtre d'erreur avec le message fourni.
         Si une fenêtre d'erreur est déjà affichée, elle est remplacée par la nouvelle.
@@ -77,7 +79,12 @@ class Game:
             self.error_window = None
 
         # Définir une zone pour la fenêtre d'erreur (ici, centrée sur l'écran)
-        error_rect = pygame.Rect(WINDOW_WIDTH // 2 - 150, WINDOW_HEIGHT // 2 - 100, 300, 200)
+        error_rect = pygame.rect.Rect(
+            WINDOW_WIDTH // 2 - WINDOW_ERROR_WIDTH//2,
+            WINDOW_HEIGHT // 2 - WINDOW_ERROR_HEIGHT//2,
+            WINDOW_ERROR_WIDTH,
+            WINDOW_ERROR_HEIGHT
+        )
 
         # Créer la fenêtre d'erreur et la stocker
         self.error_window = pygame_gui.windows.UIMessageWindow(
@@ -85,7 +92,7 @@ class Game:
             html_message=error_message,
             manager=self.ui_manager,
             window_title=title,
-            always_on_top=True
+            always_on_top=True,
         )
 
 
