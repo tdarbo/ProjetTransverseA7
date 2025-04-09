@@ -22,6 +22,7 @@ class Game:
 
         self.maps = {
             "map1": "../asset/TiledProject/maps/hole1.tmx",
+            "map2": "../asset/TiledProject/maps/hole2.tmx",
         }
 
         self.game_info = dict()
