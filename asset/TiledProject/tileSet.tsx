@@ -10,6 +10,9 @@
  <tile id="2">
   <image source="../image/tiles/sand.png" width="64" height="64"/>
  </tile>
+  <tile id="6">
+   <image source="../image/tiles/ice.png" width="64" height="64"/>
+  </tile>
  <tile id="3">
   <image source="../image/tiles/border.png" width="64" height="64"/>
   <objectgroup draworder="index" id="2">

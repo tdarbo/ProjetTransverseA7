@@ -32,7 +32,7 @@ class Engine:
                     return GROUND_GRASS_FRICTION
                 elif tile.id == "Sand":
                     return GROUND_SAND_FRICTION
-                elif tile.id == "ice":
+                elif tile.id == "Ice":
                     return GROUND_ICE_FRICTION
         # Par défaut : herbe
         return GROUND_GRASS_FRICTION

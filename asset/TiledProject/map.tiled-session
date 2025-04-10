@@ -3,39 +3,71 @@
         "height": 4300,
         "width": 2
     },
-    "activeFile": "maps/hole1.tmx",
+    "activeFile": "maps/hole2.tmx",
     "expandedProjectPaths": [
-        "maps",
-        "."
+        ".",
+        "maps"
     ],
     "fileStates": {
-        "maps/hole1.tmx": {
-            "scale": 0.5,
+        "hole2.tmx": {
+            "scale": 0.224734375,
             "selectedLayer": 3,
             "viewCenter": {
-                "x": 1948,
-                "y": 747
+                "x": 1601.891121462838,
+                "y": 1599.6662726830286
+            }
+        },
+        "maps/Glissade_mortelle.tmx": {
+            "scale": 3,
+            "selectedLayer": 4,
+            "viewCenter": {
+                "x": 1616.3333333333333,
+                "y": 1009.1666666666666
+            }
+        },
+        "maps/hole1.tmx": {
+            "expandedObjectLayers": [
+                4
+            ],
+            "scale": 0.33,
+            "selectedLayer": 2,
+            "viewCenter": {
+                "x": 1330.3030303030305,
+                "y": 1137.878787878788
+            }
+        },
+        "maps/hole2.tmx": {
+            "scale": 0.25,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 2164,
+                "y": 2466
             }
         },
         "tileSet.tsx": {
             "dynamicWrapping": true,
-            "scaleInDock": 1,
+            "scaleInDock": 0.5,
             "scaleInEditor": 4
         }
     },
-    "last.imagePath": "D:/DEV/WOKRSPACE/Pycharm/ProjetTransverseA7/asset/image/tiles",
-    "map.fixedSize": false,
+    "last.imagePath": "C:/Users/mathi/OneDrive/Images",
+    "map.fixedSize": true,
+    "map.height": 40,
     "map.lastUsedFormat": "tmx",
     "map.tileHeight": 64,
     "map.tileWidth": 64,
+    "map.width": 30,
     "openFiles": [
         "maps/hole1.tmx",
-        "tileSet.tsx"
+        "tileSet.tsx",
+        "maps/hole2.tmx"
     ],
     "project": "map.tiled-project",
     "recentFiles": [
+        "maps/hole1.tmx",
         "tileSet.tsx",
-        "maps/hole1.tmx"
+        "maps/hole2.tmx",
+        "hole2.tmx"
     ],
     "tileset.lastUsedFormat": "tsx",
     "tileset.type": 1

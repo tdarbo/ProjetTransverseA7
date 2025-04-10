@@ -22,7 +22,8 @@ class Game:
 
         self.maps = {
             "map1": "../asset/TiledProject/maps/hole1.tmx",
-            "map2": "../asset/TiledProject/maps/hole2.tmx",
+            "map2": "../asset/TiledProject/maps/Entre_les_lacs.tmx",
+            "map3": "../asset/TiledProject/maps/Glissade_mortelle.tmx",
         }
 
         self.game_info = dict()
