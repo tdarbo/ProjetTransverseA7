@@ -1,3 +1,5 @@
+from i18n.config import settings
+
 from settings import *
 from scene_config import ConfigurationScene
 from scene_manager import SceneManager
@@ -35,7 +37,12 @@ class Game:
         self.scene_manager.add("config_scene", ConfigurationScene(2, self))
         self.scene_manager.add("play_scene", PlayScene(3, self))
         # Display default scene
-        self.scene_manager.change("start_menu_scene")
+
+        if DEBUG_MODE:
+            self.game_info = DEBUG_CONFIG
+            self.scene_manager.change("play_scene")
+        else:
+            self.scene_manager.change("start_menu_scene")
 
         self.error_window = None
 

@@ -1,3 +1,4 @@
+from bonus_manager import Bonus
 from settings import *
 import pytmx
 from camera import Camera
@@ -7,7 +8,7 @@ from tile import Tile
 def load_tiled_map(map_path, tile_size):
     tmx_data = pytmx.load_pygame(map_path)
     tiles = pygame.sprite.Group()
-
+    bonuses = []
     spawn, hole = None, None
 
     print(tmx_data.layers)
@@ -21,6 +22,10 @@ def load_tiled_map(map_path, tile_size):
                     spawn = obj
                 elif obj.name == "hole":
                     hole = obj
+                elif obj.name == "bonus":
+                    b = Bonus(obj)
+                    b.print_bonus_log()
+                    bonuses.append(b)
 
         if isinstance(layer, pytmx.TiledTileLayer):
             for x, y, gid in layer:
@@ -38,12 +43,14 @@ def load_tiled_map(map_path, tile_size):
                     )
                     tiles.add(tile)
 
-    return tiles, spawn, hole
+
+    return tiles, spawn, hole, bonuses
+
 
 
 class Map:
     def __init__(self, path, surf):
-        self.tiles, self.spawn, self.hole = load_tiled_map(path, TILE_SIZE)
+        self.tiles, self.spawn, self.hole, self.bonuses = load_tiled_map(path, TILE_SIZE)
         self.surface = surf
 
         self.camera = Camera(surf)
@@ -59,6 +66,8 @@ class Map:
 
         self.map_width = map_width * tile_width
         self.map_height = map_height * tile_height
+
+
 
     def teleportPlayersToSpawn(self, players):
         for player in players:

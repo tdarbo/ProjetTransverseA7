@@ -47,7 +47,8 @@ SCENE_BG_IMAGE = loadingScreen = pygame.transform.scale(
     (WINDOW_WIDTH, WINDOW_HEIGHT)
 )
 
-DEBUG_MODE = False
+DEBUG_MODE = True
+DEBUG_CONFIG = {'players':1,'holes':4,'names':["player0"]}
 
 ASSET_PATH = "../asset"
 UI_THEME_PATH = "../data/ui-theme.json"

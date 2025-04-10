@@ -39,6 +39,7 @@ class Level:
         self.map.teleportPlayersToSpawn(self.players)
         self.centerOnCurrentPlayer()
 
+
     def process_event(self, event):
         """Evénements pygame."""
         self.map.camera.process_event(event)
@@ -77,6 +78,9 @@ class Level:
 
             adjusted_pos = self.map.camera.getAbsoluteCoord(event.pos)
             new_velocity = (self.drag_start - adjusted_pos) * self.force_multiplier
+            #if self.current_player.speed_bonus:
+            #    new_velocity *= 2
+            #    new_velocity = min(new_velocity, MAX_PLAYER_VELOCITY.length()*1.5)
             if new_velocity.length() >= MAX_PLAYER_VELOCITY.length():
                 new_velocity = new_velocity.normalize() * MAX_PLAYER_VELOCITY.length()
 
@@ -156,6 +160,8 @@ class Level:
         self.overlay_surf.fill((0, 0, 0, 0))
         self.map_surf.fill("#BDDFFF")
 
+
+
         # Dessin des tuiles (on peut ignorer les tuiles de collision en mode normal)
         for tile in self.map.tiles:
             if tile.id == "Collision" and not DEBUG_MODE:
@@ -195,12 +201,17 @@ class Level:
                 width = width_line
                 )
 
+        for bonus in self.map.bonuses:
+            bonus.draw_bonus(self.map_surf)
+
         # Application du zoom sur la map
         resize_size = (int(self.map_size[0] * zoom), int(self.map_size[1] * zoom))
         map_surf_resized = pygame.transform.scale(self.map_surf, resize_size)
 
         m_x = center[0] - int(self.map.camera.offset_X * zoom)
         m_y = center[1] - int(self.map.camera.offset_Y * zoom)
+
+
 
         screen.blit(map_surf_resized, (m_x, m_y))
 
