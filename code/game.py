@@ -15,7 +15,7 @@ class Game:
         pygame.display.set_caption(GAME_NAME)
 
         # Set up the game window
-        self.screen = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT), pygame.FULLSCREEN)
+        self.screen = pygame.display.set_mode((780, 420))
         self.running = True
         self.clock = pygame.time.Clock()
         self.dt = DELTA_TIME

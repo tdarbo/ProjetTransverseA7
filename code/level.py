@@ -2,6 +2,7 @@ from time import sleep
 
 import pygame
 
+from gif_manager import GifManager
 from settings import *
 from engine import Engine
 from broadcast import BroadcastManager
@@ -35,6 +36,10 @@ class Level:
         self.overlay_surf = pygame.Surface((screen_width, screen_height), pygame.SRCALPHA)
         self.map_size = (self.map.map_width, self.map.map_height)
         self.map_surf = pygame.Surface(self.map_size)
+
+        self.gif_manager = GifManager()
+
+        self.gif_manager.add_gif("../asset/GIF/Balle.gif",self.map.hole.x,self.map.hole.y,True, False)
 
         self.map.teleportPlayersToSpawn(self.players)
         self.centerOnCurrentPlayer()
@@ -209,6 +214,7 @@ class Level:
         self.draw_map(screen)
         self.score_manager.draw(self.overlay_surf)
         self.broadcast_manager.draw(self.overlay_surf)
+        self.gif_manager.update_all(self.map_surf,self.overlay_surf)
         screen.blit(self.overlay_surf, (0, 0))
 
     def centerOnCurrentPlayer(self):
