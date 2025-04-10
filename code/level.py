@@ -2,6 +2,7 @@ from time import sleep
 
 import pygame
 
+from bonus_manager import BonusSpeed
 from settings import *
 from engine import Engine
 from broadcast import BroadcastManager
@@ -94,12 +95,20 @@ class Level:
         if self.current_player.hide:
             self.shot_taken = True
 
+        if isinstance(self.current_player.bonus, BonusSpeed) and not self.shot_taken:
+            self.current_player.bonus.show_usage_message()
+
         if self.finished:
             print("Level finished")
 
+        self.update_bonuses()
         self.map.camera.animator.update()
         self.engine.update(dt)
         self.check_turn_end()
+
+    def update_bonuses(self):
+        for bonus in self.map.bonuses:
+            bonus.update_bonus(self.map_surf)
 
     def check_turn_end(self):
         """Vérifie si le tour est terminé et passe au joueur suivant."""

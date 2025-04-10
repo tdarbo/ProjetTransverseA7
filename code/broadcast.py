@@ -13,13 +13,13 @@ class BroadcastManager:
         self.rect = self.rendered_text.get_rect(topleft=self.pos)
 
     def draw(self, screen):
-        ''' Affiche le message et met à jour le timer.'''
+        """ Affiche le message et met à jour le timer."""
         if not(self.timeout):
             screen.blit(self.rendered_text, self.rect)
         BroadcastManager.timer(self)
 
     def broadcast(self,message):
-        ''' Lors de l'affichage d'un nouveau message cette fonction est appelée pour mettre à jour les données.'''
+        """ Lors de l'affichage d'un nouveau message cette fonction est appelée pour mettre à jour les données."""
         self.message = message
         self.pos=(640 - len(self.message)*7,5)
         self.rendered_text = self.font.render(self.message, True, self.color)
@@ -27,16 +27,16 @@ class BroadcastManager:
         self.begintimer = pygame.time.get_ticks()
         self.timeout = False
 
-    def time(self,time):
-        ''' Change le temps d'affichage du message, reglé par défaut à 5 secondes.'''
+    def change_time(self,time):
+        """ Change le temps d'affichage du message, reglé par défaut à 5 secondes."""
         self.time=time
 
     def timer(self):
-        ''' Calcul le temps restant pour l'affichage du message et arête son afficage si le temps est écoulé.'''
+        """ Calcul le temps restant pour l'affichage du message et arête son afficage si le temps est écoulé."""
         if ((pygame.time.get_ticks() - self.begintimer) // 1000) > self.time :
             self.timeout = True
 
     def change_color(self,color):
-        ''' Pour changer la couleur des prochains messages si besoin, reglé par défaut à blanc.'''
+        """ Pour changer la couleur des prochains messages si besoin, reglé par défaut à blanc."""
         self.color = color
 
