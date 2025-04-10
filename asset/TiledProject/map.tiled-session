@@ -17,12 +17,23 @@
                 "y": 1599.6662726830286
             }
         },
+        "maps/Entre_les_lacs.tmx": {
+            "scale": 0.2885625,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 1601.0396361273554,
+                "y": 1599.3069092484297
+            }
+        },
         "maps/Glissade_mortelle.tmx": {
-            "scale": 3,
+            "expandedObjectLayers": [
+                4
+            ],
+            "scale": 0.5,
             "selectedLayer": 4,
             "viewCenter": {
-                "x": 1616.3333333333333,
-                "y": 1009.1666666666666
+                "x": 1398,
+                "y": 1379
             }
         },
         "maps/hole1.tmx": {
@@ -32,7 +43,7 @@
             "scale": 0.33,
             "selectedLayer": 2,
             "viewCenter": {
-                "x": 1330.3030303030305,
+                "x": 1696.969696969697,
                 "y": 1137.878787878788
             }
         },
@@ -60,14 +71,15 @@
     "openFiles": [
         "maps/hole1.tmx",
         "tileSet.tsx",
-        "maps/hole2.tmx"
+        "maps/hole2.tmx",
+        "hole2.tmx"
     ],
     "project": "map.tiled-project",
     "recentFiles": [
         "maps/hole1.tmx",
         "tileSet.tsx",
-        "maps/hole2.tmx",
-        "hole2.tmx"
+        "hole2.tmx",
+        "maps/hole2.tmx"
     ],
     "tileset.lastUsedFormat": "tsx",
     "tileset.type": 1
