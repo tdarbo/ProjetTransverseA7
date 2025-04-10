@@ -1,5 +1,6 @@
 from pygame.examples.glcube import init_gl_stuff_old
 
+from bonus_manager import BonusSpeed
 from player import Player
 from settings import *
 from math import exp,sqrt
@@ -17,7 +18,7 @@ class Engine:
     def update_position(self, player: Player, dt: float) -> None:
         """Met à jour la position du joueur en fonction de sa vitesse."""
         bonus_modifier = 1
-        if player.speed_bonus:
+        if isinstance(player.bonus, BonusSpeed):
             bonus_modifier = 2
 
         player.position += player.velocity * dt * bonus_modifier

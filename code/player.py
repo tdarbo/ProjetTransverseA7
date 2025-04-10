@@ -14,7 +14,7 @@ class Player(pygame.sprite.Sprite):
         self.hide = False
 
         # Bonus part
-        self.speed_bonus = False
+        self.bonus = None
 
         # Création d'une Surface pour représenter le joueur
         self.image = pygame.Surface((2 * self.radius, 2 * self.radius), pygame.SRCALPHA)

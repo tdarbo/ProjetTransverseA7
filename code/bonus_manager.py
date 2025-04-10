@@ -24,6 +24,13 @@ class BonusType:
         """
         raise NotImplementedError("This method isn't implemented in this class")
 
+    def consume_bonus(self, player:Player, players:[Player]) -> None:
+        """
+
+        :param player:
+        :param players: Players does contain the players who finished and the player of ':param player'
+        """
+        pass
 
     def draw_bonus(self, surface:pygame.Surface,x,y):
         if settings.DEBUG_MODE:
@@ -41,8 +48,12 @@ class BonusSpeed(BonusType):
         super().__init__("BonusSpeed", 0)
 
     def apply_bonus(self, player:Player, players:[Player]) -> None:
-        player.speed_bonus = True
+        player.bonus = self
 
+    def consume_bonus(self, player:Player, players:[Player]) -> None:
+
+
+        player.bonus = None
 
 
 
@@ -62,7 +73,7 @@ class Bonus:
 
 
     def pick_bonus(self, player:Player, players:[Player]) -> None:
-        if not self.available:
+        if not self.available or isinstance(player.bonus, BonusType):
             return
 
         self.available = False
