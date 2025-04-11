@@ -34,6 +34,7 @@ class Engine:
                     return GROUND_SAND_FRICTION
                 elif tile.id == "Ice":
                     return GROUND_ICE_FRICTION
+
         # Par défaut : herbe
         return GROUND_GRASS_FRICTION
 
@@ -74,8 +75,9 @@ class Engine:
         """Vérifie si un joueur est en dehors du terrain."""
         for tile in self.level.map.tiles:
             if tile.rect.collidepoint(player.position):
-                return False
-        return True
+                if tile.id == "Water":
+                    return True
+        return False
 
     def resolve_finish(self, player: Player) -> None:
         """Vérifie si un joueur a terminé le niveau."""
