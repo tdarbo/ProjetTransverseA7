@@ -18,22 +18,19 @@
             }
         },
         "maps/Entre_les_lacs.tmx": {
-            "scale": 0.25,
-            "selectedLayer": 0,
+            "scale": 0.33,
+            "selectedLayer": 4,
             "viewCenter": {
-                "x": 1302,
-                "y": 1690
+                "x": 1610.6060606060607,
+                "y": 1828.7878787878785
             }
         },
         "maps/Glissade_mortelle.tmx": {
-            "expandedObjectLayers": [
-                4
-            ],
-            "scale": 0.5,
+            "scale": 0.75,
             "selectedLayer": 0,
             "viewCenter": {
-                "x": 1299,
-                "y": 1841
+                "x": 1606,
+                "y": 1242
             }
         },
         "maps/hole1.tmx": {
