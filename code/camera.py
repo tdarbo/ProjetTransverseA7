@@ -67,3 +67,26 @@ class Camera:
         self.offset_Y = 0.0
         self.zoom_factor = 1.0
         self.is_dragging = False
+
+    def world_to_screen(self, world_x, world_y):
+        # Récupérer les coordonnées du centre de l'écran
+        center_x = WINDOW_WIDTH / 2
+        center_y = WINDOW_HEIGHT / 2
+
+        # Appliquer le zoom et le décalage de la caméra
+        screen_x = center_x + (world_x - self.offset_X - center_x) * self.zoom_factor
+        screen_y = center_y + (world_y - self.offset_Y - center_y) * self.zoom_factor
+
+        return screen_x, screen_y
+
+    def is_position_on_screen(self,x:int,y:int) -> bool:
+        if x < 0 or x > WINDOW_WIDTH:
+            return False
+        elif y < 0 or y > WINDOW_HEIGHT:
+            return False
+        else:
+            return True
+
+    def is_world_position_on_screen(self,world_x:int,world_y:int):
+        x,y = self.world_to_screen(world_x,world_y)
+        return self.is_position_on_screen(x,y)
