@@ -1,14 +1,15 @@
 
 from PIL import Image
 import pygame
+from PIL.ImageOps import scale
 
 
 class GifManager:
     def __init__(self):
         self.gifs = []
 
-    def add_gif(self, path:str, x:int ,y:int, map_anchored:bool, hide:bool) -> None:
-        gif = Gif(path,x,y,map_anchored,hide)
+    def add_gif(self, path:str, x:int ,y:int, scale:float, map_anchored:bool, hide:bool) -> None:
+        gif = Gif(path,x,y,scale,map_anchored,hide)
         self.gifs.append(gif)
 
     def update_map(self, map_surf:pygame.Surface) -> None:
@@ -38,13 +39,13 @@ class GifManager:
             gif.reset()
 
 class Gif:
-    def __init__(self, gif_path:str,x:int,y:int, map_anchored:bool, hide:bool) -> None:
+    def __init__(self, gif_path:str,x:int,y:int, scale:float, map_anchored:bool, hide:bool) -> None:
         self.frames = get_gif_frames(gif_path)
 
         self.current_frame = 0
         self.max_frame = len(self.frames)
 
-        self.x, self.y = x,y
+        self.x, self.y, self.scale = x,y,scale
 
         self.map_anchored = map_anchored
 
@@ -58,7 +59,9 @@ class Gif:
 
         frame = self.frames[self.current_frame]
 
-        surface.blit(frame,(self.x,self.y))
+        final_frame = pygame.transform.scale_by(frame, self.scale)
+
+        surface.blit(final_frame,(self.x,self.y))
 
         self.current_frame += 1
         if self.current_frame >= self.max_frame:

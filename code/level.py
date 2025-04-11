@@ -39,7 +39,6 @@ class Level:
 
         self.gif_manager = GifManager()
 
-        self.gif_manager.add_gif("../asset/GIF/Balle.gif",self.map.hole.x,self.map.hole.y,True, False)
 
         self.map.teleportPlayersToSpawn(self.players)
         self.centerOnCurrentPlayer()
@@ -165,6 +164,8 @@ class Level:
         for tile in self.map.tiles:
             if tile.id == "Collision" and not DEBUG_MODE:
                 continue
+            #if not tile.is_on_screen(self.map.camera):
+            #    continue
             tile.draw(self.map_surf)
 
         pygame.draw.circle(
@@ -200,6 +201,8 @@ class Level:
                 width = width_line
                 )
 
+        self.gif_manager.update_map(self.map_surf)
+
         # Application du zoom sur la map
         resize_size = (int(self.map_size[0] * zoom), int(self.map_size[1] * zoom))
         map_surf_resized = pygame.transform.scale(self.map_surf, resize_size)
@@ -214,8 +217,10 @@ class Level:
         self.draw_map(screen)
         self.score_manager.draw(self.overlay_surf)
         self.broadcast_manager.draw(self.overlay_surf)
-        self.gif_manager.update_all(self.map_surf,self.overlay_surf)
+        self.gif_manager.update_overlay(self.overlay_surf)
         screen.blit(self.overlay_surf, (0, 0))
+        #print(self.map.camera.is_world_position_on_screen(self.current_player.position.x, self.current_player.position.y))
+
 
     def centerOnCurrentPlayer(self):
         player = self.current_player
