@@ -15,13 +15,15 @@ class Game:
         pygame.display.set_caption(GAME_NAME)
 
         # Set up the game window
-        self.screen = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT), pygame.FULLSCREEN)
+        self.screen = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
         self.running = True
         self.clock = pygame.time.Clock()
         self.dt = DELTA_TIME
 
         self.maps = {
             "map1": "../asset/TiledProject/maps/hole1.tmx",
+            "map2": "../asset/TiledProject/maps/Entre_les_lacs.tmx",
+            "map3": "../asset/TiledProject/maps/Glissade_mortelle.tmx",
         }
 
         self.game_info = dict()
