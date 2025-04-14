@@ -111,9 +111,9 @@ class ScoreManager:
         pygame.draw.rect(screen, '#3F170D', (start_x, start_y, menu_width, menu_height), 3)
 
         # On affiche le tableau du score ligne par ligne
-        for row_index in range(len(lines)):
-            row = lines[row_index]
-            for col_index in range(len(lines[0])):
+        for col_index in range(len(lines[0])):
+            for row_index in range(len(lines)):
+                row = lines[row_index]
                 cell = row[col_index]
                 current_cell_x = start_x + col_index * (cell_width + cell_gap) + menu_padding
                 current_cell_y = start_y + row_index * (cell_height + cell_gap) + menu_padding
@@ -137,7 +137,6 @@ class ScoreManager:
                         font_size= 11
                     )
                     text_obj.draw(screen)
-
     def print_score(self):
         print(self._get_table_header())
         for i in range(self.hole_number):
