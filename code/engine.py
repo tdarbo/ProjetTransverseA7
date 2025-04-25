@@ -124,10 +124,6 @@ class Engine:
         """
         intersection = player.rect.clip(tile.rect)
 
-        # On vérifie s’il y a vraiment collision
-        if intersection.width == 0 or intersection.height == 0:
-            return
-
         # On calcule les superpositions sur X et Y
         pen_x = intersection.width
         pen_y = intersection.height
@@ -140,7 +136,6 @@ class Engine:
             else:
                 # Le joueur est à droite de la tile, on le décale vers la droite
                 player.position.x += pen_x
-
             # On inverse la vélocité en X
             player.velocity.x = -player.velocity.x
 
