@@ -15,9 +15,9 @@ class StartMenuScene(Scene):
         """
         Construit les éléments d'interface du menu principal.
         """
-        n_elements = 5
-        elements_height = INPUT_HEIGHT * n_elements + INPUTS_GAP * (n_elements - 1)
-        first_element_height = (PANEL_HEIGHT - elements_height - (PANEL_MARGINS["top"] * 2)) // 2
+        elements_number = 5
+        elements_height = INPUT_HEIGHT * elements_number + INPUTS_GAP * (elements_number - 1)
+        first_element_offset = (PANEL_HEIGHT - elements_height - (PANEL_MARGINS["top"] * 2)) // 2
 
         panel = pygame_gui.elements.UIPanel(
             relative_rect=PANEL_LAYOUT,
@@ -30,13 +30,13 @@ class StartMenuScene(Scene):
             text=GAME_NAME,
             manager=self.ui_manager,
             container=panel,
-            relative_rect=pygame.Rect((0, first_element_height, -1, INPUT_HEIGHT)),
+            relative_rect=pygame.Rect((0, first_element_offset, -1, INPUT_HEIGHT)),
             anchors={'centerx': 'centerx'},
             object_id=ObjectID(class_id='label_big_black', object_id='#main_menu_game_name')
         )
         play_btn = pygame_gui.elements.UIButton(
             relative_rect=pygame.Rect((0, INPUTS_GAP), (INPUT_WIDTH, INPUT_HEIGHT)),
-            text='Play',
+            text='Jouer',
             manager=self.ui_manager,
             container=panel,
             anchors={
@@ -49,7 +49,7 @@ class StartMenuScene(Scene):
         )
         rules_btn = pygame_gui.elements.UIButton(
             relative_rect=pygame.Rect((0, INPUTS_GAP), (INPUT_WIDTH, INPUT_HEIGHT)),
-            text='Rules',
+            text='Règles',
             manager=self.ui_manager,
             container=panel,
             anchors={
@@ -62,7 +62,7 @@ class StartMenuScene(Scene):
         )
         settings_btn = pygame_gui.elements.UIButton(
             relative_rect=pygame.Rect((0, INPUTS_GAP), (INPUT_WIDTH, INPUT_HEIGHT)),
-            text='Settings',
+            text='Paramètres',
             manager=self.ui_manager,
             container=panel,
             anchors={
@@ -73,9 +73,9 @@ class StartMenuScene(Scene):
             },
             object_id=ObjectID(class_id='button_primary', object_id='#main_menu_settings_btn')
         )
-        exit_btn = pygame_gui.elements.UIButton(
+        pygame_gui.elements.UIButton(
             relative_rect=pygame.Rect((0, INPUTS_GAP), (INPUT_WIDTH, INPUT_HEIGHT)),
-            text='Exit',
+            text='Quitter',
             manager=self.ui_manager,
             container=panel,
             anchors={
@@ -116,5 +116,4 @@ class StartMenuScene(Scene):
         """
         Dessine la scène.
         """
-        screen.fill('red')
         screen.blit(SCENE_BG_IMAGE, (0, 0))
