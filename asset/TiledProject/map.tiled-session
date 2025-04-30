@@ -17,20 +17,39 @@
                 "y": 1599.6662726830286
             }
         },
+        "maps/Coeur.tmx": {
+            "scale": 0.39060267857142855,
+            "selectedLayer": 2,
+            "viewCenter": {
+                "x": 1120.0640036573518,
+                "y": 1260.872049831419
+            }
+        },
         "maps/Entre_les_lacs.tmx": {
             "scale": 0.33,
             "selectedLayer": 4,
             "viewCenter": {
-                "x": 1610.6060606060607,
+                "x": 1610.6060606060605,
                 "y": 1828.7878787878785
             }
         },
         "maps/Glissade_mortelle.tmx": {
             "scale": 0.75,
-            "selectedLayer": 0,
+            "selectedLayer": 4,
             "viewCenter": {
                 "x": 1606,
-                "y": 1242
+                "y": 2746
+            }
+        },
+        "maps/Map4.tmx": {
+            "expandedObjectLayers": [
+                6
+            ],
+            "scale": 0.5,
+            "selectedLayer": 4,
+            "viewCenter": {
+                "x": 1273,
+                "y": 1611
             }
         },
         "maps/hole1.tmx": {
@@ -40,8 +59,8 @@
             "scale": 0.33,
             "selectedLayer": 2,
             "viewCenter": {
-                "x": 1696.969696969697,
-                "y": 1137.878787878788
+                "x": 1422.7272727272727,
+                "y": 574.2424242424242
             }
         },
         "maps/hole2.tmx": {
@@ -60,11 +79,11 @@
     },
     "last.imagePath": "C:/Users/mathi/OneDrive/Images",
     "map.fixedSize": true,
-    "map.height": 40,
+    "map.height": 35,
     "map.lastUsedFormat": "tmx",
     "map.tileHeight": 64,
     "map.tileWidth": 64,
-    "map.width": 30,
+    "map.width": 35,
     "openFiles": [
         "maps/hole1.tmx",
         "tileSet.tsx",
@@ -73,6 +92,8 @@
     ],
     "project": "map.tiled-project",
     "recentFiles": [
+        "maps/Map4.tmx",
+        "maps/Coeur.tmx",
         "maps/hole1.tmx",
         "tileSet.tsx",
         "hole2.tmx",
