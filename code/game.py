@@ -20,14 +20,16 @@ class Game:
         self.clock = pygame.time.Clock()
         self.dt = DELTA_TIME
 
+        #note/10 de difficulté
+
         self.maps = {
-            "map1": "../asset/TiledProject/maps/hole1.tmx",
-            "map2": "../asset/TiledProject/maps/Entre_les_lacs.tmx",
-            "map3": "../asset/TiledProject/maps/Glissade_mortelle.tmx",
-            "map4": "../asset/TiledProject/maps/Coeur.tmx",
-            "map5": "../asset/TiledProject/maps/Détour_obstrué.tmx",
-            "map6": "../asset/TiledProject/maps/Dédale_desertique.tmx",
-            "map7": "../asset/TiledProject/maps/Descente_aux_enfers.tmx",
+            "map1": "../asset/TiledProject/maps/hole1.tmx", #1/10
+            "map2": "../asset/TiledProject/maps/Entre_les_lacs.tmx", #3/10
+            "map3": "../asset/TiledProject/maps/Glissade_mortelle.tmx", #4/10
+            "map4": "../asset/TiledProject/maps/Coeur.tmx", #5/10
+            "map5": "../asset/TiledProject/maps/Détour_obstrué.tmx", #4/10
+            "map6": "../asset/TiledProject/maps/Dédale_desertique.tmx", #5/10
+            "map7": "../asset/TiledProject/maps/Descente_aux_enfers.tmx", #9/10
 
         }
 
