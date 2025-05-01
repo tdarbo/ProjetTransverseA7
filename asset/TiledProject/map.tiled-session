@@ -25,6 +25,14 @@
                 "y": 1281.3532201840105
             }
         },
+        "maps/Descente_aux_enfers.tmx": {
+            "scale": 0.33,
+            "selectedLayer": 5,
+            "viewCenter": {
+                "x": 1395.4545454545453,
+                "y": 1398.4848484848485
+            }
+        },
         "maps/Dédale_desertique.tmx": {
             "scale": 0.33,
             "selectedLayer": 0,
@@ -98,11 +106,11 @@
     },
     "last.imagePath": "C:/Users/mathi/OneDrive/Images",
     "map.fixedSize": true,
-    "map.height": 40,
+    "map.height": 30,
     "map.lastUsedFormat": "tmx",
     "map.tileHeight": 64,
     "map.tileWidth": 64,
-    "map.width": 40,
+    "map.width": 30,
     "openFiles": [
         "maps/hole1.tmx",
         "tileSet.tsx",

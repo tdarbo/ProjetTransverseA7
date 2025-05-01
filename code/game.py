@@ -30,6 +30,7 @@ class Game:
             "map5": "../asset/TiledProject/maps/Détour_obstrué.tmx", #4/10
             "map6": "../asset/TiledProject/maps/Dédale_desertique.tmx", #5/10
             "map7": "../asset/TiledProject/maps/Descente_aux_enfers.tmx", #9/10
+            "map8": "../asset/TiledProject/maps/Île_spirale.tmx", #6/10
 
         }
 
