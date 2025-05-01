@@ -98,6 +98,14 @@
                 "y": 1129
             }
         },
+        "maps/Île_Spirale.tmx": {
+            "scale": 0.33,
+            "selectedLayer": 5,
+            "viewCenter": {
+                "x": 962.1212121212122,
+                "y": 868.1818181818182
+            }
+        },
         "tileSet.tsx": {
             "dynamicWrapping": true,
             "scaleInDock": 0.5,
