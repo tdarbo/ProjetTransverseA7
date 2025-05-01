@@ -3,7 +3,7 @@
         "height": 4300,
         "width": 2
     },
-    "activeFile": "maps/hole2.tmx",
+    "activeFile": "maps/Coeur.tmx",
     "expandedProjectPaths": [
         ".",
         "maps"
@@ -19,17 +19,28 @@
         },
         "maps/Coeur.tmx": {
             "scale": 0.39060267857142855,
-            "selectedLayer": 2,
+            "selectedLayer": 0,
             "viewCenter": {
-                "x": 1120.0640036573518,
-                "y": 1260.872049831419
+                "x": 1248.071318361049,
+                "y": 1281.3532201840105
+            }
+        },
+        "maps/Détour_obstrué.tmx": {
+            "expandedObjectLayers": [
+                6
+            ],
+            "scale": 0.33,
+            "selectedLayer": 5,
+            "viewCenter": {
+                "x": 1180.3030303030303,
+                "y": 1328.7878787878785
             }
         },
         "maps/Entre_les_lacs.tmx": {
             "scale": 0.33,
             "selectedLayer": 4,
             "viewCenter": {
-                "x": 1610.6060606060605,
+                "x": 1610.6060606060607,
                 "y": 1828.7878787878785
             }
         },
@@ -38,7 +49,7 @@
             "selectedLayer": 4,
             "viewCenter": {
                 "x": 1606,
-                "y": 2746
+                "y": 543.3333333333333
             }
         },
         "maps/Map4.tmx": {
@@ -59,8 +70,8 @@
             "scale": 0.33,
             "selectedLayer": 2,
             "viewCenter": {
-                "x": 1422.7272727272727,
-                "y": 574.2424242424242
+                "x": 1416.6666666666667,
+                "y": 1034.848484848485
             }
         },
         "maps/hole2.tmx": {
@@ -79,23 +90,26 @@
     },
     "last.imagePath": "C:/Users/mathi/OneDrive/Images",
     "map.fixedSize": true,
-    "map.height": 35,
+    "map.height": 45,
     "map.lastUsedFormat": "tmx",
     "map.tileHeight": 64,
     "map.tileWidth": 64,
-    "map.width": 35,
+    "map.width": 45,
     "openFiles": [
         "maps/hole1.tmx",
         "tileSet.tsx",
-        "maps/hole2.tmx",
-        "hole2.tmx"
+        "maps/Glissade_mortelle.tmx",
+        "maps/Entre_les_lacs.tmx",
+        "maps/Coeur.tmx"
     ],
     "project": "map.tiled-project",
     "recentFiles": [
-        "maps/Map4.tmx",
-        "maps/Coeur.tmx",
         "maps/hole1.tmx",
         "tileSet.tsx",
+        "maps/Glissade_mortelle.tmx",
+        "maps/Entre_les_lacs.tmx",
+        "maps/Coeur.tmx",
+        "maps/Map4.tmx",
         "hole2.tmx",
         "maps/hole2.tmx"
     ],

@@ -25,6 +25,8 @@ class Game:
             "map2": "../asset/TiledProject/maps/Entre_les_lacs.tmx",
             "map3": "../asset/TiledProject/maps/Glissade_mortelle.tmx",
             "map4": "../asset/TiledProject/maps/Coeur.tmx",
+            "map5": "../asset/TiledProject/maps/Détour_obstrué.tmx",
+            "map6": "../asset/TiledProject/maps/Dédale_desertique.tmx",
         }
 
         self.game_info = dict()
