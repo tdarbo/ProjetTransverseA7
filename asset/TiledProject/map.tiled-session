@@ -85,6 +85,17 @@
                 "y": 1611
             }
         },
+        "maps/Sablier_du_temps_perdu.tmx": {
+            "expandedObjectLayers": [
+                7
+            ],
+            "scale": 0.5,
+            "selectedLayer": 3,
+            "viewCenter": {
+                "x": 1307,
+                "y": 1857
+            }
+        },
         "maps/hole1.tmx": {
             "expandedObjectLayers": [
                 4
@@ -105,8 +116,11 @@
             }
         },
         "maps/Île_Spirale.tmx": {
+            "expandedObjectLayers": [
+                6
+            ],
             "scale": 0.33,
-            "selectedLayer": 5,
+            "selectedLayer": 4,
             "viewCenter": {
                 "x": 962.1212121212122,
                 "y": 868.1818181818182
@@ -120,11 +134,11 @@
     },
     "last.imagePath": "C:/Users/mathi/OneDrive/Images",
     "map.fixedSize": true,
-    "map.height": 30,
+    "map.height": 40,
     "map.lastUsedFormat": "tmx",
     "map.tileHeight": 64,
     "map.tileWidth": 64,
-    "map.width": 30,
+    "map.width": 40,
     "openFiles": [
         "maps/hole1.tmx",
         "tileSet.tsx",
