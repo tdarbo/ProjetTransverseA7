@@ -26,14 +26,20 @@
             }
         },
         "maps/Descente_aux_enfers.tmx": {
+            "expandedObjectLayers": [
+                6
+            ],
             "scale": 0.33,
-            "selectedLayer": 5,
+            "selectedLayer": 4,
             "viewCenter": {
                 "x": 1395.4545454545453,
                 "y": 1398.4848484848485
             }
         },
         "maps/Dédale_desertique.tmx": {
+            "expandedObjectLayers": [
+                6
+            ],
             "scale": 0.33,
             "selectedLayer": 0,
             "viewCenter": {
