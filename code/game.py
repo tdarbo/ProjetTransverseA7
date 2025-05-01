@@ -27,6 +27,8 @@ class Game:
             "map4": "../asset/TiledProject/maps/Coeur.tmx",
             "map5": "../asset/TiledProject/maps/Détour_obstrué.tmx",
             "map6": "../asset/TiledProject/maps/Dédale_desertique.tmx",
+            "map7": "../asset/TiledProject/maps/Descente_aux_enfers.tmx",
+
         }
 
         self.game_info = dict()
