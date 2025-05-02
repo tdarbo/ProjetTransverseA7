@@ -4,7 +4,7 @@
  <tile id="0">
   <image source="../image/tiles/dirt.png" width="64" height="64"/>
  </tile>
- <tile id="10">
+ <tile id="18">
   <image source="../image/tiles/water-dirt.png" width="64" height="64"/>
  </tile>
  <tile id="1">
@@ -16,7 +16,7 @@
  <tile id="6">
   <image source="../image/tiles/ice.png" width="64" height="64"/>
  </tile>
- <tile id="8">
+ <tile id="14">
   <image source="../image/tiles/water.png" width="64" height="64"/>
  </tile>
  <tile id="3">
@@ -28,10 +28,34 @@
    <object id="4" x="0" y="0"/>
   </objectgroup>
  </tile>
- <tile id="12">
+ <tile id="24">
   <image source="../image/tiles/box.png" width="64" height="64"/>
  </tile>
  <tile id="13">
   <image source="../image/tiles/lava-dirt.png" width="64" height="64"/>
+ </tile>
+ <tile id="23">
+  <image source="../image/tiles/Orientation=bottom.png" width="64" height="64"/>
+ </tile>
+ <tile id="22">
+  <image source="../image/tiles/Orientation=corner-bottom-left.png" width="64" height="64"/>
+ </tile>
+ <tile id="21">
+  <image source="../image/tiles/Orientation=corner-bottom-right.png" width="64" height="64"/>
+ </tile>
+ <tile id="20">
+  <image source="../image/tiles/Orientation=corner-top-left.png" width="64" height="64"/>
+ </tile>
+ <tile id="19">
+  <image source="../image/tiles/Orientation=corner-top-right.png" width="64" height="64"/>
+ </tile>
+ <tile id="17">
+  <image source="../image/tiles/Orientation=left.png" width="64" height="64"/>
+ </tile>
+ <tile id="16">
+  <image source="../image/tiles/Orientation=right.png" width="64" height="64"/>
+ </tile>
+ <tile id="15">
+  <image source="../image/tiles/Orientation=top.png" width="64" height="64"/>
  </tile>
 </tileset>
