@@ -67,11 +67,11 @@
             }
         },
         "maps/Glissade_mortelle.tmx": {
-            "scale": 0.75,
+            "scale": 0.33,
             "selectedLayer": 4,
             "viewCenter": {
-                "x": 1606,
-                "y": 543.3333333333333
+                "x": 1604.5454545454543,
+                "y": 1534.848484848485
             }
         },
         "maps/Map4.tmx": {
@@ -89,11 +89,11 @@
             "expandedObjectLayers": [
                 7
             ],
-            "scale": 0.5,
+            "scale": 0.33,
             "selectedLayer": 3,
             "viewCenter": {
-                "x": 1307,
-                "y": 1857
+                "x": 1307.5757575757575,
+                "y": 1574.242424242424
             }
         },
         "maps/hole1.tmx": {

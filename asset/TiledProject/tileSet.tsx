@@ -29,9 +29,9 @@
   </objectgroup>
  </tile>
  <tile id="12">
-  <image source="../../../../../OneDrive/Images/box - Copie.png" width="64" height="64"/>
+  <image source="../image/tiles/box.png" width="64" height="64"/>
  </tile>
  <tile id="13">
-  <image source="../../../../../OneDrive/Images/lava-dirt - Copie.png" width="64" height="64"/>
+  <image source="../image/tiles/lava-dirt.png" width="64" height="64"/>
  </tile>
 </tileset>
