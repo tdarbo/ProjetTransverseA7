@@ -32,6 +32,8 @@ class Game:
             "map7": "../asset/TiledProject/maps/Descente_aux_enfers.tmx", #9/10
             "map8": "../asset/TiledProject/maps/Île_spirale.tmx", #7/10
             "map9": "../asset/TiledProject/maps/Sablier_du_temps_perdu.tmx", #6/10
+            "map10": "../asset/TiledProject/maps/Deux_lunes.tmx", #6/10
+
 
         }
 

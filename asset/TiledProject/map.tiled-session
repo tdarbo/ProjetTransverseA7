@@ -93,7 +93,7 @@
             "selectedLayer": 4,
             "viewCenter": {
                 "x": 1698,
-                "y": 1028.6666666666667
+                "y": 2156.6666666666665
             }
         },
         "maps/hole1.tmx": {
@@ -115,6 +115,14 @@
                 "y": 1129
             }
         },
+        "maps/map_test.tmx": {
+            "scale": 0.33,
+            "selectedLayer": 2,
+            "viewCenter": {
+                "x": 1304.5454545454543,
+                "y": 910.6060606060606
+            }
+        },
         "maps/Île_Spirale.tmx": {
             "expandedObjectLayers": [
                 6
@@ -132,7 +140,7 @@
             "scaleInEditor": 4
         }
     },
-    "last.imagePath": "C:/Users/mathi/OneDrive/Images",
+    "last.imagePath": "C:/Users/mathi/Downloads",
     "map.fixedSize": true,
     "map.height": 40,
     "map.lastUsedFormat": "tmx",
