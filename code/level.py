@@ -1,12 +1,7 @@
-from time import sleep
-
-import pygame
-
 from gif_manager import GifManager
 from settings import *
 from engine import Engine
 from broadcast import BroadcastManager
-
 
 class Level:
     """Gestion de la map, des tours et des événements"""
@@ -108,22 +103,19 @@ class Level:
             if self.current_player.velocity.length() < VELOCITY_THRESHOLD:
                 self.next_turn()
 
-    def next_turn(self, i = 0):
+    def next_turn(self):
         """Passe au tour du joueur suivant."""
-        l = i
         self.shot_taken = False
-        if l > len(self.players):
-            self.finished = True
-            return
-
-        self.current_player_index = (self.current_player_index + 1) % len(self.players)
-        self.current_player = self.players[self.current_player_index]
-        if self.current_player.hide:
-            self.next_turn(l+1)
+        for i in range(len(self.players)):
+            self.current_player_index = (self.current_player_index + 1) % len(self.players)
+            self.current_player = self.players[self.current_player_index]
+            if not self.current_player.hide:
+                print(f"Tour du joueur {self.current_player_index + 1}")
+                self.centerOnCurrentPlayer()
+                return
             print("skipped turn")
-        else:
-            print(f"Tour du joueur {self.current_player_index + 1}")
-            self.centerOnCurrentPlayer()
+        # Aucun joueur actif
+        self.finished = True
 
     def world_to_screen_position(self, world_pos, center_point, camera_zoom):
         return (
