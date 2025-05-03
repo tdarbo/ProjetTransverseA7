@@ -19,10 +19,10 @@
         },
         "maps/Coeur.tmx": {
             "scale": 0.39060267857142855,
-            "selectedLayer": 0,
+            "selectedLayer": 4,
             "viewCenter": {
                 "x": 1248.071318361049,
-                "y": 1281.3532201840105
+                "y": -32.001828675924344
             }
         },
         "maps/Descente_aux_enfers.tmx": {
@@ -30,10 +30,10 @@
                 6
             ],
             "scale": 0.33,
-            "selectedLayer": 4,
+            "selectedLayer": 0,
             "viewCenter": {
-                "x": 1395.4545454545453,
-                "y": 1398.4848484848485
+                "x": 1240.909090909091,
+                "y": 843.939393939394
             }
         },
         "maps/Dédale_desertique.tmx": {
@@ -41,7 +41,7 @@
                 6
             ],
             "scale": 0.33,
-            "selectedLayer": 0,
+            "selectedLayer": 1,
             "viewCenter": {
                 "x": 2068.181818181818,
                 "y": 1343.939393939394
@@ -52,7 +52,7 @@
                 6
             ],
             "scale": 0.33,
-            "selectedLayer": 5,
+            "selectedLayer": 4,
             "viewCenter": {
                 "x": 1180.3030303030303,
                 "y": 1328.7878787878785
@@ -60,7 +60,7 @@
         },
         "maps/Entre_les_lacs.tmx": {
             "scale": 0.33,
-            "selectedLayer": 4,
+            "selectedLayer": 0,
             "viewCenter": {
                 "x": 1610.6060606060607,
                 "y": 1828.7878787878785
@@ -89,11 +89,11 @@
             "expandedObjectLayers": [
                 7
             ],
-            "scale": 0.33,
-            "selectedLayer": 3,
+            "scale": 0.75,
+            "selectedLayer": 4,
             "viewCenter": {
-                "x": 1307.5757575757575,
-                "y": 1574.242424242424
+                "x": 1698,
+                "y": 1028.6666666666667
             }
         },
         "maps/hole1.tmx": {
@@ -101,7 +101,7 @@
                 4
             ],
             "scale": 0.33,
-            "selectedLayer": 2,
+            "selectedLayer": 0,
             "viewCenter": {
                 "x": 1416.6666666666667,
                 "y": 1034.848484848485
