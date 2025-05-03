@@ -66,4 +66,4 @@ SCORE_CELL_HEIGHT = 10 # Hauteur d'une cellule
 SCORE_CELL_GAP = 15 # Espace entre cellules
 SCORE_MENU_PADDING = 20 # Espace entre le contenu et le menu
 SCORE_MENU_MARGIN = 25 # Espace entre le menu et les bords de l'écran
-SCORE_MENU_FONT_SIZE = 10 # Taille de la police du menu
+SCORE_MENU_FONT_SIZE = 11 # Taille de la police du menu
