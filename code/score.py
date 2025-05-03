@@ -2,151 +2,189 @@ from player import Player
 from settings import *
 from ui_text import Text
 
-WIDTH = 1200
-HEIGHT = 500
+
 class ScoreManager:
     """
-    This class manages the scores of all the players during the game.
-    Allows adding, removing and resetting points,
-    Calculates the global score for each player
+    Gère les scores de tous les joueurs pendant la partie.
+    Permet d'ajouter, réinitialiser les points et calcule les scores totaux.
     """
 
-    def __init__(self, players: list, hole_number: int):
-        self.players = players
-        self.hole_number = hole_number
-        self.score = self.create_dictionary()  # Dictionary that contains the scores of the players
-        self.collapsed = True
+    def __init__(self, players: list[Player], holes_number: int):
+        self.players: list[Player] = players # Liste des "objets" joueurs
+        self.players_number = len(players) # Nombre total de joueurs
+        self.holes_number = holes_number # Nombre de trous à jouer
+        self.current_hole = 0 # Numéro du trou en train d'être joué
+        self.score = self.create_dictionary() # Dictionnaire contenant tous les scores par joueur
+        # ex : self.score = {Player: {"score": [0,0,0], "total": 0}}
+        self.collapsed = True # Utilisé pour masquer/afficher l'affichage du score
+
+        # Dimensions totales du menu de score
+        self.menu_width = (
+                SCORE_CELL_WIDTH * (self.players_number + 1) +
+                SCORE_CELL_GAP * self.players_number +
+                SCORE_MENU_PADDING * 2
+        )
+        self.menu_height = (
+                SCORE_CELL_HEIGHT * (self.holes_number + 2) +
+                SCORE_CELL_GAP * (self.holes_number + 1) +
+                SCORE_MENU_PADDING * 2
+        )
+
+    def set_current_hole(self, hole_number):
+        self.current_hole = hole_number
+
+    # def toggle_menu(self):
+    #     # Si le menu est collapsed, on inverse son état
+    #     self.collapsed = not self.collapsed
 
     def create_dictionary(self):
+        # Initialise le dictionnaire des scores pour chaque joueur
         score_dict = dict()
         for player in self.players:
             if player not in score_dict:
                 score_dict[player] = dict()
-            player_score = [0] * self.hole_number
-            score_dict[player]["score"] = player_score
+
+            # Chaque joueur commence avec un tableau de scores à 0 pour chaque trou
+            score_dict[player]["score"] = [0] * self.holes_number
+
+            # Le total est initialisé à 0
             score_dict[player]["total"] = 0
 
         return score_dict
 
     def add_points(self, player, hole):
+        # Ajoute un point au joueur pour le trou donné
+        # Puis met à jour le total
         self.score[player]["score"][hole] += 1
         self.score_calculation()
 
     def score_calculation(self):
+        # Calcule le score total pour chaque joueur en additionnant ses scores trou par trou
         for player in self.players:
             total = 0
-            for i in range(self.hole_number):
+            for i in range(self.holes_number):
                 total += self.score[player]["score"][i]
             self.score[player]["total"] = total
 
     def score_reset(self):
+        # Réinitialise tous les scores à 0 pour tous les joueurs
         for player in self.players:
-            tab = [0] * self.hole_number  # Adding a line to remove the total
-            self.score[player]["score"] = tab
+            # On remet le score du joueur à chaque trou à zéros
+            for i in range(self.holes_number):
+                self.score[player]["score"][i] = 0
             self.score[player]["total"] = 0
 
-    def _get_table_header(self):
-        line = []
-        line.append("Trou n°")
-        for player in self.score.keys(): # Keys = Noms des joueurs
-            # On a besoin de la couleur du joueur et son nom
-            # On passe donc un tuple avec (nom, couleur)
-            line.append(player)
-
-        return line
-
-    def _get_table_line(self, hole):
-        line = list()
-        line.append(str(hole + 1))
-        for value in self.score.values():
-            # 'value' correspond à un objet Player
-            if value["score"][hole] == 0 :
-                # Si le score est nul, on affiche un '-' à la place du '0'
-                line.append('-')
-            else :
-                # On récupère le score du joueur pour le niveau associé au trou "hole"
-                line.append(str(value["score"][hole]))
-
-        return line
-
-    def _get_table_footer(self):
-        line = list()
-        line.append("Total")
-        for value in self.score.values():
-            # 'value' correspond à un objet Player
-            if value["total"] == 0:
-                # Si le total est nul, on affiche un '-' à la place du '0'
-                line.append('-')
-            else:
-                line.append(str(value["total"])) # On récupère le score total du joueur
-
-        return line
-
     def draw(self, screen):
-        # On construit un tableau à partir des données du tableau
-        header = self._get_table_header()
-        footer = self._get_table_footer()
-        lines = [header]
-        for i in range(self.hole_number):
-            lines.append(self._get_table_line(i))
-        lines.append(footer)
+        # Position du menu en bas à droite de l'écran
+        start_x = screen.get_width() - SCORE_MENU_MARGIN - self.menu_width
+        start_y = screen.get_height() - SCORE_MENU_MARGIN - self.menu_height
 
-        # Dimension des cellules
-        cell_width = 100 # Largeur d'une cellule
-        cell_height = 10 # Hauteur d'une cellule
-        cell_gap = 15 # Espace entre cellules
+        # Dessin du fond du menu (rectangle orange) et de sa bordure
+        pygame.draw.rect(screen, (213, 85, 52), (start_x, start_y, self.menu_width, self.menu_height))
+        pygame.draw.rect(screen, '#3F170D', (start_x, start_y, self.menu_width, self.menu_height), 3)
 
-        # Dimension du menu
-        menu_padding = 20
-        menu_margin = 25
-        menu_height = (len(lines) - 1) * cell_gap + cell_height * len(lines) + menu_padding * 2
-        menu_width = (len(lines[0]) - 1) * cell_gap + cell_width * len(lines[0]) + menu_padding * 2
+        # Décalage interne pour ne pas coller le contenu aux bords du menu
+        start_x += SCORE_MENU_PADDING
+        start_y += SCORE_MENU_PADDING
 
-        # Calcul de la position de la première cellule pour que notre menu soit positionné à partir du coin inférieur droit
-        start_x = screen.get_width() - menu_margin - menu_width
-        start_y = screen.get_height() - menu_margin - menu_height
+        for i in range(-1, self.players_number):
+            # La colonne d'indice -1 est réservée aux en-têtes du tableau (numéros de trou, "Total", ...)
+            # Toutes les autres colonnes affichent les scores de chaque joueur
 
-        # On dessine un rectangle englobant le menu
-        pygame.draw.rect(screen,(213, 85, 52),(start_x, start_y, menu_width, menu_height))
-        pygame.draw.rect(screen, '#3F170D', (start_x, start_y, menu_width, menu_height), 3)
+            # Calcul position horizontale de la cellule
+            current_cell_x = start_x + (i + 1) * SCORE_CELL_WIDTH + (i + 1) * SCORE_CELL_GAP
 
-        # On affiche le tableau du score ligne par ligne
-        for col_index in range(len(lines[0])):
-            for row_index in range(len(lines)):
-                row = lines[row_index]
-                cell = row[col_index]
-                current_cell_x = start_x + col_index * (cell_width + cell_gap) + menu_padding
-                current_cell_y = start_y + row_index * (cell_height + cell_gap) + menu_padding
+            if i != -1:
+                # On récupère le joueur associé à cette colonne
+                player = self.players[i]
+            else:
+                # Pas de joueur pour la colonne d'en-tête (colonne -1)
+                player = None
 
-                if row_index == 0 and isinstance(cell, Player):
-                    # Si c'est la première ligne du tableau et que notre cellule correspond à un joueur
-                    # Alors on dessine un cercle de couleur devant le joueur associé
-                        pygame.draw.circle(screen, cell.color, (current_cell_x, current_cell_y + 5), 5)
-                        text_obj = Text(
-                            text=str(cell.name),
-                            pos=(15 + current_cell_x, current_cell_y),
-                            color=(255, 255, 255),
-                            font_size=10
-                        )
-                        text_obj.draw(screen)
-                else :
-                    text_obj = Text(
-                        text=str(cell),
-                        pos=(current_cell_x, current_cell_y),
-                        color=(255, 255, 255),
-                        font_size= 11
-                    )
-                    text_obj.draw(screen)
-    def print_score(self):
-        print(self._get_table_header())
-        for i in range(self.hole_number):
-            print(self._get_table_line(i))
-        print(self._get_table_footer())
+            # Dessin des 3 parties du tableau : en-tête, scores et total
+            self.draw_header(screen, i, player, current_cell_x, start_y)
+            self.draw_body(screen, i, player, current_cell_x, start_y)
+            self.draw_footer(screen, i, player, current_cell_x, start_y)
+
+    def draw_header(self, screen, column_index, player, cell_x, cell_y):
+        if column_index == -1:
+            # Première colonne : on affiche le texte de l’en-tête "Trou n°"
+            Text(
+                text="Trou n°",
+                pos=(cell_x, cell_y),
+                color=(255, 255, 255),
+                font_size=SCORE_MENU_FONT_SIZE
+            ).draw(screen)
+        else:
+            # En-tête joueur : on affiche un cercle de couleur et son nom (ou "Vous" par défaut)
+            pygame.draw.circle(
+                surface=screen,
+                color=player.color,
+                center=(cell_x, cell_y + 5),
+                radius=5
+            )
+            Text(
+                text=player.name if self.players[column_index].name else "Vous",
+                pos=(cell_x + 12, cell_y),
+                color=(255, 255, 255),
+                font_size=SCORE_MENU_FONT_SIZE
+            ).draw(screen)
+
+    def draw_body(self, screen, column_index, player, cell_x, start_y):
+        for row_index in range(0, self.holes_number):
+            # Position verticale de la cellule en fonction du trou (ligne)
+            cell_y = start_y + (row_index + 1) * SCORE_CELL_HEIGHT + (row_index + 1) * SCORE_CELL_GAP
+
+            if column_index == -1:
+                # Première colonne : on affiche le numéro de chaque trou
+                Text(
+                    text=str(row_index + 1),
+                    pos=(cell_x, cell_y),
+                    color=(255, 255, 255),
+                    font_size=SCORE_MENU_FONT_SIZE
+                ).draw(screen)
+            else:
+                # Cellule score du joueur pour ce trou
+                # Le score du joueur à un trou est une valeur dans le tableau à la clé "score" dans le dico associé au joueur
+                # On récupère ce score à l'index du numéro du trou dans le tableau (ici row_index).
+                # Rappel de la structure : score = {Player1: {"score": [...], "total": 0}, Player2: ...}
+                score = str(self.score[player]["score"][row_index])
+                Text(
+                    text=score if score != "0" else "-",  # Affiche un tiret si le score est nul
+                    pos=(cell_x, cell_y),
+                    color=(255, 255, 255),
+                    font_size=SCORE_MENU_FONT_SIZE
+                ).draw(screen)
+
+    def draw_footer(self, screen, column_index, player, cell_x, start_y):
+        # Position verticale du footer (ligne "Total")
+        cell_y = start_y + (self.holes_number + 1) * SCORE_CELL_HEIGHT + (self.holes_number + 1) * SCORE_CELL_GAP
+
+        if column_index == -1:
+            # Première colonne : on affiche "Total" en bas
+            Text(
+                text="Total",
+                pos=(cell_x, cell_y),
+                color=(255, 255, 255),
+                font_size=SCORE_MENU_FONT_SIZE
+            ).draw(screen)
+        else:
+            # Affichage du total du joueur
+            # Le total est une valeur à la clé "total" dans le dico associé au joueur
+            # Rappel de la structure : score = {Player1: {"score": [...], "total": 0}, Player2: ...}
+            total = str(self.score[player]["total"])
+            Text(
+                text=total if total != "0" else "-",  # Tiret si score encore à 0
+                pos=(cell_x, cell_y),
+                color=(255, 255, 255),
+                font_size=SCORE_MENU_FONT_SIZE
+            ).draw(screen)
+
 
 if __name__ == '__main__':
     players = ["Louis", "Mathias", "Bastien", "Mattéo", "Thomas"]
-    hole_number = 2
-    score_manager = ScoreManager(players, hole_number)
+    holes_number = 2
+    score_manager = ScoreManager(players, holes_number)
     score_manager.create_dictionary()
     print(score_manager.score, "initialisé")
     score_manager.add_points("Louis", 0)
@@ -157,7 +195,5 @@ if __name__ == '__main__':
     print(score_manager.score, "calcul score")
     score_manager.score_calculation()
     print(score_manager.score, "calcul score total")
-    # score_manager.score_reset()
+    score_manager.score_reset()
     print(score_manager.score, "après reset")
-    score_manager.print_score()
-    #score_manager.draw()
