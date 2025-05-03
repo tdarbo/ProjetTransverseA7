@@ -14,6 +14,19 @@ class Engine:
         self.players = level.players
         self.num_players = len(self.players)
 
+    def inversionX(self, player : Player) -> int:
+        if player.velocity.x > 0:
+            return -1
+        else :
+            return 1
+
+    def inversionY(self, player : Player) -> int:
+        if player.velocity.y > 0:
+            return -1
+        else :
+            return 1
+
+
     def update_position(self, player: Player, dt: float) -> None:
         """Met à jour la position du joueur en fonction de sa vitesse."""
         player.position += player.velocity * dt
@@ -151,6 +164,39 @@ class Engine:
             # On Inverse la vélocité en Y
             player.velocity.y = -player.velocity.y
 
+    def resolve_player_bounce_collision(self, player: Player, tile) -> None:
+        """
+        Gère la collision entre un joueur et une tuile obstacle.
+        """
+        intersection = player.rect.clip(tile.rect)
+
+        # On calcule les superpositions sur X et Y
+        pen_x = intersection.width
+        pen_y = intersection.height
+
+        # Résolution de la collision en X
+        if pen_x < pen_y:
+            if player.rect.centerx < tile.rect.centerx:
+                # Le joueur est à gauche de la tile, on le décale vers la gauche
+                player.position.x -= pen_x
+            else:
+                # Le joueur est à droite de la tile, on le décale vers la droite
+                player.position.x += pen_x
+            # On inverse la vélocité en X
+            player.velocity.x = self.inversionX(player) * MAX_PLAYER_VELOCITY.length()
+
+        # Résolution de la collision en Y
+        else:
+            if player.rect.centery < tile.rect.centery:
+                # Le joueur est au-dessus de la tile, on le décale vers le haut
+                player.position.y -= pen_y
+            else:
+                # Le joueur est en dessous de la tile, on le décale vers le bas
+                player.position.y += pen_y
+
+            # On Inverse la vélocité en Y
+            player.velocity.y = self.inversionY(player) * MAX_PLAYER_VELOCITY.length()
+
     def update(self, dt: float) -> None:
         """Met à jour la physique du jeu pour tous les joueurs."""
 
@@ -179,6 +225,10 @@ class Engine:
             for tile in self.level.map.tiles:
                 if tile.id == "Collision" and player.rect.colliderect(tile.rect):
                     self.resolve_player_obstacle_collision(player, tile)
+
+            for tile in self.level.map.tiles:
+                if tile.id == "Bounce" and player.rect.colliderect(tile.rect):
+                    self.resolve_player_bounce_collision(player, tile)
 
             player.update()
 
