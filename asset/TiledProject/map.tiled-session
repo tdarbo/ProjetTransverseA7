@@ -22,7 +22,7 @@
             "selectedLayer": 4,
             "viewCenter": {
                 "x": 1248.071318361049,
-                "y": 1050.9400537173553
+                "y": -32.001828675924344
             }
         },
         "maps/Descente_aux_enfers.tmx": {
@@ -33,7 +33,7 @@
             "selectedLayer": 0,
             "viewCenter": {
                 "x": 1240.909090909091,
-                "y": 1271.212121212121
+                "y": 843.939393939394
             }
         },
         "maps/Dédale_desertique.tmx": {
@@ -89,11 +89,11 @@
             "expandedObjectLayers": [
                 7
             ],
-            "scale": 0.33,
+            "scale": 0.75,
             "selectedLayer": 4,
             "viewCenter": {
-                "x": 1340.909090909091,
-                "y": 1592.4242424242425
+                "x": 1698,
+                "y": 1028.6666666666667
             }
         },
         "maps/hole1.tmx": {
