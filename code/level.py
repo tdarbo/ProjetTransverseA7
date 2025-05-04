@@ -6,13 +6,14 @@ from broadcast import BroadcastManager
 class Level:
     """Gestion de la map, des tours et des événements"""
 
-    def __init__(self, hole_number, tiled_map, players, score_manager, screen_width=1280, screen_height=720):
+    def __init__(self, hole_number, tiled_map, players, score_manager, broadcast_manager, screen_width=1280,
+                 screen_height=720):
         """Initialise le niveau."""
         self.map = tiled_map
         self.players = players
         self.engine = Engine(self)
         self.score_manager = score_manager
-        self.broadcast_manager = BroadcastManager()
+        self.broadcast_manager = broadcast_manager
         self.current_player_index = 0
         self.current_player = players[0]
         self.shot_taken = False  # Indique si le joueur actif a joué
@@ -110,18 +111,13 @@ class Level:
             self.current_player_index = (self.current_player_index + 1) % len(self.players)
             self.current_player = self.players[self.current_player_index]
             if not self.current_player.hide:
+                self.broadcast_manager.broadcast(f"Tour du joueur {self.current_player_index + 1}")
                 print(f"Tour du joueur {self.current_player_index + 1}")
                 self.centerOnCurrentPlayer()
                 return
             print("skipped turn")
         # Aucun joueur actif
         self.finished = True
-
-    def world_to_screen_position(self, world_pos, center_point, camera_zoom):
-        return (
-            center_point[0] - self.map.camera.offset_X * camera_zoom + world_pos.x * camera_zoom,
-            center_point[1] - self.map.camera.offset_Y * camera_zoom + world_pos.y * camera_zoom
-        )
 
     def get_line_color(self, line_length: int) -> str:
         global width_line
@@ -144,6 +140,12 @@ class Level:
             color = "red"
             width_line = 6
         return color
+
+    def world_to_screen_position(self, world_pos, center_point, camera_zoom):
+        return (
+            center_point[0] - self.map.camera.offset_X * camera_zoom + world_pos.x * camera_zoom,
+            center_point[1] - self.map.camera.offset_Y * camera_zoom + world_pos.y * camera_zoom
+        )
 
     def draw_map(self, screen):
         zoom = self.map.camera.zoom_factor

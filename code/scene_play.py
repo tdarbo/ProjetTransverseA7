@@ -5,6 +5,7 @@ from level import Level
 from score import ScoreManager
 from map import Map
 from scene_manager import Scene
+from broadcast import BroadcastManager
 
 
 class PlayScene(Scene):
@@ -20,6 +21,7 @@ class PlayScene(Scene):
         # Création des joueurs et init score
         self.players = []
         self.score_manager = None
+        self.broadcast_manager = None
 
         # Gestion des niveaux joués
         self.hole_number = 0
@@ -34,6 +36,7 @@ class PlayScene(Scene):
         else :
             self.hole_number = 1
         self.score_manager = ScoreManager(self.players, self.hole_number)
+        self.broadcast_manager = BroadcastManager()
         self.levels_played = 0
         self.hole_number = self.hole_number
         self.current_level = None
@@ -59,8 +62,15 @@ class PlayScene(Scene):
         """Crée un niveau à partir du path de la map."""
         tiled_map = Map(map_path, self.screen)
         width, height = self.screen.get_size()
-        level = Level(hole_number, tiled_map, self.players, self.score_manager, width, height)
-        print(level)
+        level = Level(
+            hole_number,
+            tiled_map,
+            self.players,
+            self.score_manager,
+            self.broadcast_manager,
+            width,
+            height
+        )
         return level
 
     def load_next_level(self):
