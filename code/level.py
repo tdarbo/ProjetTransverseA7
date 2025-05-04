@@ -154,13 +154,18 @@ class Level:
         self.overlay_surf.fill((0, 0, 0, 0))
         self.map_surf.fill("#BDDFFF")
 
+        visible_tiles = 0
+        total_tiles = len(self.map.tiles)
         # Dessin des tuiles (on peut ignorer les tuiles de collision en mode normal)
         for tile in self.map.tiles:
             if tile.id == "Collision" and not DEBUG_MODE:
                 continue
-            #if not tile.is_on_screen(self.map.camera):
+            # if not tile.is_on_screen(self.map.camera):
             #    continue
             tile.draw(self.map_surf)
+            visible_tiles += 1
+        print(f"Tiles dessinées: {visible_tiles} / {total_tiles}")
+
 
         pygame.draw.circle(
             surface=self.map_surf,
