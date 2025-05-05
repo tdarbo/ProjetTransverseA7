@@ -2,7 +2,7 @@ from time import sleep
 
 import pygame
 
-from bonus_manager import BonusSpeed
+from bonus_manager import BonusSpeed, BonusType
 from settings import *
 from engine import Engine
 from broadcast import BroadcastManager
@@ -50,12 +50,17 @@ class Level:
             elif event.key == pygame.K_h:
                 self.current_player.position.x = self.map.hole.x
                 self.current_player.position.y = self.map.hole.y
+            elif event.key == pygame.K_e:
+                if isinstance(self.current_player.bonus, BonusType):
+                    self.current_player.bonus.consume_bonus(self.current_player, self.players)
         elif event.type == pygame.MOUSEBUTTONDOWN:
             self.on_mouse_down(event)
         elif event.type == pygame.MOUSEMOTION:
             self.on_mouse_motion(event)
         elif event.type == pygame.MOUSEBUTTONUP:
             self.on_mouse_up(event)
+
+
 
     def on_mouse_down(self, event):
         if self.shot_taken:
@@ -76,6 +81,10 @@ class Level:
             # On modifie le score du joueur
             # Il vient de jouer donc on lui ajoute 1 point
             self.score_manager.add_points(self.current_player, self.hole_number)
+
+            if isinstance(self.current_player.bonus, BonusSpeed):
+                self.current_player.bonus.consume_bonus(self.current_player, self.players)
+
 
             adjusted_pos = self.map.camera.getAbsoluteCoord(event.pos)
             new_velocity = (self.drag_start - adjusted_pos) * self.force_multiplier

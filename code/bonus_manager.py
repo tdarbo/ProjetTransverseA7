@@ -9,26 +9,26 @@ from player import Player
 
 # Dev vars
 RESPAWN = False
-RESPAWN_TIME = 15 # time in seconds
+RESPAWN_TIME = 15  # time in seconds
 
+EXPLOSION_MAX_POWER = 2
 
 
 class BonusType:
-    def __init__(self, name:str, color:str, icon_id:int):
+    def __init__(self, name: str, color: str, icon_id: int):
         self.name = name
         self.color = color
         self.icon_id = icon_id
         self.broadcast = BroadcastManager()
 
-    def apply_bonus(self, player:Player, players:[Player]) -> None:
+    def apply_bonus(self, player: Player, players: [Player]) -> None:
         """
-
         :param player:
         :param players: Players does contain the players who finished and the player of ':param player'
         """
         raise NotImplementedError("This method isn't implemented in this class")
 
-    def consume_bonus(self, player:Player, players:[Player]) -> None:
+    def consume_bonus(self, player: Player, players: [Player]) -> None:
         """
 
         :param player:
@@ -36,9 +36,9 @@ class BonusType:
         """
         pass
 
-    def update(self,surface:pygame.Surface,x,y):
+    def update(self, surface: pygame.Surface, x, y):
         self.broadcast.draw(surface)
-        self.draw_bonus(surface,x,y)
+        self.draw_bonus(surface, x, y)
 
     def show_pickup_message(self) -> None:
         """
@@ -54,25 +54,24 @@ class BonusType:
         """
         pass
 
-    def draw_bonus(self, surface:pygame.Surface,x,y):
+    def draw_bonus(self, surface: pygame.Surface, x, y):
         if settings.DEBUG_MODE:
             pygame.draw.circle(
                 surface=surface,
                 color=pygame.Color(self.color),
-                center=(x,y),
+                center=(x, y),
                 radius=20
             )
 
 
-
 class BonusSpeed(BonusType):
     def __init__(self):
-        super().__init__("BonusSpeed","green", 0)
+        super().__init__("BonusSpeed", "green", 0)
 
-    def apply_bonus(self, player:Player, players:[Player]) -> None:
+    def apply_bonus(self, player: Player, players: [Player]) -> None:
         player.bonus = self
 
-    def consume_bonus(self, player:Player, players:[Player]) -> None:
+    def consume_bonus(self, player: Player, players: [Player]) -> None:
         player.bonus = None
 
     def show_usage_message(self) -> None:
@@ -81,7 +80,30 @@ class BonusSpeed(BonusType):
         self.broadcast.broadcast("Vous avez ce bonus de vitesse jusqu'à la fin de ce tour !")
 
 
+class BonusExplosion(BonusType):
+    def __init__(self):
+        super().__init__("BonusExplosion", "red", 1)
 
+    def apply_bonus(self, player: Player, players: [Player]) -> None:
+        player.bonus = self
+
+    def consume_bonus(self, player: Player, players: [Player]) -> None:
+        for target in players:
+            if target == player or target.hide:
+                continue
+            diff = player.position - target.position
+            multiplier = min((1 / max(diff.length(),0.001)), EXPLOSION_MAX_POWER)
+            repulsion = diff.normalize() * multiplier * 100
+            if settings.DEBUG_MODE: print(f"[DEBUG] PRE {target.name} : {target.position} : {target.velocity}")
+            target.velocity -= repulsion * 1000
+            if settings.DEBUG_MODE: print(f"[DEBUG] POS {target.name} : {target.position} : {target.velocity}")
+        player.bonus = None
+
+
+    def show_usage_message(self) -> None:
+        self.broadcast.change_color(self.color)
+        self.broadcast.change_color(1)
+        self.broadcast.broadcast("Appuyez sur 'E' pour utiliser le bonus d'explosion !")
 
 
 class Bonus:
@@ -98,8 +120,7 @@ class Bonus:
         self.available = True
         self.last_pick = 0
 
-
-    def pick_bonus(self, player:Player, players:[Player]) -> None:
+    def pick_bonus(self, player: Player, players: [Player]) -> None:
         if not self.available or isinstance(player.bonus, BonusType):
             return
 
@@ -109,10 +130,8 @@ class Bonus:
         self.bonus.show_pickup_message()
         self.bonus.apply_bonus(player, players)
 
-
-
-    def update_bonus(self,surface:pygame.Surface) -> None:
-        self.bonus.update(surface,self.x,self.y)
+    def update_bonus(self, surface: pygame.Surface) -> None:
+        self.bonus.update(surface, self.x, self.y)
         if not self.available and time.time() - self.last_pick > RESPAWN_TIME:
             self.respawn_bonus()
 
@@ -122,11 +141,9 @@ class Bonus:
         self.last_pick = 0
         #TODO: Make animation on respawn
 
-    def draw_bonus(self, surface:pygame.Surface):
+    def draw_bonus(self, surface: pygame.Surface):
         if self.available:
-            self.bonus.draw_bonus(surface,self.x,self.y)
-
-
+            self.bonus.draw_bonus(surface, self.x, self.y)
 
     def print_bonus_log(self):
         print(f"""
@@ -140,7 +157,9 @@ Bonus :
   last_pick : {self.last_pick}
         """)
 
-BonusList = [BonusSpeed]
+
+BonusList = [BonusExplosion]
+
 
 def get_random_bonus() -> BonusType:
     return random.choice(BonusList)()
