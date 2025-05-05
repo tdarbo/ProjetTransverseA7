@@ -42,6 +42,7 @@ def load_tiled_map(map_path: str, tile_size: int):
                 if gid != 0:
                     # On récupère l'image de la tuile
                     tile_image = tmx_data.get_tile_image_by_gid(gid)
+                    tile_image = pygame.Surface.convert(tile_image)
                     # On crée l'objet associé à cette tuile
                     tile = Tile(
                         tile_type_id=layer.name,
@@ -49,7 +50,7 @@ def load_tiled_map(map_path: str, tile_size: int):
                         y=y * tile_size,
                         width=tile_size,
                         height=tile_size,
-                        image_surface=tile_image,
+                        image=tile_image,
                     )
                     # On ajoute la tuile au groupe de sprites pygame
                     tiles.add(tile)
