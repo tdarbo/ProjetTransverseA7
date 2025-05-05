@@ -1,10 +1,8 @@
-from gif_manager import GifManager
 from time import sleep
 
 import pygame
 
 from bonus_manager import BonusSpeed, BonusType
-from gif_manager import GifManager
 from settings import *
 from engine import Engine
 from broadcast import BroadcastManager
@@ -39,9 +37,9 @@ class Level:
         self.map_size = (self.map.map_width, self.map.map_height)
         self.map_surf = pygame.Surface(self.map_size)
 
-        self.gif_manager = GifManager()
         #self.gif_manager.add_gif("../asset/GIF/Cactus.gif", 1511, 153, .5, True, False)
         self.bonus_gifs = []
+
 
 
         self.map.teleportPlayersToSpawn(self.players)
@@ -111,23 +109,24 @@ class Level:
         if self.current_player.finished:
             self.shot_taken = True
 
-        if isinstance(self.current_player.bonus, BonusSpeed) and not self.shot_taken:
-            self.current_player.bonus.show_usage_message()
 
-        if self.finished:
-            print("Level finished")
 
         self.update_bonuses()
         self.map.camera.animator.update()
         self.engine.update(dt)
         self.check_turn_end()
 
+    def update_gifs(self):
+        self.map.load_gif_bonuses(self.map_surf)
+        self.current_player.update_gifs(self.overlay_surf)
+
     def update_bonuses(self):
         for bonus in self.map.bonuses:
             bonus.update_bonus(self.map_surf)
         if isinstance(self.current_player.bonus, BonusType):
-            self.gif_manager.show_gif(self.current_player.bonus.icon_id,5,5,.5, False)
             self.bonus_gifs.append(self.current_player.bonus.icon_id)
+        else:
+            if DEBUG_MODE: self.current_player.bonus = BonusSpeed()
 
     def check_turn_end(self):
         """Vérifie si le tour est terminé et passe au joueur suivant."""
@@ -136,12 +135,12 @@ class Level:
             if self.current_player.velocity.length() < VELOCITY_THRESHOLD:
                 self.next_turn()
 
+
+
     def next_turn(self):
         """Passe au tour du joueur suivant."""
 
         # Reset les gifs de bonus
-        for gif in self.bonus_gifs:
-            self.gif_manager.hide_gif(gif)
 
         self.shot_taken = False
         for i in range(len(self.players)):
@@ -195,6 +194,7 @@ class Level:
         total_tiles = len(self.map.tiles)
 
 
+
         # Dessin des tuiles (on peut ignorer les tuiles de collision en mode normal)
         for tile in self.map.tiles:
             if tile.id == "Collision" and not DEBUG_MODE:
@@ -242,7 +242,6 @@ class Level:
                 width = width_line
                 )
 
-        self.gif_manager.update_map(self.map_surf)
 
         for bonus in self.map.bonuses:
             bonus.draw_bonus(self.map_surf)
@@ -254,7 +253,7 @@ class Level:
         m_x = center[0] - int(self.map.camera.offset_X * zoom)
         m_y = center[1] - int(self.map.camera.offset_Y * zoom)
 
-
+        self.update_gifs()
 
         screen.blit(map_surf_resized, (m_x, m_y))
 
@@ -263,7 +262,6 @@ class Level:
         self.draw_map(screen)
         self.score_manager.draw(self.overlay_surf)
         self.broadcast_manager.draw(self.overlay_surf)
-        self.gif_manager.update_overlay(self.overlay_surf)
         screen.blit(self.overlay_surf, (0, 0))
         #print(self.map.camera.is_world_position_on_screen(self.current_player.position.x, self.current_player.position.y))
 

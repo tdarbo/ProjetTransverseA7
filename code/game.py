@@ -70,7 +70,7 @@ class Game:
         # Main game loop
         while self.running:
             # Calculate time delta
-            #self.dt = self.clock.tick(FPS) / 1000
+            self.dt = self.clock.tick(FPS) / 1000
 
             # Event handling
             for event in pygame.event.get():
@@ -90,7 +90,6 @@ class Game:
             # Update the display
             pygame.display.flip()
 
-            clock.tick(400)
 
     def manage_error(self, error_message, title="Erreur"):
         """
