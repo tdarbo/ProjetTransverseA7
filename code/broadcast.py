@@ -1,42 +1,39 @@
+from ui_text import Text
 from settings import *
 
-class BroadcastManager:
+
+class BroadcastManager(Text):
     def __init__(self):
-        self.message = ''
-        self.time = 5
-        self.pos = (640 - len(self.message)*7,5)
+        """Gère les messages à l'écran."""
+        # On utilise Text dans ui_text pour gérer l'affichage du broadcast_manager
+        super().__init__(text="", pos=(WINDOW_WIDTH // 2, 20), font_size=15, font_name=FONT_PATH, align="midtop")
+        self.duration = 5
         self.begintimer = 0
-        self.timeout = False
-        self.color = "white"
-        self.font = pygame.font.Font(FONT_PATH, 15)
-        self.rendered_text = self.font.render(self.message, True, self.color)
-        self.rect = self.rendered_text.get_rect(topleft=self.pos)
+        self.timeout = True
 
     def draw(self, screen):
-        ''' Affiche le message et met à jour le timer.'''
-        if not(self.timeout):
-            screen.blit(self.rendered_text, self.rect)
-        BroadcastManager.timer(self)
+        """Affiche le message si le timeout n'est pas écoulé."""
+        if not self.timeout:
+            # On draw le texte de l'objet Text (dans ui_text)
+            super().draw(screen)
+            # vérifie le timer
+            self.timer()
 
-    def broadcast(self,message):
-        ''' Lors de l'affichage d'un nouveau message cette fonction est appelée pour mettre à jour les données.'''
-        self.message = message
-        self.pos=(640 - len(self.message)*7,5)
-        self.rendered_text = self.font.render(self.message, True, self.color)
-        self.rect = self.rendered_text.get_rect(topleft=self.pos)
+    def broadcast(self, message):
+        """Définit un nouveau message à afficher avec minuterie."""
+        # Comme BroadcastManager est un enfant de Text,
+        # on peut accéder aux méthodes et aux propriétés de Text via le self de BroadcastManager
+        # set_text est définie dans Text et permet de changer le texte affiché.
+        self.set_text(message)
         self.begintimer = pygame.time.get_ticks()
         self.timeout = False
-
-    def time(self,time):
-        ''' Change le temps d'affichage du message, reglé par défaut à 5 secondes.'''
-        self.time=time
+        self.set_position((WINDOW_WIDTH // 2, 20), align="midtop")
 
     def timer(self):
-        ''' Calcul le temps restant pour l'affichage du message et arête son afficage si le temps est écoulé.'''
-        if ((pygame.time.get_ticks() - self.begintimer) // 1000) > self.time :
+        """Vérifie si le temps d'affichage est écoulé."""
+        if ((pygame.time.get_ticks() - self.begintimer) // 1000) > self.duration:
             self.timeout = True
 
-    def change_color(self,color):
-        ''' Pour changer la couleur des prochains messages si besoin, reglé par défaut à blanc.'''
-        self.color = color
-
+    def set_duration(self, seconds):
+        """Change la durée d'affichage du message."""
+        self.duration = seconds

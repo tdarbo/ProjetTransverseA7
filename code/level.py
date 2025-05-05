@@ -1,23 +1,25 @@
+from gif_manager import GifManager
 from time import sleep
 
 import pygame
 
+from bonus_manager import BonusSpeed, BonusType
 from gif_manager import GifManager
 from settings import *
 from engine import Engine
 from broadcast import BroadcastManager
 
-
 class Level:
     """Gestion de la map, des tours et des événements"""
 
-    def __init__(self, hole_number, tiled_map, players, score_manager, screen_width=1280, screen_height=720):
+    def __init__(self, hole_number, tiled_map, players, score_manager, broadcast_manager, screen_width=1280,
+                 screen_height=720):
         """Initialise le niveau."""
         self.map = tiled_map
         self.players = players
         self.engine = Engine(self)
         self.score_manager = score_manager
-        self.broadcast_manager = BroadcastManager()
+        self.broadcast_manager = broadcast_manager
         self.current_player_index = 0
         self.current_player = players[0]
         self.shot_taken = False  # Indique si le joueur actif a joué
@@ -43,6 +45,7 @@ class Level:
         self.map.teleportPlayersToSpawn(self.players)
         self.centerOnCurrentPlayer()
 
+
     def process_event(self, event):
         """Evénements pygame."""
         self.map.camera.process_event(event)
@@ -52,12 +55,17 @@ class Level:
             elif event.key == pygame.K_h:
                 self.current_player.position.x = self.map.hole.x
                 self.current_player.position.y = self.map.hole.y
+            elif event.key == pygame.K_e:
+                if isinstance(self.current_player.bonus, BonusType):
+                    self.current_player.bonus.consume_bonus(self.current_player, self.players)
         elif event.type == pygame.MOUSEBUTTONDOWN:
             self.on_mouse_down(event)
         elif event.type == pygame.MOUSEMOTION:
             self.on_mouse_motion(event)
         elif event.type == pygame.MOUSEBUTTONUP:
             self.on_mouse_up(event)
+
+
 
     def on_mouse_down(self, event):
         if self.shot_taken:
@@ -79,8 +87,15 @@ class Level:
             # Il vient de jouer donc on lui ajoute 1 point
             self.score_manager.add_points(self.current_player, self.hole_number)
 
+            if isinstance(self.current_player.bonus, BonusSpeed):
+                self.current_player.bonus.consume_bonus(self.current_player, self.players)
+
+
             adjusted_pos = self.map.camera.getAbsoluteCoord(event.pos)
             new_velocity = (self.drag_start - adjusted_pos) * self.force_multiplier
+            #if self.current_player.speed_bonus:
+            #    new_velocity *= 2
+            #    new_velocity = min(new_velocity, MAX_PLAYER_VELOCITY.length()*1.5)
             if new_velocity.length() >= MAX_PLAYER_VELOCITY.length():
                 new_velocity = new_velocity.normalize() * MAX_PLAYER_VELOCITY.length()
 
@@ -91,15 +106,23 @@ class Level:
             self.drag_current = None
 
     def update(self, dt):
-        if self.current_player.hide:
+        if self.current_player.finished:
             self.shot_taken = True
+
+        if isinstance(self.current_player.bonus, BonusSpeed) and not self.shot_taken:
+            self.current_player.bonus.show_usage_message()
 
         if self.finished:
             print("Level finished")
 
+        self.update_bonuses()
         self.map.camera.animator.update()
         self.engine.update(dt)
         self.check_turn_end()
+
+    def update_bonuses(self):
+        for bonus in self.map.bonuses:
+            bonus.update_bonus(self.map_surf)
 
     def check_turn_end(self):
         """Vérifie si le tour est terminé et passe au joueur suivant."""
@@ -108,28 +131,20 @@ class Level:
             if self.current_player.velocity.length() < VELOCITY_THRESHOLD:
                 self.next_turn()
 
-    def next_turn(self, i = 0):
+    def next_turn(self):
         """Passe au tour du joueur suivant."""
-        l = i
         self.shot_taken = False
-        if l > len(self.players):
-            self.finished = True
-            return
-
-        self.current_player_index = (self.current_player_index + 1) % len(self.players)
-        self.current_player = self.players[self.current_player_index]
-        if self.current_player.hide:
-            self.next_turn(l+1)
+        for i in range(len(self.players)):
+            self.current_player_index = (self.current_player_index + 1) % len(self.players)
+            self.current_player = self.players[self.current_player_index]
+            if not self.current_player.finished:
+                self.broadcast_manager.broadcast(f"Tour du joueur {self.current_player_index + 1}")
+                print(f"Tour du joueur {self.current_player_index + 1}")
+                self.centerOnCurrentPlayer()
+                return
             print("skipped turn")
-        else:
-            print(f"Tour du joueur {self.current_player_index + 1}")
-            self.centerOnCurrentPlayer()
-
-    def world_to_screen_position(self, world_pos, center_point, camera_zoom):
-        return (
-            center_point[0] - self.map.camera.offset_X * camera_zoom + world_pos.x * camera_zoom,
-            center_point[1] - self.map.camera.offset_Y * camera_zoom + world_pos.y * camera_zoom
-        )
+        # Aucun joueur actif
+        self.finished = True
 
     def get_line_color(self, line_length: int) -> str:
         global width_line
@@ -153,6 +168,12 @@ class Level:
             width_line = 6
         return color
 
+    def world_to_screen_position(self, world_pos, center_point, camera_zoom):
+        return (
+            center_point[0] - self.map.camera.offset_X * camera_zoom + world_pos.x * camera_zoom,
+            center_point[1] - self.map.camera.offset_Y * camera_zoom + world_pos.y * camera_zoom
+        )
+
     def draw_map(self, screen):
         zoom = self.map.camera.zoom_factor
         center = (screen.get_width() / 2, screen.get_height() / 2)
@@ -160,13 +181,23 @@ class Level:
         self.overlay_surf.fill((0, 0, 0, 0))
         self.map_surf.fill("#BDDFFF")
 
+        visible_tiles = 0
+        total_tiles = len(self.map.tiles)
+
+
         # Dessin des tuiles (on peut ignorer les tuiles de collision en mode normal)
         for tile in self.map.tiles:
             if tile.id == "Collision" and not DEBUG_MODE:
                 continue
-            #if not tile.is_on_screen(self.map.camera):
+            # if not tile.is_on_screen(self.map.camera):
             #    continue
+            if tile.id == "Bounce" and not DEBUG_MODE:
+                continue
+            # if not tile.is_on_screen(self.map.camera):
             tile.draw(self.map_surf)
+            visible_tiles += 1
+        print(f"Tiles dessinées: {visible_tiles} / {total_tiles}")
+
 
         pygame.draw.circle(
             surface=self.map_surf,
@@ -177,11 +208,11 @@ class Level:
 
         # Dessin des joueurs
         for player in self.players:
-            if not player.hide:
+            if not player.finished:
                 player.draw(self.map_surf)
 
         # Cerclage du joueur actif s'il n'a pas encore joué
-        if not self.shot_taken and not self.current_player.hide:
+        if not self.shot_taken and not self.current_player.finished:
             pygame.draw.circle(
                 surface=self.map_surf,
                 color=pygame.Color("white"),
@@ -203,12 +234,17 @@ class Level:
 
         self.gif_manager.update_map(self.map_surf)
 
+        for bonus in self.map.bonuses:
+            bonus.draw_bonus(self.map_surf)
+
         # Application du zoom sur la map
         resize_size = (int(self.map_size[0] * zoom), int(self.map_size[1] * zoom))
         map_surf_resized = pygame.transform.scale(self.map_surf, resize_size)
 
         m_x = center[0] - int(self.map.camera.offset_X * zoom)
         m_y = center[1] - int(self.map.camera.offset_Y * zoom)
+
+
 
         screen.blit(map_surf_resized, (m_x, m_y))
 

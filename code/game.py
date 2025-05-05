@@ -1,5 +1,6 @@
 import pygame.rect
 
+
 from settings import *
 from scene_config import ConfigurationScene
 from scene_manager import SceneManager
@@ -20,10 +21,26 @@ class Game:
         self.clock = pygame.time.Clock()
         self.dt = DELTA_TIME
 
-        self.maps = {
-            "map1": "../asset/TiledProject/maps/hole1.tmx",
-            "map2": "../asset/TiledProject/maps/hole2.tmx",
-        }
+        #note/10 de difficulté
+
+        if DEBUG_MODE:
+            self.maps = {
+                #"map1": "../asset/TiledProject/maps/debug_map.tmx",
+                "map1": "../asset/TiledProject/maps/hole1.tmx"
+                     } #1/10
+        else:
+            self.maps = {
+                "map1": "../asset/TiledProject/maps/hole1.tmx", #1/10
+                "map2": "../asset/TiledProject/maps/Entre_les_lacs.tmx", #3/10
+                "map3": "../asset/TiledProject/maps/Glissade_mortelle.tmx", #4/10
+                "map4": "../asset/TiledProject/maps/Coeur.tmx", #5/10
+                "map5": "../asset/TiledProject/maps/Détour_obstrué.tmx", #4/10
+                "map6": "../asset/TiledProject/maps/Dédale_desertique.tmx", #5/10
+                "map7": "../asset/TiledProject/maps/Descente_aux_enfers.tmx", #9/10
+                "map8": "../asset/TiledProject/maps/Île_spirale.tmx", #7/10
+                "map9": "../asset/TiledProject/maps/Sablier_du_temps_perdu.tmx", #6/10
+                "map10": "../asset/TiledProject/maps/Deux_lunes.tmx", #6/10
+            }
 
         self.game_info = dict()
 
@@ -38,7 +55,12 @@ class Game:
         self.scene_manager.add("config_scene", ConfigurationScene(2, self))
         self.scene_manager.add("play_scene", PlayScene(3, self))
         # Display default scene
-        self.scene_manager.change("start_menu_scene")
+
+        if DEBUG_MODE:
+            self.game_info = DEBUG_CONFIG
+            self.scene_manager.change("play_scene")
+        else:
+            self.scene_manager.change("start_menu_scene")
 
         self.error_window = None
 

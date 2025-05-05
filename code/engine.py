@@ -1,5 +1,6 @@
 from pygame.examples.glcube import init_gl_stuff_old
 
+from bonus_manager import BonusSpeed
 from player import Player
 from settings import *
 from math import exp,sqrt
@@ -14,9 +15,26 @@ class Engine:
         self.players = level.players
         self.num_players = len(self.players)
 
+    def inversionX(self, player : Player) -> int:
+        if player.velocity.x > 0:
+            return -1
+        else :
+            return 1
+
+    def inversionY(self, player : Player) -> int:
+        if player.velocity.y > 0:
+            return -1
+        else :
+            return 1
+
+
     def update_position(self, player: Player, dt: float) -> None:
         """Met à jour la position du joueur en fonction de sa vitesse."""
-        player.position += player.velocity * dt
+        bonus_modifier = 1
+        if isinstance(player.bonus, BonusSpeed):
+            bonus_modifier = 2
+
+        player.position += player.velocity * dt * bonus_modifier
 
     def apply_friction(self, player: Player, dt: float) -> None:
         """Applique la friction du sol à un joueur."""
@@ -32,14 +50,15 @@ class Engine:
                     return GROUND_GRASS_FRICTION
                 elif tile.id == "Sand":
                     return GROUND_SAND_FRICTION
-                elif tile.id == "ice":
+                elif tile.id == "Ice":
                     return GROUND_ICE_FRICTION
+
         # Par défaut : herbe
         return GROUND_GRASS_FRICTION
 
     def resolve_player_player_collision(self, player1: Player, player2: Player) -> None:
         """Résout une collision entre deux joueurs."""
-        if player1.hide or player2.hide:
+        if player1.finished or player2.finished:
             return
 
         diff = player1.position - player2.position
@@ -73,16 +92,16 @@ class Engine:
     def is_out_of_bounds(self, player: Player) -> bool:
         """Vérifie si un joueur est en dehors du terrain."""
         for tile in self.level.map.tiles:
-            if tile.rect.collidepoint(player.position):
-                return False
-        return True
+            if tile.id == "Water":
+                return True
+        return False
 
     def resolve_finish(self, player: Player) -> None:
         """Vérifie si un joueur a terminé le niveau."""
-        if not player.hide:
+        if not player.finished:
             print(f"Player:{player.name} has finished in x shots")
             player.velocity = Vector(0.0, 0.0)
-            player.hide = True
+            player.finished = True
 
 
     def is_on_finish(self, player: Player) -> None:
@@ -95,36 +114,14 @@ class Engine:
         if distance < (BALL_RADIUS + 1):
             self.resolve_finish(player)
 
-
     # À implémenter si nécessaire :
     # return player.rect.collideobjects(self.level.map.hole)
-
-    def resolve_player_wall_collision(self, player):
-        """
-        Gère les collisions entre un joueur et les bords de la fenêtre.
-        """
-        if player.position.x - player.radius < 0:
-            player.position.x = player.radius
-            player.velocity.x = -player.velocity.x
-        if player.position.x + player.radius > WINDOW_WIDTH:
-            player.position.x = WINDOW_WIDTH - player.radius
-            player.velocity.x = -player.velocity.x
-        if player.position.y - player.radius < 0:
-            player.position.y = player.radius
-            player.velocity.y = -player.velocity.y
-        if player.position.y + player.radius > WINDOW_HEIGHT:
-            player.position.y = WINDOW_HEIGHT - player.radius
-            player.velocity.y = -player.velocity.y
 
     def resolve_player_obstacle_collision(self, player: Player, tile) -> None:
         """
         Gère la collision entre un joueur et une tuile obstacle.
         """
         intersection = player.rect.clip(tile.rect)
-
-        # On vérifie s’il y a vraiment collision
-        if intersection.width == 0 or intersection.height == 0:
-            return
 
         # On calcule les superpositions sur X et Y
         pen_x = intersection.width
@@ -138,7 +135,6 @@ class Engine:
             else:
                 # Le joueur est à droite de la tile, on le décale vers la droite
                 player.position.x += pen_x
-
             # On inverse la vélocité en X
             player.velocity.x = -player.velocity.x
 
@@ -153,6 +149,48 @@ class Engine:
 
             # On Inverse la vélocité en Y
             player.velocity.y = -player.velocity.y
+
+    def resolve_bonus(self):
+        for player in self.players:
+            for bonus in self.level.map.bonuses:
+                diff_x, diff_y = player.position.x - bonus.x, player.position.y - bonus.y
+
+                distance = sqrt(diff_x ** 2 + diff_y ** 2)
+                if distance < (BALL_RADIUS + 5) and bonus.available:
+                    bonus.pick_bonus(player,self.players)
+
+    def resolve_player_bounce_collision(self, player: Player, tile) -> None:
+        """
+        Gère la collision entre un joueur et une tuile bumper.
+        """
+        intersection = player.rect.clip(tile.rect)
+
+        # On calcule les superpositions sur X et Y
+        pen_x = intersection.width
+        pen_y = intersection.height
+
+        # Résolution de la collision en X
+        if pen_x < pen_y:
+            if player.rect.centerx < tile.rect.centerx:
+                # Le joueur est à gauche de la tile, on le décale vers la gauche
+                player.position.x -= pen_x
+            else:
+                # Le joueur est à droite de la tile, on le décale vers la droite
+                player.position.x += pen_x
+            # On inverse la vélocité en X
+            player.velocity.x = self.inversionX(player) * MAX_PLAYER_VELOCITY.length()
+
+        # Résolution de la collision en Y
+        else:
+            if player.rect.centery < tile.rect.centery:
+                # Le joueur est au-dessus de la tile, on le décale vers le haut
+                player.position.y -= pen_y
+            else:
+                # Le joueur est en dessous de la tile, on le décale vers le bas
+                player.position.y += pen_y
+
+            # On Inverse la vélocité en Y
+            player.velocity.y = self.inversionY(player) * MAX_PLAYER_VELOCITY.length()
 
     def update(self, dt: float) -> None:
         """Met à jour la physique du jeu pour tous les joueurs."""
@@ -172,10 +210,6 @@ class Engine:
             for j in range(i + 1, self.num_players):
                 self.resolve_player_player_collision(player, self.players[j])
 
-            if False :
-                # Gestion des collisions avec les murs
-                self.resolve_player_wall_collision(player)
-
             player.update()
 
             # Gestion des collisions avec la map
@@ -183,9 +217,14 @@ class Engine:
                 if tile.id == "Collision" and player.rect.colliderect(tile.rect):
                     self.resolve_player_obstacle_collision(player, tile)
 
+            for tile in self.level.map.tiles:
+                if tile.id == "Bounce" and player.rect.colliderect(tile.rect):
+                    self.resolve_player_bounce_collision(player, tile)
+
             player.update()
 
             self.resolve_out_of_bounds(player)
             self.is_on_finish(player)
+            self.resolve_bonus()
 
             player.update()

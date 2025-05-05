@@ -1,5 +1,6 @@
 from math import cos, pi
 
+CAM_SPEED = 1
 
 class CameraAnimator:
     def __init__(self):
@@ -40,8 +41,8 @@ class CameraMoveAnimation:
         t = min(self.elapsed_time / self.duration, 1)
         # Gestion accélération/décélération du mouvement
         t = 0.5 - 0.5 * cos(t * pi)
-        self.camera.offset_X = self.start_x + (self.target_x - self.start_x) * t
-        self.camera.offset_Y = self.start_y + (self.target_y - self.start_y) * t
+        self.camera.offset_X = self.start_x + (self.target_x - self.start_x) * t * CAM_SPEED
+        self.camera.offset_Y = self.start_y + (self.target_y - self.start_y) * t * CAM_SPEED
 
     def is_finished(self):
         return self.elapsed_time >= self.duration
@@ -59,7 +60,7 @@ class CameraZoomAnimation:
         self.elapsed_time += 1
         t = min(self.elapsed_time / self.duration, 1)
         t = 0.5 - 0.5 * cos(t * pi)
-        self.camera.zoom_factor = self.start_zoom + (self.target_zoom - self.start_zoom) * t
+        self.camera.zoom_factor = self.start_zoom + (self.target_zoom - self.start_zoom) * t * CAM_SPEED
 
     def is_finished(self):
         return self.elapsed_time >= self.duration
