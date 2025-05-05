@@ -89,7 +89,6 @@ class Map:
         self.map_height = map_height * tile_height
 
 
-
     def teleportPlayersToSpawn(self, players: list):
         """
         Téléporte tous les joueurs au spawn.
@@ -107,3 +106,9 @@ class Map:
         """
         player.position.x = self.spawn.x
         player.position.y = self.spawn.y
+
+    def load_gif_bonuses(self, map_surf: pygame.Surface):
+        if len(self.bonuses) == 0:
+            return
+        for bonus in self.bonuses:
+            bonus.gif.update(map_surf)

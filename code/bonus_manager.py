@@ -3,6 +3,8 @@ import time
 
 import pygame
 
+from settings import SCORE_MENU_MARGIN
+from gif_manager import Gif
 import settings
 from broadcast import BroadcastManager
 from player import Player
@@ -15,11 +17,12 @@ EXPLOSION_MAX_POWER = 2
 
 
 class BonusType:
-    def __init__(self, name: str, color: str, icon_id: int):
+    def __init__(self, name: str, color: str, icon_id: str):
         self.name = name
         self.color = color
         self.icon_id = icon_id
         self.broadcast = BroadcastManager()
+        self.gif = Gif(icon_id, SCORE_MENU_MARGIN, SCORE_MENU_MARGIN, .05, False, False)
 
     def apply_bonus(self, player: Player, players: [Player]) -> None:
         """
@@ -64,7 +67,7 @@ class BonusType:
 
 class BonusSpeed(BonusType):
     def __init__(self):
-        super().__init__("BonusSpeed", "green", 0)
+        super().__init__("BonusSpeed", "green", "../asset/GIF/Bonus_vitesse.gif")
 
     def apply_bonus(self, player: Player, players: [Player]) -> None:
         player.bonus = self
@@ -78,7 +81,7 @@ class BonusSpeed(BonusType):
 
 class BonusExplosion(BonusType):
     def __init__(self):
-        super().__init__("BonusExplosion", "red", 1)
+        super().__init__("BonusExplosion", "red", "../asset/GIF/Bonus_V1.2.gif")
 
     def apply_bonus(self, player: Player, players: [Player]) -> None:
         player.bonus = self
@@ -114,6 +117,8 @@ class Bonus:
         self.available = True
         self.last_pick = 0
 
+        self.gif = Gif("../asset/GIF/Bonus_V1.2.gif",self.x,self.y,.5,True,False)
+
     def pick_bonus(self, player: Player, players: [Player]) -> None:
         if not self.available or isinstance(player.bonus, BonusType):
             return
@@ -123,6 +128,7 @@ class Bonus:
 
         self.bonus.show_pickup_message()
         self.bonus.apply_bonus(player, players)
+        self.gif.hide = True
 
     def update_bonus(self, surface: pygame.Surface) -> None:
         self.bonus.update(surface, self.x, self.y)
@@ -133,6 +139,7 @@ class Bonus:
         self.bonus = get_random_bonus()
         self.available = True
         self.last_pick = 0
+        self.gif.hide = False
         #TODO: Make animation on respawn
 
     def draw_bonus(self, surface: pygame.Surface):

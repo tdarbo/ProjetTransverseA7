@@ -8,8 +8,8 @@ class Player(pygame.sprite.Sprite):
         self.mass = mass
         self.position = Vector(position)
         self.velocity = Vector(0, 0)
-        self.radius = radius
-        self.name = name
+        self.radius:int = radius
+        self.name:str = name
 
         self.finished = False
 
@@ -35,3 +35,9 @@ class Player(pygame.sprite.Sprite):
         self.position.x, self.position.y = 0, 0
         self.velocity.x, self.velocity.y = 0, 0
         self.radius = BALL_RADIUS
+
+    def update_gifs(self, overlay:pygame.Surface) -> None:
+        if self.bonus is None:
+            return
+        if self.bonus.gif.path != "":
+            self.bonus.gif.update(overlay)

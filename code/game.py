@@ -64,6 +64,8 @@ class Game:
         pygame.time.wait(2000)
 
     def run(self):
+        clock = pygame.time.Clock()
+
         # Main game loop
         while self.running:
             # Calculate time delta
@@ -86,6 +88,7 @@ class Game:
 
             # Update the display
             pygame.display.flip()
+
 
     def manage_error(self, error_message, title="Erreur"):
         """

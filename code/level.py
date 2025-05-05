@@ -1,4 +1,3 @@
-from gif_manager import GifManager
 from time import sleep
 
 import pygame
@@ -38,7 +37,9 @@ class Level:
         self.overlay_surf = pygame.Surface((screen_width, screen_height)).convert_alpha()
         self.map_surf = pygame.Surface(self.map_size).convert()
 
-        self.gif_manager = GifManager()
+        #self.gif_manager.add_gif("../asset/GIF/Cactus.gif", 1511, 153, .5, True, False)
+        self.bonus_gifs = []
+
 
         self.map.teleportPlayersToSpawn(self.players)
         self.centerOnCurrentPlayer()
@@ -107,20 +108,24 @@ class Level:
         if self.current_player.finished:
             self.shot_taken = True
 
-        if isinstance(self.current_player.bonus, BonusSpeed) and not self.shot_taken:
-            self.current_player.bonus.show_usage_message()
 
-        if self.finished:
-            print("Level finished")
 
         self.update_bonuses()
         self.map.camera.animator.update()
         self.engine.update(dt)
         self.check_turn_end()
 
+    def update_gifs(self):
+        self.map.load_gif_bonuses(self.map_surf)
+        self.current_player.update_gifs(self.overlay_surf)
+
     def update_bonuses(self):
         for bonus in self.map.bonuses:
             bonus.update_bonus(self.map_surf)
+        if isinstance(self.current_player.bonus, BonusType):
+            self.bonus_gifs.append(self.current_player.bonus.icon_id)
+        else:
+            if DEBUG_MODE: self.current_player.bonus = BonusSpeed()
 
     def check_turn_end(self):
         """Vérifie si le tour est terminé et passe au joueur suivant."""
@@ -129,8 +134,13 @@ class Level:
             if self.current_player.velocity.length() < VELOCITY_THRESHOLD:
                 self.next_turn()
 
+
+
     def next_turn(self):
         """Passe au tour du joueur suivant."""
+
+        # Reset les gifs de bonus
+
         self.shot_taken = False
         for i in range(len(self.players)):
             self.current_player_index = (self.current_player_index + 1) % len(self.players)
@@ -183,6 +193,9 @@ class Level:
             if tile.id in {"Collision", "Bounce"} and not DEBUG_MODE:
                 continue
             tile.draw(self.map_surf)
+            visible_tiles += 1
+        print(f"Tiles dessinées: {visible_tiles} / {total_tiles}")
+
 
         pygame.draw.circle(
             surface=self.map_surf,
@@ -220,7 +233,6 @@ class Level:
                 width = width_line
                 )
 
-        self.gif_manager.update_map(self.map_surf)
 
         resize_size = (int(self.map_size[0] * zoom), int(self.map_size[1] * zoom))
         if zoom == 1.0:
@@ -238,7 +250,6 @@ class Level:
         self.draw_map(screen)
         self.score_manager.draw(self.overlay_surf)
         self.broadcast_manager.draw(self.overlay_surf)
-        self.gif_manager.update_overlay(self.overlay_surf)
         screen.blit(self.overlay_surf, (0, 0))
         #print(self.map.camera.is_world_position_on_screen(self.current_player.position.x, self.current_player.position.y))
 
