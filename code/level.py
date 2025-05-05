@@ -162,6 +162,9 @@ class Level:
                 continue
             # if not tile.is_on_screen(self.map.camera):
             #    continue
+            if tile.id == "Bounce" and not DEBUG_MODE:
+                continue
+            # if not tile.is_on_screen(self.map.camera):
             tile.draw(self.map_surf)
             visible_tiles += 1
         print(f"Tiles dessinées: {visible_tiles} / {total_tiles}")
