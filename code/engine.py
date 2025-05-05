@@ -53,7 +53,7 @@ class Engine:
 
     def resolve_player_player_collision(self, player1: Player, player2: Player) -> None:
         """Résout une collision entre deux joueurs."""
-        if player1.hide or player2.hide:
+        if player1.finished or player2.finished:
             return
 
         diff = player1.position - player2.position
@@ -87,17 +87,16 @@ class Engine:
     def is_out_of_bounds(self, player: Player) -> bool:
         """Vérifie si un joueur est en dehors du terrain."""
         for tile in self.level.map.tiles:
-            if tile.rect.collidepoint(player.position):
-                if tile.id == "Water":
-                    return True
+            if tile.id == "Water":
+                return True
         return False
 
     def resolve_finish(self, player: Player) -> None:
         """Vérifie si un joueur a terminé le niveau."""
-        if not player.hide:
+        if not player.finished:
             print(f"Player:{player.name} has finished in x shots")
             player.velocity = Vector(0.0, 0.0)
-            player.hide = True
+            player.finished = True
 
 
     def is_on_finish(self, player: Player) -> None:
@@ -110,26 +109,8 @@ class Engine:
         if distance < (BALL_RADIUS + 1):
             self.resolve_finish(player)
 
-
     # À implémenter si nécessaire :
     # return player.rect.collideobjects(self.level.map.hole)
-
-    def resolve_player_wall_collision(self, player):
-        """
-        Gère les collisions entre un joueur et les bords de la fenêtre.
-        """
-        if player.position.x - player.radius < 0:
-            player.position.x = player.radius
-            player.velocity.x = -player.velocity.x
-        if player.position.x + player.radius > WINDOW_WIDTH:
-            player.position.x = WINDOW_WIDTH - player.radius
-            player.velocity.x = -player.velocity.x
-        if player.position.y - player.radius < 0:
-            player.position.y = player.radius
-            player.velocity.y = -player.velocity.y
-        if player.position.y + player.radius > WINDOW_HEIGHT:
-            player.position.y = WINDOW_HEIGHT - player.radius
-            player.velocity.y = -player.velocity.y
 
     def resolve_player_obstacle_collision(self, player: Player, tile) -> None:
         """
@@ -214,10 +195,6 @@ class Engine:
             # Gestion des collisions entre joueurs
             for j in range(i + 1, self.num_players):
                 self.resolve_player_player_collision(player, self.players[j])
-
-            if False :
-                # Gestion des collisions avec les murs
-                self.resolve_player_wall_collision(player)
 
             player.update()
 
