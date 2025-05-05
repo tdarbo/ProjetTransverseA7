@@ -104,6 +104,14 @@
                 "y": 1728.7878787878785
             }
         },
+        "maps/debug_map.tmx": {
+            "scale": 0.354765625,
+            "selectedLayer": 5,
+            "viewCenter": {
+                "x": 1281.1275049548558,
+                "y": 1281.127504954856
+            }
+        },
         "maps/hole1.tmx": {
             "expandedObjectLayers": [
                 4
