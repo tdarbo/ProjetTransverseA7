@@ -34,12 +34,11 @@ class Level:
         self.finished = False
 
         # Surfaces d'affichage
-        self.overlay_surf = pygame.Surface((screen_width, screen_height), pygame.SRCALPHA)
         self.map_size = (self.map.map_width, self.map.map_height)
-        self.map_surf = pygame.Surface(self.map_size)
+        self.overlay_surf = pygame.Surface((screen_width, screen_height)).convert_alpha()
+        self.map_surf = pygame.Surface(self.map_size).convert()
 
         self.gif_manager = GifManager()
-
 
         self.map.teleportPlayersToSpawn(self.players)
         self.centerOnCurrentPlayer()
@@ -177,26 +176,13 @@ class Level:
         zoom = self.map.camera.zoom_factor
         center = (screen.get_width() / 2, screen.get_height() / 2)
         # Réinitialise les surfaces
-        self.overlay_surf.fill((0, 0, 0, 0))
         self.map_surf.fill("#BDDFFF")
+        self.overlay_surf.fill((0, 0, 0, 0))
 
-        visible_tiles = 0
-        total_tiles = len(self.map.tiles)
-
-
-        # Dessin des tuiles (on peut ignorer les tuiles de collision en mode normal)
         for tile in self.map.tiles:
-            if tile.id == "Collision" and not DEBUG_MODE:
+            if tile.id in {"Collision", "Bounce"} and not DEBUG_MODE:
                 continue
-            # if not tile.is_on_screen(self.map.camera):
-            #    continue
-            if tile.id == "Bounce" and not DEBUG_MODE:
-                continue
-            # if not tile.is_on_screen(self.map.camera):
             tile.draw(self.map_surf)
-            visible_tiles += 1
-        print(f"Tiles dessinées: {visible_tiles} / {total_tiles}")
-
 
         pygame.draw.circle(
             surface=self.map_surf,
@@ -204,6 +190,9 @@ class Level:
             center=(self.map.hole.x, self.map.hole.y),
             radius=20
         )
+
+        for bonus in self.map.bonuses:
+            bonus.draw_bonus(self.map_surf)
 
         # Dessin des joueurs
         for player in self.players:
@@ -233,18 +222,15 @@ class Level:
 
         self.gif_manager.update_map(self.map_surf)
 
-        for bonus in self.map.bonuses:
-            bonus.draw_bonus(self.map_surf)
-
-        # Application du zoom sur la map
         resize_size = (int(self.map_size[0] * zoom), int(self.map_size[1] * zoom))
-        map_surf_resized = pygame.transform.scale(self.map_surf, resize_size)
-
-        m_x = center[0] - int(self.map.camera.offset_X * zoom)
-        m_y = center[1] - int(self.map.camera.offset_Y * zoom)
-
-
-
+        if zoom == 1.0:
+            map_surf_resized = self.map_surf
+        else:
+            map_surf_resized = pygame.transform.scale(self.map_surf, resize_size)
+        zoom_offset_x = int(self.map.camera.offset_X * zoom)
+        zoom_offset_y = int(self.map.camera.offset_Y * zoom)
+        m_x = center[0] - zoom_offset_x
+        m_y = center[1] - zoom_offset_y
         screen.blit(map_surf_resized, (m_x, m_y))
 
     def draw(self, screen):
