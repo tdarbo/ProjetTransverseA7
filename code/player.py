@@ -11,7 +11,7 @@ class Player(pygame.sprite.Sprite):
         self.radius = radius
         self.name = name
 
-        self.hide = False
+        self.finished = False
 
         # Bonus part
         self.bonus = None
