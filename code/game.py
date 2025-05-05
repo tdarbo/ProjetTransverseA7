@@ -1,6 +1,5 @@
 import pygame.rect
-
-
+from pygame.locals import *
 from settings import *
 from scene_config import ConfigurationScene
 from scene_manager import SceneManager
@@ -10,51 +9,48 @@ from scene_start_menu import StartMenuScene
 
 class Game:
     def __init__(self):
-        """Initialize the game."""
-        # Initialize Pygame
         pygame.init()
         pygame.display.set_caption(GAME_NAME)
-
-        # Set up the game window
-        self.screen = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
+        pygame.event.set_allowed([QUIT, KEYDOWN, KEYUP, K_SPACE, K_h, K_e, MOUSEBUTTONDOWN, MOUSEMOTION, MOUSEBUTTONUP])
+        # flags = FULLSCREEN | DOUBLEBUF
+        flags = DOUBLEBUF
+        self.screen = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT), flags, 8)
         self.running = True
         self.clock = pygame.time.Clock()
         self.dt = DELTA_TIME
 
-        #note/10 de difficulté
+        if not DEBUG_MODE:
+            # Charger et afficher le splash screen
+            self.screen.blit(SPLASH_BG, (0, 0))
+            pygame.display.flip()
 
         if DEBUG_MODE:
             self.maps = {
-                #"map1": "../asset/TiledProject/maps/debug_map.tmx",
                 "map1": "../asset/TiledProject/maps/hole1.tmx"
-                     } #1/10
+            }
         else:
             self.maps = {
-                "map1": "../asset/TiledProject/maps/hole1.tmx", #1/10
-                "map2": "../asset/TiledProject/maps/Entre_les_lacs.tmx", #3/10
-                "map3": "../asset/TiledProject/maps/Glissade_mortelle.tmx", #4/10
-                "map4": "../asset/TiledProject/maps/Coeur.tmx", #5/10
-                "map5": "../asset/TiledProject/maps/Détour_obstrué.tmx", #4/10
-                "map6": "../asset/TiledProject/maps/Dédale_desertique.tmx", #5/10
-                "map7": "../asset/TiledProject/maps/Descente_aux_enfers.tmx", #9/10
-                "map8": "../asset/TiledProject/maps/Île_spirale.tmx", #7/10
-                "map9": "../asset/TiledProject/maps/Sablier_du_temps_perdu.tmx", #6/10
-                "map10": "../asset/TiledProject/maps/Deux_lunes.tmx", #6/10
+                "map1": "../asset/TiledProject/maps/hole1.tmx",
+                "map2": "../asset/TiledProject/maps/Entre_les_lacs.tmx",
+                "map3": "../asset/TiledProject/maps/Glissade_mortelle.tmx",
+                "map4": "../asset/TiledProject/maps/Coeur.tmx",
+                "map5": "../asset/TiledProject/maps/Détour_obstrué.tmx",
+                "map6": "../asset/TiledProject/maps/Dédale_desertique.tmx",
+                "map7": "../asset/TiledProject/maps/Descente_aux_enfers.tmx",
+                "map8": "../asset/TiledProject/maps/Île_spirale.tmx",
+                "map9": "../asset/TiledProject/maps/Sablier_du_temps_perdu.tmx",
+                "map10": "../asset/TiledProject/maps/Deux_lunes.tmx",
             }
 
         self.game_info = dict()
 
-        # UI manager with pygame_gui
         self.ui_manager = pygame_gui.UIManager((WINDOW_WIDTH, WINDOW_HEIGHT), theme_path="../data/ui-theme.json")
         self.ui_manager.set_visual_debug_mode(DEBUG_MODE)
 
-        # Initialize the scene manager
         self.scene_manager = SceneManager()
-        # Create and add the scenes
         self.scene_manager.add("start_menu_scene", StartMenuScene(1, self))
         self.scene_manager.add("config_scene", ConfigurationScene(2, self))
         self.scene_manager.add("play_scene", PlayScene(3, self))
-        # Display default scene
 
         if DEBUG_MODE:
             self.game_info = DEBUG_CONFIG
@@ -63,6 +59,9 @@ class Game:
             self.scene_manager.change("start_menu_scene")
 
         self.error_window = None
+
+        # Attendre un court instant
+        pygame.time.wait(2000)
 
     def run(self):
         # Main game loop
