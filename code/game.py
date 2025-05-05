@@ -1,6 +1,5 @@
 import pygame.rect
 
-from i18n.config import settings
 
 from settings import *
 from scene_config import ConfigurationScene
@@ -24,20 +23,24 @@ class Game:
 
         #note/10 de difficulté
 
-        self.maps = {
-            "map1": "../asset/TiledProject/maps/hole1.tmx", #1/10
-            "map2": "../asset/TiledProject/maps/Entre_les_lacs.tmx", #3/10
-            "map3": "../asset/TiledProject/maps/Glissade_mortelle.tmx", #4/10
-            "map4": "../asset/TiledProject/maps/Coeur.tmx", #5/10
-            "map5": "../asset/TiledProject/maps/Détour_obstrué.tmx", #4/10
-            "map6": "../asset/TiledProject/maps/Dédale_desertique.tmx", #5/10
-            "map7": "../asset/TiledProject/maps/Descente_aux_enfers.tmx", #9/10
-            "map8": "../asset/TiledProject/maps/Île_spirale.tmx", #7/10
-            "map9": "../asset/TiledProject/maps/Sablier_du_temps_perdu.tmx", #6/10
-            "map10": "../asset/TiledProject/maps/Deux_lunes.tmx", #6/10
-
-
-        }
+        if DEBUG_MODE:
+            self.maps = {
+                #"map1": "../asset/TiledProject/maps/debug_map.tmx",
+                "map1": "../asset/TiledProject/maps/hole1.tmx"
+                     } #1/10
+        else:
+            self.maps = {
+                "map1": "../asset/TiledProject/maps/hole1.tmx", #1/10
+                "map2": "../asset/TiledProject/maps/Entre_les_lacs.tmx", #3/10
+                "map3": "../asset/TiledProject/maps/Glissade_mortelle.tmx", #4/10
+                "map4": "../asset/TiledProject/maps/Coeur.tmx", #5/10
+                "map5": "../asset/TiledProject/maps/Détour_obstrué.tmx", #4/10
+                "map6": "../asset/TiledProject/maps/Dédale_desertique.tmx", #5/10
+                "map7": "../asset/TiledProject/maps/Descente_aux_enfers.tmx", #9/10
+                "map8": "../asset/TiledProject/maps/Île_spirale.tmx", #7/10
+                "map9": "../asset/TiledProject/maps/Sablier_du_temps_perdu.tmx", #6/10
+                "map10": "../asset/TiledProject/maps/Deux_lunes.tmx", #6/10
+            }
 
         self.game_info = dict()
 

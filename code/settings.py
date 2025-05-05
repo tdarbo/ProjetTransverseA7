@@ -10,7 +10,6 @@ FONT_PATH = "../asset/font/font-regular-v2.ttf"
 ## Paramètres de configuration du jeu
 GAME_NAME = "GOAT"
 GAME_VERSION = "1.0"
-DEBUG_MODE = False
 WINDOW_WIDTH = 1280
 WINDOW_HEIGHT = 720
 FPS = 60
@@ -52,12 +51,9 @@ SCENE_BG_IMAGE = loadingScreen = pygame.transform.scale(
     (WINDOW_WIDTH, WINDOW_HEIGHT)
 )
 
+# DEBUG
 DEBUG_MODE = True
 DEBUG_CONFIG = {'players':2,'holes':4,'names':["player0"]}
-
-ASSET_PATH = "../asset"
-UI_THEME_PATH = "../data/ui-theme.json"
-FONT_PATH = "../asset/font/font-regular-v2.ttf"
 
 ## Paramètres de la caméra
 MAX_ZOOM = 4

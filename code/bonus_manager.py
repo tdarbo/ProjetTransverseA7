@@ -44,8 +44,6 @@ class BonusType:
         """
         Generic message when bonus picked up
         """
-        self.broadcast.change_color(self.color)
-        self.broadcast.change_time(5)
         self.broadcast.broadcast(f"Vous avez récupéré {self.name} !")
 
     def show_usage_message(self) -> None:
@@ -75,8 +73,6 @@ class BonusSpeed(BonusType):
         player.bonus = None
 
     def show_usage_message(self) -> None:
-        self.broadcast.change_color(self.color)
-        self.broadcast.change_color(1)
         self.broadcast.broadcast("Vous avez ce bonus de vitesse jusqu'à la fin de ce tour !")
 
 
@@ -101,8 +97,6 @@ class BonusExplosion(BonusType):
 
 
     def show_usage_message(self) -> None:
-        self.broadcast.change_color(self.color)
-        self.broadcast.change_color(1)
         self.broadcast.broadcast("Appuyez sur 'E' pour utiliser le bonus d'explosion !")
 
 
@@ -158,7 +152,7 @@ Bonus :
         """)
 
 
-BonusList = [BonusExplosion]
+BonusList = [BonusExplosion,BonusSpeed]
 
 
 def get_random_bonus() -> BonusType:
