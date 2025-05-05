@@ -6,11 +6,25 @@ from PIL.ImageOps import scale
 
 class GifManager:
     def __init__(self):
-        self.gifs = []
+        self.gifs = {}
 
-    def add_gif(self, path:str, x:int ,y:int, scale:float, map_anchored:bool, hide:bool) -> None:
-        gif = Gif(path,x,y,scale,map_anchored,hide)
-        self.gifs.append(gif)
+    def show_gif(self,path:str, x:int, y:int, scale_factor:float, map_anchored:bool):
+        s_gif = self.gifs[path]
+        if isinstance(s_gif,Gif):
+            s_gif.hide = False
+            s_gif.x = x
+            s_gif.y = y
+            s_gif.scale = scale_factor
+        else:
+            n_gif = Gif(path, x, y, scale_factor, map_anchored, False)
+            self.gifs[path] = n_gif
+
+    def hide_gif(self,path:str):
+        s_gif = self.gifs[path]
+        if isinstance(s_gif,Gif):
+            s_gif.hide = True
+        else:
+            raise Exception(f"Gif {path} not found in gifs list")
 
     def update_map(self, map_surf:pygame.Surface) -> None:
         for gif in self.gifs:
@@ -48,11 +62,12 @@ class Gif:
         self.x, self.y, self.scale = x,y,scale
 
         self.map_anchored = map_anchored
-
+        self.last_update = 0
         self.hide = hide
 
 
     def update(self,surface:pygame.Surface):
+
 
         if self.hide:
             return
@@ -62,6 +77,11 @@ class Gif:
         final_frame = pygame.transform.scale_by(frame, self.scale)
 
         surface.blit(final_frame,(self.x,self.y))
+
+        if abs(self.last_update - pygame.time.get_ticks()) < 500:
+            return
+
+        self.last_update = pygame.time.get_ticks()
 
         self.current_frame += 1
         if self.current_frame >= self.max_frame:

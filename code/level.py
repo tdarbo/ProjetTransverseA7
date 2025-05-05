@@ -40,6 +40,8 @@ class Level:
         self.map_surf = pygame.Surface(self.map_size)
 
         self.gif_manager = GifManager()
+        #self.gif_manager.add_gif("../asset/GIF/Cactus.gif", 1511, 153, .5, True, False)
+        self.bonus_gifs = []
 
 
         self.map.teleportPlayersToSpawn(self.players)
@@ -123,6 +125,9 @@ class Level:
     def update_bonuses(self):
         for bonus in self.map.bonuses:
             bonus.update_bonus(self.map_surf)
+        if isinstance(self.current_player.bonus, BonusType):
+            self.gif_manager.show_gif(self.current_player.bonus.icon_id,5,5,.5, False)
+            self.bonus_gifs.append(self.current_player.bonus.icon_id)
 
     def check_turn_end(self):
         """Vérifie si le tour est terminé et passe au joueur suivant."""
@@ -133,6 +138,11 @@ class Level:
 
     def next_turn(self):
         """Passe au tour du joueur suivant."""
+
+        # Reset les gifs de bonus
+        for gif in self.bonus_gifs:
+            self.gif_manager.hide_gif(gif)
+
         self.shot_taken = False
         for i in range(len(self.players)):
             self.current_player_index = (self.current_player_index + 1) % len(self.players)
@@ -196,7 +206,7 @@ class Level:
             # if not tile.is_on_screen(self.map.camera):
             tile.draw(self.map_surf)
             visible_tiles += 1
-        print(f"Tiles dessinées: {visible_tiles} / {total_tiles}")
+        #print(f"Tiles dessinées: {visible_tiles} / {total_tiles}")
 
 
         pygame.draw.circle(

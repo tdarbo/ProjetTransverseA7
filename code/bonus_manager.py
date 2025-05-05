@@ -15,7 +15,7 @@ EXPLOSION_MAX_POWER = 2
 
 
 class BonusType:
-    def __init__(self, name: str, color: str, icon_id: int):
+    def __init__(self, name: str, color: str, icon_id: str):
         self.name = name
         self.color = color
         self.icon_id = icon_id
@@ -64,7 +64,7 @@ class BonusType:
 
 class BonusSpeed(BonusType):
     def __init__(self):
-        super().__init__("BonusSpeed", "green", 0)
+        super().__init__("BonusSpeed", "green", "../asset/GIF/Bonus_vitesse.gif")
 
     def apply_bonus(self, player: Player, players: [Player]) -> None:
         player.bonus = self
@@ -78,7 +78,7 @@ class BonusSpeed(BonusType):
 
 class BonusExplosion(BonusType):
     def __init__(self):
-        super().__init__("BonusExplosion", "red", 1)
+        super().__init__("BonusExplosion", "red", "../asset/GIF/Bonus_V1.2.gif")
 
     def apply_bonus(self, player: Player, players: [Player]) -> None:
         player.bonus = self
