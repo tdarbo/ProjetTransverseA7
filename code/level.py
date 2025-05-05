@@ -87,7 +87,7 @@ class Level:
             self.drag_current = None
 
     def update(self, dt):
-        if self.current_player.hide:
+        if self.current_player.finished:
             self.shot_taken = True
 
         if self.finished:
@@ -110,7 +110,7 @@ class Level:
         for i in range(len(self.players)):
             self.current_player_index = (self.current_player_index + 1) % len(self.players)
             self.current_player = self.players[self.current_player_index]
-            if not self.current_player.hide:
+            if not self.current_player.finished:
                 self.broadcast_manager.broadcast(f"Tour du joueur {self.current_player_index + 1}")
                 print(f"Tour du joueur {self.current_player_index + 1}")
                 self.centerOnCurrentPlayer()
@@ -179,11 +179,11 @@ class Level:
 
         # Dessin des joueurs
         for player in self.players:
-            if not player.hide:
+            if not player.finished:
                 player.draw(self.map_surf)
 
         # Cerclage du joueur actif s'il n'a pas encore joué
-        if not self.shot_taken and not self.current_player.hide:
+        if not self.shot_taken and not self.current_player.finished:
             pygame.draw.circle(
                 surface=self.map_surf,
                 color=pygame.Color("white"),
