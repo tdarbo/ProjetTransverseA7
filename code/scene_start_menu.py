@@ -121,7 +121,7 @@ class StartMenuScene(Scene):
             elif "#main_menu_settings_btn" in ids:
                 self.scene_manager.change("settings_scene")  # Transition vers la scène des paramètres
             elif "#main_menu_exit_btn" in ids:
-                self.game.quit_game()  # Appel d'une méthode pour quitter le jeu
+                self.game.running = False
 
     def draw(self, screen):
         """Dessine la scène."""
