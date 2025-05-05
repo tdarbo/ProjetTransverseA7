@@ -90,11 +90,10 @@ class Engine:
             print(f"Player:{player.name} is out of bounds")
 
     def is_out_of_bounds(self, player: Player) -> bool:
-        """Vérifie si un joueur est en dehors du terrain."""
         for tile in self.level.map.tiles:
-            if tile.id == "Water":
-                return True
-        return False
+            if tile.rect.collidepoint(player.position) and tile.id != "Water":
+                return False  # Le joueur est sur une tuile
+        return True  # Le joueur n’est sur aucune tuile, il est "out of bounds"
 
     def resolve_finish(self, player: Player) -> None:
         """Vérifie si un joueur a terminé le niveau."""
