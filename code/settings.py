@@ -46,13 +46,17 @@ PANEL_MARGINS = {
     "left": 50,
     "right": 50
 }
-SCENE_BG_IMAGE = loadingScreen = pygame.transform.scale(
+SCENE_BG_IMAGE = pygame.transform.scale(
     pygame.image.load('../asset/image/terrain_bg.jpg'),
+    (WINDOW_WIDTH, WINDOW_HEIGHT)
+)
+SPLASH_BG = pygame.transform.scale(
+    pygame.image.load('../asset/image/splash_bg.png'),
     (WINDOW_WIDTH, WINDOW_HEIGHT)
 )
 
 # DEBUG
-DEBUG_MODE = True
+DEBUG_MODE = False
 DEBUG_CONFIG = {'players':2,'holes':4,'names':["player0"]}
 
 ## Paramètres de la caméra
