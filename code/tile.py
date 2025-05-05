@@ -2,7 +2,7 @@ from settings import *
 
 
 class Tile(pygame.sprite.Sprite):
-    def __init__(self, tile_type_id, x, y, width, height, image_surface):
+    def __init__(self, tile_type_id, x, y, width, height, image):
         super().__init__()
 
         # Identifiant du type de la tuile
@@ -10,7 +10,7 @@ class Tile(pygame.sprite.Sprite):
         self.id = tile_type_id
 
         # Surface de l'image associée à la tuile
-        self.image = image_surface
+        self.image = image
 
         # On initialise la position de la tuile
         # get_rect() est utilisée pour obtenir un rectangle représentant la position et la taille de l'image
