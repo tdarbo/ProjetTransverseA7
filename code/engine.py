@@ -166,7 +166,7 @@ class Engine:
 
     def resolve_player_bounce_collision(self, player: Player, tile) -> None:
         """
-        Gère la collision entre un joueur et une tuile obstacle.
+        Gère la collision entre un joueur et une tuile bumper.
         """
         intersection = player.rect.clip(tile.rect)
 
