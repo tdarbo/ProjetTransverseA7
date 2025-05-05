@@ -1,4 +1,9 @@
 from gif_manager import GifManager
+from time import sleep
+
+import pygame
+
+from bonus_manager import BonusSpeed, BonusType
 from settings import *
 from engine import Engine
 from broadcast import BroadcastManager
@@ -39,6 +44,7 @@ class Level:
         self.map.teleportPlayersToSpawn(self.players)
         self.centerOnCurrentPlayer()
 
+
     def process_event(self, event):
         """Evénements pygame."""
         self.map.camera.process_event(event)
@@ -48,12 +54,17 @@ class Level:
             elif event.key == pygame.K_h:
                 self.current_player.position.x = self.map.hole.x
                 self.current_player.position.y = self.map.hole.y
+            elif event.key == pygame.K_e:
+                if isinstance(self.current_player.bonus, BonusType):
+                    self.current_player.bonus.consume_bonus(self.current_player, self.players)
         elif event.type == pygame.MOUSEBUTTONDOWN:
             self.on_mouse_down(event)
         elif event.type == pygame.MOUSEMOTION:
             self.on_mouse_motion(event)
         elif event.type == pygame.MOUSEBUTTONUP:
             self.on_mouse_up(event)
+
+
 
     def on_mouse_down(self, event):
         if self.shot_taken:
@@ -75,8 +86,15 @@ class Level:
             # Il vient de jouer donc on lui ajoute 1 point
             self.score_manager.add_points(self.current_player, self.hole_number)
 
+            if isinstance(self.current_player.bonus, BonusSpeed):
+                self.current_player.bonus.consume_bonus(self.current_player, self.players)
+
+
             adjusted_pos = self.map.camera.getAbsoluteCoord(event.pos)
             new_velocity = (self.drag_start - adjusted_pos) * self.force_multiplier
+            #if self.current_player.speed_bonus:
+            #    new_velocity *= 2
+            #    new_velocity = min(new_velocity, MAX_PLAYER_VELOCITY.length()*1.5)
             if new_velocity.length() >= MAX_PLAYER_VELOCITY.length():
                 new_velocity = new_velocity.normalize() * MAX_PLAYER_VELOCITY.length()
 
@@ -90,12 +108,20 @@ class Level:
         if self.current_player.hide:
             self.shot_taken = True
 
+        if isinstance(self.current_player.bonus, BonusSpeed) and not self.shot_taken:
+            self.current_player.bonus.show_usage_message()
+
         if self.finished:
             print("Level finished")
 
+        self.update_bonuses()
         self.map.camera.animator.update()
         self.engine.update(dt)
         self.check_turn_end()
+
+    def update_bonuses(self):
+        for bonus in self.map.bonuses:
+            bonus.update_bonus(self.map_surf)
 
     def check_turn_end(self):
         """Vérifie si le tour est terminé et passe au joueur suivant."""
@@ -156,6 +182,8 @@ class Level:
 
         visible_tiles = 0
         total_tiles = len(self.map.tiles)
+
+
         # Dessin des tuiles (on peut ignorer les tuiles de collision en mode normal)
         for tile in self.map.tiles:
             if tile.id == "Collision" and not DEBUG_MODE:
@@ -205,12 +233,17 @@ class Level:
 
         self.gif_manager.update_map(self.map_surf)
 
+        for bonus in self.map.bonuses:
+            bonus.draw_bonus(self.map_surf)
+
         # Application du zoom sur la map
         resize_size = (int(self.map_size[0] * zoom), int(self.map_size[1] * zoom))
         map_surf_resized = pygame.transform.scale(self.map_surf, resize_size)
 
         m_x = center[0] - int(self.map.camera.offset_X * zoom)
         m_y = center[1] - int(self.map.camera.offset_Y * zoom)
+
+
 
         screen.blit(map_surf_resized, (m_x, m_y))
 

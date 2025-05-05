@@ -1,5 +1,6 @@
 from pygame.examples.glcube import init_gl_stuff_old
 
+from bonus_manager import BonusSpeed
 from player import Player
 from settings import *
 from math import exp,sqrt
@@ -29,7 +30,11 @@ class Engine:
 
     def update_position(self, player: Player, dt: float) -> None:
         """Met à jour la position du joueur en fonction de sa vitesse."""
-        player.position += player.velocity * dt
+        bonus_modifier = 1
+        if isinstance(player.bonus, BonusSpeed):
+            bonus_modifier = 2
+
+        player.position += player.velocity * dt * bonus_modifier
 
     def apply_friction(self, player: Player, dt: float) -> None:
         """Applique la friction du sol à un joueur."""
@@ -164,6 +169,15 @@ class Engine:
             # On Inverse la vélocité en Y
             player.velocity.y = -player.velocity.y
 
+    def resolve_bonus(self):
+        for player in self.players:
+            for bonus in self.level.map.bonuses:
+                diff_x, diff_y = player.position.x - bonus.x, player.position.y - bonus.y
+
+                distance = sqrt(diff_x ** 2 + diff_y ** 2)
+                if distance < (BALL_RADIUS + 5) and bonus.available:
+                    bonus.pick_bonus(player,self.players)
+
     def resolve_player_bounce_collision(self, player: Player, tile) -> None:
         """
         Gère la collision entre un joueur et une tuile obstacle.
@@ -234,5 +248,6 @@ class Engine:
 
             self.resolve_out_of_bounds(player)
             self.is_on_finish(player)
+            self.resolve_bonus()
 
             player.update()

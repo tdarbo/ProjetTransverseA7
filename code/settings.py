@@ -52,6 +52,13 @@ SCENE_BG_IMAGE = loadingScreen = pygame.transform.scale(
     (WINDOW_WIDTH, WINDOW_HEIGHT)
 )
 
+DEBUG_MODE = True
+DEBUG_CONFIG = {'players':2,'holes':4,'names':["player0"]}
+
+ASSET_PATH = "../asset"
+UI_THEME_PATH = "../data/ui-theme.json"
+FONT_PATH = "../asset/font/font-regular-v2.ttf"
+
 ## Paramètres de la caméra
 MAX_ZOOM = 4
 MIN_ZOOM = 0.5

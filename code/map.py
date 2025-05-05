@@ -1,3 +1,4 @@
+from bonus_manager import Bonus
 from settings import *
 import pytmx
 from camera import Camera
@@ -14,6 +15,7 @@ def load_tiled_map(map_path: str, tile_size: int):
     # On charge les données de la carte
     tmx_data = pytmx.load_pygame(map_path)
     tiles = pygame.sprite.Group()
+    bonuses = []
     spawn, hole = None, None
 
     # Parcours des layers de la carte
@@ -29,6 +31,10 @@ def load_tiled_map(map_path: str, tile_size: int):
                     spawn = obj
                 elif obj.name == "hole":
                     hole = obj
+                elif obj.name == "bonus":
+                    b = Bonus(obj)
+                    b.print_bonus_log()
+                    bonuses.append(b)
 
         # Traitement des tuiles
         if isinstance(layer, pytmx.TiledTileLayer):
@@ -48,7 +54,9 @@ def load_tiled_map(map_path: str, tile_size: int):
                     # On ajoute la tuile au groupe de sprites pygame
                     tiles.add(tile)
 
-    return tiles, spawn, hole
+
+    return tiles, spawn, hole, bonuses
+
 
 class Map:
     def __init__(self, path: str, surf):
@@ -59,7 +67,7 @@ class Map:
         :param surf: Surface sur laquelle la carte sera dessinée
         """
         # Chargement des tuiles, du point de spawn et du trou à partir de la carte
-        self.tiles, self.spawn, self.hole = load_tiled_map(path, TILE_SIZE)
+        self.tiles, self.spawn, self.hole, self.bonuses = load_tiled_map(path, TILE_SIZE)
         self.surface = surf
 
         # On initialise la caméra
@@ -78,6 +86,8 @@ class Map:
         # On termine par calculer les dimensions de la carte en pixels
         self.map_width = map_width * tile_width
         self.map_height = map_height * tile_height
+
+
 
     def teleportPlayersToSpawn(self, players: list):
         """
