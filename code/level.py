@@ -2,7 +2,7 @@ from time import sleep
 
 import pygame
 
-from bonus_manager import BonusSpeed, BonusType, BonusFantome
+from bonus_manager import BonusSpeed, BonusType, BonusFantome, BonusAimant
 from settings import *
 from engine import Engine
 from broadcast import BroadcastManager
@@ -139,7 +139,7 @@ class Level:
             if not self.current_player.finished:
                 self.broadcast_manager.broadcast(f"Tour du joueur {self.current_player_index + 1}")
                 print(f"Tour du joueur {self.current_player_index + 1}")
-                if isinstance(self.current_player.bonus, BonusFantome):
+                if isinstance(self.current_player.bonus, BonusFantome) or isinstance(self.current_player.bonus, BonusAimant):
                     self.current_player.bonus.next_turn(self.current_player)
                 self.centerOnCurrentPlayer()
                 return

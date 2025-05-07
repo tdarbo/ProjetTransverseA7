@@ -1,6 +1,7 @@
 from pygame.examples.glcube import init_gl_stuff_old
 
-from bonus_manager import BonusSpeed, BonusFantome
+from bonus_manager import BonusSpeed, BonusFantome, BonusAimant
+
 from player import Player
 from settings import *
 from math import exp,sqrt
@@ -212,6 +213,9 @@ class Engine:
 
             player.update()
 
+            if isinstance(player.bonus, BonusAimant) and player.bonus.isActive():
+                self.apply_bonus_aimant(player)
+
             # Application de la friction
             self.apply_friction(player, dt)
 
@@ -237,3 +241,14 @@ class Engine:
             self.resolve_bonus()
 
             player.update()
+
+    def apply_bonus_aimant(self, player:Player):
+        """
+        Applique le bonus d'aimant à un joueur.
+        """
+        hole_x, hole_y = self.level.map.hole.x, self.level.map.hole.y
+        hole = pygame.math.Vector2(hole_x, hole_y)
+        pos = player.position  # Supposé être un Vector2 aussi
+        direction = hole - pos
+        attraction_force = direction.normalize() * (1 / max(direction.length(), 0.001)*5) * 100
+        player.velocity += attraction_force

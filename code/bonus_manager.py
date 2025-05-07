@@ -129,12 +129,25 @@ class BonusFantome(BonusType):
 class BonusAimant(BonusType):
     def __init__(self):
         super().__init__("BonusAimant", "yellow", "../asset/GIF/Bonus_aimant.gif")
+        self.active = False
+        self.start_time = 0
+
+    def isActive(self):
+        if time.time() - self.start_time > 10:
+            self.active = False
+
+        return self.active
 
     def apply_bonus(self, player: Player, players: [Player]) -> None:
         player.bonus = self
 
     def consume_bonus(self, player: Player, players: [Player]) -> None:
-        player.bonus = None
+        self.active = True
+        self.start_time = time.time()
+
+    def next_turn(self,player: Player):
+        if self.active:
+            player.bonus = None
 
     def show_usage_message(self) -> None:
         self.broadcast.broadcast("Appuyez sur 'E' pour utiliser le bonus d'aimant pendant ce tour !")
@@ -200,4 +213,4 @@ BonusList = [BonusExplosion,BonusSpeed]
 
 
 def get_random_bonus() -> BonusType:
-    return BonusFantome()#random.choice(BonusList)()
+    return BonusAimant()#random.choice(BonusList)()
