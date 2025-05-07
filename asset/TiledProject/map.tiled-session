@@ -19,10 +19,10 @@
         },
         "maps/Coeur.tmx": {
             "scale": 0.39060267857142855,
-            "selectedLayer": 5,
+            "selectedLayer": 0,
             "viewCenter": {
                 "x": 1248.071318361049,
-                "y": 1411.920681181782
+                "y": 1050.9400537173553
             }
         },
         "maps/Descente_aux_enfers.tmx": {
@@ -32,7 +32,7 @@
             "scale": 0.33,
             "selectedLayer": 0,
             "viewCenter": {
-                "x": 1240.909090909091,
+                "x": 665.1515151515152,
                 "y": 1271.212121212121
             }
         },
@@ -49,10 +49,10 @@
                 6
             ],
             "scale": 0.33,
-            "selectedLayer": 1,
+            "selectedLayer": 0,
             "viewCenter": {
                 "x": 2068.181818181818,
-                "y": 1343.939393939394
+                "y": 1771.2121212121212
             }
         },
         "maps/Détour_obstrué.tmx": {
@@ -60,7 +60,7 @@
                 6
             ],
             "scale": 0.33,
-            "selectedLayer": 5,
+            "selectedLayer": 0,
             "viewCenter": {
                 "x": 1180.3030303030303,
                 "y": 1328.7878787878785
@@ -68,7 +68,7 @@
         },
         "maps/Entre_les_lacs.tmx": {
             "scale": 0.33,
-            "selectedLayer": 4,
+            "selectedLayer": 0,
             "viewCenter": {
                 "x": 1610.6060606060607,
                 "y": 1828.7878787878785
@@ -76,7 +76,7 @@
         },
         "maps/Glissade_mortelle.tmx": {
             "scale": 0.33,
-            "selectedLayer": 4,
+            "selectedLayer": 0,
             "viewCenter": {
                 "x": 1604.5454545454543,
                 "y": 1534.848484848485
@@ -98,15 +98,18 @@
                 7
             ],
             "scale": 0.33,
-            "selectedLayer": 5,
+            "selectedLayer": 0,
             "viewCenter": {
-                "x": 1698.4848484848483,
+                "x": 1546.9696969696968,
                 "y": 1728.7878787878785
             }
         },
         "maps/debug_map.tmx": {
+            "expandedObjectLayers": [
+                4
+            ],
             "scale": 0.354765625,
-            "selectedLayer": 5,
+            "selectedLayer": 0,
             "viewCenter": {
                 "x": 1281.1275049548558,
                 "y": 1281.127504954856
@@ -124,14 +127,17 @@
             }
         },
         "maps/hole2.tmx": {
-            "scale": 1.5,
+            "scale": 0.33,
             "selectedLayer": 0,
             "viewCenter": {
-                "x": 2330.333333333333,
-                "y": 1129
+                "x": 1310.6060606060607,
+                "y": 646.969696969697
             }
         },
         "maps/map_test.tmx": {
+            "expandedObjectLayers": [
+                9
+            ],
             "scale": 0.33,
             "selectedLayer": 2,
             "viewCenter": {
@@ -156,7 +162,7 @@
             "scaleInEditor": 4
         }
     },
-    "last.imagePath": "C:/Users/mathi/Downloads",
+    "last.imagePath": "C:/Users/mathi/OneDrive/Images",
     "map.fixedSize": true,
     "map.height": 40,
     "map.lastUsedFormat": "tmx",
@@ -172,6 +178,7 @@
     ],
     "project": "map.tiled-project",
     "recentFiles": [
+        "maps/map_test.tmx",
         "maps/hole1.tmx",
         "tileSet.tsx",
         "maps/Glissade_mortelle.tmx",
