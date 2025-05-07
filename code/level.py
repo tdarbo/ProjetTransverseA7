@@ -111,7 +111,7 @@ class Level:
 
     def update_gifs(self):
         self.map.load_gif_bonuses(self.map_surf)
-        self.current_player.update_gifs(self.overlay_surf)
+
 
     def update_bonuses(self):
         for bonus in self.map.bonuses:
@@ -190,6 +190,8 @@ class Level:
             radius=20
         )
 
+        self.map.load_gif_bonuses(self.map_surf)
+
         for bonus in self.map.bonuses:
             bonus.draw_bonus(self.map_surf)
 
@@ -235,6 +237,7 @@ class Level:
         self.draw_map(screen)
         self.score_manager.draw(self.overlay_surf)
         self.broadcast_manager.draw(self.overlay_surf)
+        self.current_player.update_gifs(self.overlay_surf)
         screen.blit(self.overlay_surf, (0, 0))
         # print(self.map.camera.is_world_position_on_screen(self.current_player.position.x, self.current_player.position.y))
 

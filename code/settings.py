@@ -56,7 +56,7 @@ SPLASH_BG = pygame.transform.scale(
 )
 
 # DEBUG
-DEBUG_MODE = False
+DEBUG_MODE = True
 DEBUG_CONFIG = {'players':2,'holes':4,'names':["player0"]}
 
 ## Paramètres de la caméra

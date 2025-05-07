@@ -39,5 +39,5 @@ class Player(pygame.sprite.Sprite):
     def update_gifs(self, overlay:pygame.Surface) -> None:
         if self.bonus is None:
             return
-        if self.bonus.gif.path != "":
-            self.bonus.gif.update(overlay)
+
+        self.bonus.gif.update(overlay)
