@@ -139,9 +139,9 @@ class Level:
             if not self.current_player.finished:
                 self.broadcast_manager.broadcast(f"Tour du joueur {self.current_player_index + 1}")
                 print(f"Tour du joueur {self.current_player_index + 1}")
-                self.centerOnCurrentPlayer()
                 if isinstance(self.current_player.bonus, BonusFantome):
                     self.current_player.bonus.next_turn(self.current_player)
+                self.centerOnCurrentPlayer()
                 return
         # Aucun joueur actif
         self.finished = True
