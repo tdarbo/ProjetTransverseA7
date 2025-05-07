@@ -78,7 +78,6 @@ class BonusSpeed(BonusType):
     def show_usage_message(self) -> None:
         self.broadcast.broadcast("Vous avez ce bonus de vitesse jusqu'à la fin de ce tour !")
 
-
 class BonusExplosion(BonusType):
     def __init__(self):
         super().__init__("BonusExplosion", "red", "../asset/GIF/Bonus_V1.2.gif")
@@ -126,6 +125,19 @@ class BonusFantome(BonusType):
 
     def show_usage_message(self) -> None:
         self.broadcast.broadcast("Vous serez invisible au prochain tour !")
+
+class BonusAimant(BonusType):
+    def __init__(self):
+        super().__init__("BonusAimant", "yellow", "../asset/GIF/Bonus_aimant.gif")
+
+    def apply_bonus(self, player: Player, players: [Player]) -> None:
+        player.bonus = self
+
+    def consume_bonus(self, player: Player, players: [Player]) -> None:
+        player.bonus = None
+
+    def show_usage_message(self) -> None:
+        self.broadcast.broadcast("Appuyez sur 'E' pour utiliser le bonus d'aimant pendant ce tour !")
 
 
 class Bonus:
