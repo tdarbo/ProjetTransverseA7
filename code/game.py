@@ -88,7 +88,7 @@ class Game:
             # Update and draw the user interface
             self.ui_manager.update(self.dt)
             self.ui_manager.draw_ui(self.screen)
-            self.sound_manager.play()
+            #self.sound_manager.play()
             # Update the display
             pygame.display.flip()
 
