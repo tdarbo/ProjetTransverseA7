@@ -2,34 +2,24 @@ from settings import *
 
 
 class SoundManager:
-    def __init__(self, file_path):
-        """ Le file_path doit être en .wav !!!"""
-        self.sound = pygame.mixer.Sound(file_path)
-        self.repeat = False
-        self.nbr_loop = 0
+    def __init__(self, frequency=44100, size=-16, channels=2, buffer=512):
+        pygame.mixer.init(frequency, size, channels, buffer)
 
-    def play(self):
-        """ Lance la musique un nombre de fois loop."""
-        self.sound.play(self.nbr_loop)
 
-    def pause(self):
-        """ arrête la musique."""
-        self.sound.stop()
+    def play_music(self, music_path: str, loops: int = -1, fade_ms: int = 1000):
+            pygame.mixer.music.load(music_path)
+            pygame.mixer.music.play(loops=loops, fade_ms=fade_ms)
+            print(f"[SoundManager] Lecture musique: {music_path}")
 
-    def set_volume(self, volume):
-        """ Prend un paramètre un volume compris entre 0 et 1 qui détermine le pourcentage du volume de la musique qu'on
-        va utiliser"""
-        self.sound.set_volume(volume)
 
-    def loop(self, repeat = False, nbr_loop = -1):
-        """ Détermine si on doit jouer la musique à l'infini et sinon le nombre de fois où la musique se répètera. """
-        self.repeat = repeat
-        if not self.repeat:
-            self.nbr_loop = -1
-        else :
-            self.nbr_loop = nbr_loop - 1
+    def play_sound(self, sound_path: str):
 
-if __name__ == '__main__':
-    pygame.mixer.init()
-    s = SoundManager("../asset/musics/Lancement jeu.wav")
-    s.play()
+            sound = pygame.mixer.Sound(sound_path)
+            sound.set_volume(VOLUME_SOUND)
+            channel = pygame.mixer.find_channel()
+            if channel:
+                channel.play(sound)
+                print(f"[SoundManager] Son joué: {sound_path}")
+            else:
+                print("[SoundManager] Aucun canal libre, le son ne peut pas être joué")
+

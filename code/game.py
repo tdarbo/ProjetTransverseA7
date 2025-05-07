@@ -45,7 +45,12 @@ class Game:
             }
 
         self.game_info = dict()
-        
+
+        # Initialize sound
+        self.sound_manager = SoundManager()
+        self.sound_manager.play_music(MUSICS["launch"],loops = 0)
+        self.sound_manager.play_sound(SOUNDS["victory"])
+
 
         self.ui_manager = pygame_gui.UIManager((WINDOW_WIDTH, WINDOW_HEIGHT), theme_path="../data/ui-theme.json")
         self.ui_manager.set_visual_debug_mode(DEBUG_MODE)
@@ -88,7 +93,6 @@ class Game:
             # Update and draw the user interface
             self.ui_manager.update(self.dt)
             self.ui_manager.draw_ui(self.screen)
-            #self.sound_manager.play()
             # Update the display
             pygame.display.flip()
 

@@ -76,9 +76,9 @@ SCORE_MENU_MARGIN = 25 # Espace entre le menu et les bords de l'écran
 SCORE_MENU_FONT_SIZE = 11 # Taille de la police du menu
 
 ## Musiques et sons
-MUSICS = {"Lancement_jeu":"../asset/musics/Lancement jeu.wav",
-          "jeu1":"../asset/musics/Lancement jeu.wav",
-          "jeu2":"../asset/musics/Musique_jeu-v2.wav",
+MUSICS = {"launch":"../asset/musics/Lancement jeu.wav",
+          "game1":"../asset/musics/Lancement jeu.wav",
+          "game2":"../asset/musics/Musique_jeu-v2.wav",
           }
 
 SOUNDS = {"ball":"../asset/musics/Balle.wav",
@@ -86,3 +86,5 @@ SOUNDS = {"ball":"../asset/musics/Balle.wav",
           "bounce":"../asset/musics/Rebond.wav",
           "victory":"../asset/musics/Victoire !.wav",
           }
+VOLUME_SOUND = 0.5
+VOLUME_MUSIC = 1
