@@ -74,3 +74,15 @@ SCORE_CELL_GAP = 15 # Espace entre cellules
 SCORE_MENU_PADDING = 20 # Espace entre le contenu et le menu
 SCORE_MENU_MARGIN = 25 # Espace entre le menu et les bords de l'écran
 SCORE_MENU_FONT_SIZE = 11 # Taille de la police du menu
+
+## Musiques et sons
+MUSICS = {"Lancement_jeu":"../asset/musics/Lancement jeu.wav",
+          "jeu1":"../asset/musics/Lancement jeu.wav",
+          "jeu2":"../asset/musics/Musique_jeu-v2.wav",
+          }
+
+SOUNDS = {"ball":"../asset/musics/Balle.wav",
+          "clic":"../asset/musics/Clic.wav",
+          "bounce":"../asset/musics/Rebond.wav",
+          "victory":"../asset/musics/Victoire !.wav",
+          }

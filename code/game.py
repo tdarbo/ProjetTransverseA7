@@ -5,11 +5,13 @@ from scene_config import ConfigurationScene
 from scene_manager import SceneManager
 from scene_play import PlayScene
 from scene_start_menu import StartMenuScene
+from sound import SoundManager
 
 
 class Game:
     def __init__(self):
         pygame.init()
+        pygame.mixer.init()
         pygame.display.set_caption(GAME_NAME)
         pygame.event.set_allowed([QUIT, KEYDOWN, KEYUP, K_SPACE, K_h, K_e, MOUSEBUTTONDOWN, MOUSEMOTION, MOUSEBUTTONUP])
         # flags = FULLSCREEN | DOUBLEBUF
@@ -43,6 +45,7 @@ class Game:
             }
 
         self.game_info = dict()
+        
 
         self.ui_manager = pygame_gui.UIManager((WINDOW_WIDTH, WINDOW_HEIGHT), theme_path="../data/ui-theme.json")
         self.ui_manager.set_visual_debug_mode(DEBUG_MODE)
@@ -85,7 +88,7 @@ class Game:
             # Update and draw the user interface
             self.ui_manager.update(self.dt)
             self.ui_manager.draw_ui(self.screen)
-
+            self.sound_manager.play()
             # Update the display
             pygame.display.flip()
 

@@ -117,4 +117,4 @@ class PlayScene(Scene):
     def quit_game(self):
         """Affiche les scores finaux et ferme le jeu."""
         print("Partie terminée ! Scores finaux :")
-        self.score_manager.print_score()
+
