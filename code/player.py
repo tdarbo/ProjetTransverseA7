@@ -28,6 +28,11 @@ class Player(pygame.sprite.Sprite):
         self.rect.center = (int(self.position.x), int(self.position.y))
 
     def draw(self, surface):
+        if self.bonus is not None and self.bonus.active:
+            # Draw a transparent circle for the ghost bonus
+            transparent_color = (*self.color[:3], 100)  # Adjust alpha to make it less opaque
+            pygame.draw.circle(self.image, transparent_color, (self.radius, self.radius), self.radius)
+
         surface.blit(self.image, self.rect)
 
     def reset(self):

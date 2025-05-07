@@ -2,7 +2,7 @@ from time import sleep
 
 import pygame
 
-from bonus_manager import BonusSpeed, BonusType
+from bonus_manager import BonusSpeed, BonusType, BonusFantome
 from settings import *
 from engine import Engine
 from broadcast import BroadcastManager
@@ -104,6 +104,8 @@ class Level:
         if self.current_player.finished:
             self.shot_taken = True
 
+
+        self.DEBUG_LOGS()
         self.update_bonuses()
         self.map.camera.animator.update()
         self.engine.update(dt)
@@ -119,7 +121,7 @@ class Level:
         if isinstance(self.current_player.bonus, BonusType):
             self.bonus_gifs.append(self.current_player.bonus.icon_id)
         else:
-            if DEBUG_MODE: self.current_player.bonus = BonusSpeed()
+            pass#if DEBUG_MODE: self.current_player.bonus = BonusSpeed()
 
     def check_turn_end(self):
         """Vérifie si le tour est terminé et passe au joueur suivant."""
@@ -138,8 +140,9 @@ class Level:
                 self.broadcast_manager.broadcast(f"Tour du joueur {self.current_player_index + 1}")
                 print(f"Tour du joueur {self.current_player_index + 1}")
                 self.centerOnCurrentPlayer()
+                if isinstance(self.current_player.bonus, BonusFantome):
+                    self.current_player.bonus.next_turn(self.current_player)
                 return
-            print("skipped turn")
         # Aucun joueur actif
         self.finished = True
 
@@ -261,3 +264,7 @@ class Level:
         y /= p_count
 
         camera.animator.posToPosAndZoom(camera, (x, y), 0.5, 15)
+
+    def DEBUG_LOGS(self):
+        if DEBUG_MODE:
+            pass#if isinstance(self.current_player.bonus, BonusFantome): print(self.current_player.bonus)

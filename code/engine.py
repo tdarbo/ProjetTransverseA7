@@ -1,6 +1,6 @@
 from pygame.examples.glcube import init_gl_stuff_old
 
-from bonus_manager import BonusSpeed
+from bonus_manager import BonusSpeed, BonusFantome
 from player import Player
 from settings import *
 from math import exp,sqrt
@@ -61,6 +61,9 @@ class Engine:
         if player1.finished or player2.finished:
             return
 
+        if isinstance(player1.bonus, BonusFantome) and player1.bonus.active:
+            return
+
         diff = player1.position - player2.position
         distance = diff.length()
         min_distance = player1.radius + player2.radius
@@ -84,6 +87,8 @@ class Engine:
 
     def resolve_out_of_bounds(self, player: Player) -> None:
         """Gère le cas où un joueur sort des limites de la carte."""
+        if isinstance(player.bonus, BonusFantome) and player.bonus.active:
+            return
         if self.is_out_of_bounds(player):
             player.velocity = Vector(0.0, 0.0)
             self.level.map.teleportPlayerToSpawn(player)
@@ -120,6 +125,11 @@ class Engine:
         """
         Gère la collision entre un joueur et une tuile obstacle.
         """
+
+        if isinstance(player.bonus, BonusFantome) and player.bonus.active:
+            return
+
+
         intersection = player.rect.clip(tile.rect)
 
         # On calcule les superpositions sur X et Y

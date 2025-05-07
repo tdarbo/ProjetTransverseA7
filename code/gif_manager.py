@@ -69,8 +69,6 @@ class Gif:
     def update(self,surface:pygame.Surface):
 
 
-
-
         if self.hide:
             return
 

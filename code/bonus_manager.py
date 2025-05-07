@@ -102,6 +102,31 @@ class BonusExplosion(BonusType):
     def show_usage_message(self) -> None:
         self.broadcast.broadcast("Appuyez sur 'E' pour utiliser le bonus d'explosion !")
 
+class BonusFantome(BonusType):
+    def __init__(self):
+        super().__init__("BonusFantome", "blue", "../asset/GIF/Bonus_invisible.gif")
+        self.active = False
+
+    def apply_bonus(self, player: Player, players: [Player]) -> None:
+        player.bonus = self
+
+    def consume_bonus(self, player: Player, players: [Player]) -> None:
+        player.bonus = None
+
+    def next_turn(self,player: Player):
+        if self.active:
+            self.active = False
+            self.consume_bonus(player, [])
+            self.broadcast.broadcast("Vous n'êtes plus invisible !")
+        else:
+            self.active = True
+            self.broadcast.broadcast("Vous êtes invisible !")
+
+
+
+    def show_usage_message(self) -> None:
+        self.broadcast.broadcast("Vous serez invisible au prochain tour !")
+
 
 class Bonus:
     def __init__(self, obj) -> None:
@@ -163,4 +188,4 @@ BonusList = [BonusExplosion,BonusSpeed]
 
 
 def get_random_bonus() -> BonusType:
-    return random.choice(BonusList)()
+    return BonusFantome()#random.choice(BonusList)()
