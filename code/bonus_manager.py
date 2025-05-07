@@ -117,7 +117,6 @@ class Bonus:
         self.available = True
         self.last_pick = 0
 
-        k = .05
         self.gif = Gif("../asset/GIF/Bonus_V1.2.gif",self.x-40,self.y-40,.05,True,False)
 
     def pick_bonus(self, player: Player, players: [Player]) -> None:
