@@ -28,29 +28,21 @@ class Game:
 
         if DEBUG_MODE:
             self.maps = {
-                "map1": "../asset/TiledProject/maps/hole1.tmx"
+                "0": {
+                    "name": "Test",
+                    "par": 0,
+                    "path": "../asset/TiledProject/maps/hole1.tmx"
+                },
             }
         else:
-            self.maps = {
-                "map1": "../asset/TiledProject/maps/hole1.tmx",
-                "map2": "../asset/TiledProject/maps/Entre_les_lacs.tmx",
-                "map3": "../asset/TiledProject/maps/Glissade_mortelle.tmx",
-                "map4": "../asset/TiledProject/maps/Coeur.tmx",
-                "map5": "../asset/TiledProject/maps/Détour_obstrué.tmx",
-                "map6": "../asset/TiledProject/maps/Dédale_desertique.tmx",
-                "map7": "../asset/TiledProject/maps/Descente_aux_enfers.tmx",
-                "map8": "../asset/TiledProject/maps/Île_spirale.tmx",
-                "map9": "../asset/TiledProject/maps/Sablier_du_temps_perdu.tmx",
-                "map10": "../asset/TiledProject/maps/Deux_lunes.tmx",
-            }
+            self.maps = MAPS
 
         self.game_info = dict()
 
         # Initialize sound
         self.sound_manager = SoundManager()
-        self.sound_manager.play_music(MUSICS["launch"],loops = 0)
+        self.sound_manager.play_music(MUSICS["launch"], loops=0)
         self.sound_manager.play_sound(SOUNDS["victory"])
-
 
         self.ui_manager = pygame_gui.UIManager((WINDOW_WIDTH, WINDOW_HEIGHT), theme_path="../data/ui-theme.json")
         self.ui_manager.set_visual_debug_mode(DEBUG_MODE)
@@ -96,7 +88,6 @@ class Game:
             # Update the display
             pygame.display.flip()
 
-
     def manage_error(self, error_message, title="Erreur"):
         """
         Affiche une fenêtre d'erreur avec le message fourni.
@@ -112,8 +103,8 @@ class Game:
 
         # Définir une zone pour la fenêtre d'erreur (ici, centrée sur l'écran)
         error_rect = pygame.rect.Rect(
-            WINDOW_WIDTH // 2 - WINDOW_ERROR_WIDTH//2,
-            WINDOW_HEIGHT // 2 - WINDOW_ERROR_HEIGHT//2,
+            WINDOW_WIDTH // 2 - WINDOW_ERROR_WIDTH // 2,
+            WINDOW_HEIGHT // 2 - WINDOW_ERROR_HEIGHT // 2,
             WINDOW_ERROR_WIDTH,
             WINDOW_ERROR_HEIGHT
         )

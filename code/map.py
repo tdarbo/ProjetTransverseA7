@@ -60,25 +60,25 @@ def load_tiled_map(map_path: str, tile_size: int):
 
 
 class Map:
-    def __init__(self, path: str, surf):
+    def __init__(self, infos: dict, screen: pygame.Surface):
         """
         Création d'une nouvelle Map.
 
         :param path: Chemin vers le fichier de la carte
         :param surf: Surface sur laquelle la carte sera dessinée
         """
+        self.infos = infos
         # Chargement des tuiles, du point de spawn et du trou à partir de la carte
-        self.tiles, self.spawn, self.hole, self.bonuses = load_tiled_map(path, TILE_SIZE)
-        self.surface = surf
+        self.tiles, self.spawn, self.hole, self.bonuses = load_tiled_map(self.infos["path"], TILE_SIZE)
 
         # On initialise la caméra
-        self.camera = Camera(surf)
+        self.camera = Camera(screen)
         self.camera.offset_X = self.hole.x
         self.camera.offset_Y = self.hole.y
         self.camera.zoom_factor = 0.5
 
         # On charge les données de la carte
-        tmx_data = pytmx.TiledMap(path)
+        tmx_data = pytmx.TiledMap(self.infos["path"])
         map_width = tmx_data.width  # Nombre de tuiles en largeur
         map_height = tmx_data.height  # Nombre de tuiles en hauteur
         tile_width = tmx_data.tilewidth  # Largeur d'une tuile en pixels
