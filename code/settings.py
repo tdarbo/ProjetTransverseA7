@@ -24,38 +24,43 @@ MAPS = {
     },
     "3": {
         "name": "Coeur",
-        "par": 4,
+        "par": 5,
         "path": "../asset/TiledProject/maps/Coeur.tmx"
     },
     "4": {
         "name": "Détour obstrué",
-        "par": 4,
+        "par": 5,
         "path": "../asset/TiledProject/maps/Détour_obstrué.tmx"
     },
     "5": {
         "name": "Dédale désertique",
-        "par": 4,
+        "par": 6,
         "path": "../asset/TiledProject/maps/Dédale_desertique.tmx"
     },
     "6": {
         "name": "Descente aux enfers",
-        "par": 4,
+        "par": 9,
         "path": "../asset/TiledProject/maps/Descente_aux_enfers.tmx"
     },
     "7": {
         "name": "Île spirale",
-        "par": 4,
+        "par": 8,
         "path": "../asset/TiledProject/maps/Île_spirale.tmx"
     },
     "8": {
         "name": "Sablier du temps perdu",
-        "par": 4,
+        "par": 7,
         "path": "../asset/TiledProject/maps/Sablier_du_temps_perdu.tmx"
     },
     "9": {
         "name": "Deux lunes",
-        "par": 4,
+        "par": 7,
         "path": "../asset/TiledProject/maps/Deux_lunes.tmx"
+    },
+    "10": {
+        "name": "Donut dopé",
+        "par": 4,
+        "path": "../asset/TiledProject/maps/Donut_dopé.tmx"
     },
 }
 
