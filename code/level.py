@@ -11,7 +11,7 @@ from broadcast import BroadcastManager
 class Level:
     """Gestion de la map, des tours et des événements"""
 
-    def __init__(self, hole_number, tiled_map, players, score_manager, broadcast_manager, screen_width=1280,
+    def __init__(self, hole_number, tiled_map, players, score_manager, broadcast_manager, game,screen_width=1280,
                  screen_height=720):
         """Initialise le niveau."""
         self.map = tiled_map
@@ -43,6 +43,7 @@ class Level:
 
         self.map.teleportPlayersToSpawn(self.players)
         self.centerOnCurrentPlayer()
+        self.game = game
 
     def process_event(self, event):
         """Evénements pygame."""
@@ -79,6 +80,7 @@ class Level:
 
     def on_mouse_up(self, event):
         if self.dragging:
+            self.game.sound_manager.play_sound(SOUNDS["ball"])
             # On modifie le score du joueur
             # Il vient de jouer donc on lui ajoute 1 point
             self.score_manager.add_points(self.current_player, self.hole_number)
@@ -99,6 +101,7 @@ class Level:
             self.shot_taken = True
             self.drag_start = None
             self.drag_current = None
+
 
     def update(self, dt):
         if self.current_player.finished:
