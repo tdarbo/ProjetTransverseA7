@@ -28,6 +28,7 @@ class PlayScene(Scene):
         self.levels_played = 0
         self.current_level = None
 
+
     def on_enter(self):
         self.game_info = self.game.game_info
         self.players = self.create_players()
@@ -42,6 +43,7 @@ class PlayScene(Scene):
         self.current_level = None
         # Chargement du premier niveau
         self.load_next_level()
+        self.game.sound_manager.play_music(MUSICS["game1"])
 
     def create_players(self):
         """Instancie les joueurs en utilisant les noms fournis."""
@@ -68,6 +70,7 @@ class PlayScene(Scene):
             self.players,
             self.score_manager,
             self.broadcast_manager,
+            self.game,
             width,
             height
         )
