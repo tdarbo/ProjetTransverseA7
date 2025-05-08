@@ -193,7 +193,7 @@ class Engine:
 
     def resolve_player_speed_right(self, player: Player) -> None:
         """
-        Accelere le joueur sur la droite
+        Accelere le joueur vers la droite
         """
         if player.velocity.x > 0:
             player.velocity.x = player.velocity.x + player.velocity.x * 0.1
@@ -202,12 +202,30 @@ class Engine:
 
     def resolve_player_speed_left(self, player: Player) -> None:
         """
-        Accelere le joueur sur la gauche
+        Accelere le joueur vers la gauche
         """
         if player.velocity.x > 0:
             player.velocity.x = player.velocity.x + player.velocity.x * 0.1 * (-1) - 10
         else :
             player.velocity.x = player.velocity.x + player.velocity.x * 0.1
+
+    def resolve_player_speed_down(self, player: Player) -> None:
+        """
+        Accelere le joueur vers le bas
+        """
+        if player.velocity.y > 0:
+            player.velocity.y = player.velocity.y + player.velocity.y * 0.1
+        else :
+            player.velocity.y = player.velocity.y + player.velocity.y * 0.1 * (-1) + 10
+
+    def resolve_player_speed_up(self, player: Player) -> None:
+        """
+        Accelere le joueur vers le haut
+        """
+        if player.velocity.y > 0:
+            player.velocity.y = player.velocity.y + player.velocity.y * 0.1 * (-1) - 10
+        else :
+            player.velocity.y = player.velocity.y + player.velocity.y * 0.1
 
     def update(self, dt: float) -> None:
         """Met à jour la physique du jeu pour tous les joueurs."""
@@ -242,6 +260,12 @@ class Engine:
 
                 elif tile.id == "Speed_left" and player.rect.colliderect(tile.rect):
                     self.resolve_player_speed_left(player)
+
+                elif tile.id == "Speed_down" and player.rect.colliderect(tile.rect):
+                    self.resolve_player_speed_down(player)
+
+                elif tile.id == "Speed_up" and player.rect.colliderect(tile.rect):
+                    self.resolve_player_speed_up(player)
             player.update()
 
             self.resolve_out_of_bounds(player)
