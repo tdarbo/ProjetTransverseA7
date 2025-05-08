@@ -198,8 +198,16 @@ class Engine:
         if player.velocity.x > 0:
             player.velocity.x = player.velocity.x + player.velocity.x * 0.1
         else :
-            player.velocity.x = player.velocity.x + player.velocity.x * 0.1 * (-1) + 10
-        print(player.velocity.x)
+            player.velocity.x = player.velocity.x + player.velocity.x * 0.1 * (-1) + 1
+
+    def resolve_player_speed_left(self, player: Player) -> None:
+        """
+        Accelere le joueur sur la gauche
+        """
+        if player.velocity.x > 0:
+            player.velocity.x = player.velocity.x + player.velocity.x * 0.1 * (-1) - 10
+        else :
+            player.velocity.x = player.velocity.x + player.velocity.x * 0.1
 
     def update(self, dt: float) -> None:
         """Met à jour la physique du jeu pour tous les joueurs."""
@@ -221,7 +229,7 @@ class Engine:
 
             player.update()
 
-            # Gestion des collisions avec la map
+            # Gestion des collisions/bounce/accélerateur avec la map
             for tile in self.level.map.tiles:
                 if tile.id == "Collision" and player.rect.colliderect(tile.rect):
                     self.resolve_player_obstacle_collision(player, tile)
@@ -229,9 +237,11 @@ class Engine:
                 elif tile.id == "Bounce" and player.rect.colliderect(tile.rect):
                     self.resolve_player_bounce_collision(player, tile)
 
-                if tile.id == "Speed_right" and player.rect.colliderect(tile.rect):
+                elif tile.id == "Speed_right" and player.rect.colliderect(tile.rect):
                     self.resolve_player_speed_right(player)
 
+                elif tile.id == "Speed_left" and player.rect.colliderect(tile.rect):
+                    self.resolve_player_speed_left(player)
             player.update()
 
             self.resolve_out_of_bounds(player)
