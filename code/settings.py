@@ -77,7 +77,7 @@ SCORE_MENU_FONT_SIZE = 11 # Taille de la police du menu
 
 ## Musiques et sons
 MUSICS = {"launch":"../asset/musics/Lancement jeu.wav",
-          "game1":"../asset/musics/Lancement jeu.wav",
+          "game1":"../asset/musics/Musique_jeu.wav",
           "game2":"../asset/musics/Musique_jeu-v2.wav",
           }
 

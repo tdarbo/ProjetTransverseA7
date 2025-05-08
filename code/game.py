@@ -49,7 +49,7 @@ class Game:
         # Initialize sound
         self.sound_manager = SoundManager()
         self.sound_manager.play_music(MUSICS["launch"],loops = 0)
-        self.sound_manager.play_sound(SOUNDS["victory"])
+
 
 
         self.ui_manager = pygame_gui.UIManager((WINDOW_WIDTH, WINDOW_HEIGHT), theme_path="../data/ui-theme.json")
