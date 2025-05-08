@@ -138,7 +138,8 @@ SOUNDS = {"ball": "../asset/musics/Balle.wav",
           "bounce": "../asset/musics/Rebond.wav",
           "victory": "../asset/musics/Victoire !.wav",
           "boost":"../asset/musics/boost.wav",
-          "magnet":"../asset/musics/aimant.wav"
+          "magnet":"../asset/musics/aimant.wav",
+          "water":"../asset/musics/eau.wav"
           }
 VOLUME_SOUND = 0.5
 VOLUME_MUSIC = 0.5

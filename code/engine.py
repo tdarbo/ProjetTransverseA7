@@ -98,6 +98,7 @@ class Engine:
     def resolve_out_of_bounds(self, player: Player) -> None:
         """Gère le cas où un joueur sort des limites de la carte."""
         if self.is_out_of_bounds(player):
+            self.level.game.sound_manager.play_sound(SOUNDS["water"])
             player.velocity = Vector(0.0, 0.0)
             self.level.map.teleportPlayerToSpawn(player)
             print(f"Player:{player.name} is out of bounds")
