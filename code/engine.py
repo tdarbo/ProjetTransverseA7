@@ -197,6 +197,7 @@ class Engine:
         """
         Accelere le joueur vers la droite
         """
+        self.level.game.sound_manager.play_sound(SOUNDS["boost"])
         if player.velocity.x > 0:
             player.velocity.x = player.velocity.x + player.velocity.x * 0.1
         else :
@@ -206,6 +207,7 @@ class Engine:
         """
         Accelere le joueur vers la gauche
         """
+        self.level.game.sound_manager.play_sound(SOUNDS["boost"])
         if player.velocity.x > 0:
             player.velocity.x = player.velocity.x + player.velocity.x * 0.1 * (-1) - 10
         else :
@@ -215,6 +217,7 @@ class Engine:
         """
         Accelere le joueur vers le bas
         """
+        self.level.game.sound_manager.play_sound(SOUNDS["boost"])
         if player.velocity.y > 0:
             player.velocity.y = player.velocity.y + player.velocity.y * 0.1
         else :
@@ -224,6 +227,7 @@ class Engine:
         """
         Accelere le joueur vers le haut
         """
+        self.level.game.sound_manager.play_sound(SOUNDS["boost"])
         if player.velocity.y > 0:
             player.velocity.y = player.velocity.y + player.velocity.y * 0.1 * (-1) - 10
         else :
