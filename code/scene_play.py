@@ -71,8 +71,6 @@ class PlayScene(Scene):
             self.score_manager,
             self.broadcast_manager,
             self.game,
-            width,
-            height
         )
         return level
 
