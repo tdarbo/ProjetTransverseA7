@@ -191,6 +191,16 @@ class Engine:
             # On Inverse la vélocité en Y
             player.velocity.y = self.inversionY(player) * MAX_PLAYER_VELOCITY.length()
 
+    def resolve_player_speed_right(self, player: Player) -> None:
+        """
+        Accelere le joueur sur la droite
+        """
+        if player.velocity.x > 0:
+            player.velocity.x = player.velocity.x + player.velocity.x * 0.1
+        else :
+            player.velocity.x = player.velocity.x + player.velocity.x * 0.1 * (-1) + 10
+        print(player.velocity.x)
+
     def update(self, dt: float) -> None:
         """Met à jour la physique du jeu pour tous les joueurs."""
 
@@ -216,9 +226,11 @@ class Engine:
                 if tile.id == "Collision" and player.rect.colliderect(tile.rect):
                     self.resolve_player_obstacle_collision(player, tile)
 
-            for tile in self.level.map.tiles:
-                if tile.id == "Bounce" and player.rect.colliderect(tile.rect):
+                elif tile.id == "Bounce" and player.rect.colliderect(tile.rect):
                     self.resolve_player_bounce_collision(player, tile)
+
+                if tile.id == "Speed_right" and player.rect.colliderect(tile.rect):
+                    self.resolve_player_speed_right(player)
 
             player.update()
 

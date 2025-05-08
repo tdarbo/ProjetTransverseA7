@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<tileset version="1.10" tiledversion="1.11.2" name="tileSet" tilewidth="64" tileheight="64" tilecount="22" columns="0">
+<tileset version="1.10" tiledversion="1.11.2" name="tileSet" tilewidth="64" tileheight="64" tilecount="26" columns="0">
  <grid orientation="orthogonal" width="1" height="1"/>
  <tile id="1">
   <image source="../image/tiles/grass.png" width="64" height="64"/>
@@ -72,5 +72,17 @@
  </tile>
  <tile id="34">
   <image source="../image/tiles/dirt.png" width="64" height="64"/>
+ </tile>
+ <tile id="35">
+  <image source="../image/tiles/Turbo_down.png" width="64" height="64"/>
+ </tile>
+ <tile id="36">
+  <image source="../image/tiles/Turbo_left.png" width="64" height="64"/>
+ </tile>
+ <tile id="37">
+  <image source="../image/tiles/Turbo_right.png" width="64" height="64"/>
+ </tile>
+ <tile id="38">
+  <image source="../image/tiles/Turbo_up.png" width="64" height="64"/>
  </tile>
 </tileset>
