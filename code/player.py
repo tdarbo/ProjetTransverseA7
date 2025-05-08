@@ -1,6 +1,5 @@
 from settings import *
 
-
 class Player(pygame.sprite.Sprite):
     def __init__(self, color, position, radius=BALL_RADIUS, mass=BALL_MASS, name=""):
         super().__init__()
@@ -31,6 +30,7 @@ class Player(pygame.sprite.Sprite):
         surface.blit(self.image, self.rect)
 
     def reset(self):
+        self.finished = False
         self.mass = BALL_MASS
         self.position.x, self.position.y = 0, 0
         self.velocity.x, self.velocity.y = 0, 0
