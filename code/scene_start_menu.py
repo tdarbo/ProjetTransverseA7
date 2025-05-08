@@ -13,6 +13,7 @@ class StartMenuScene(Scene):
         super().__init__(height_index, game)
         self.build_main_menu_panel()  # Construction de l'interface du menu principal
 
+
     def build_main_menu_panel(self):
         """
         Construit les éléments d'interface du menu principal.
@@ -101,9 +102,11 @@ class StartMenuScene(Scene):
             object_id=ObjectID(class_id='button_secondary', object_id='#main_menu_exit_btn')
         )
 
+
         # Affichage console utile en mode debug
         if DEBUG_MODE:
             print(f"[{self.__class__.__name__}] Main menu UI created.")
+
 
     def process_event(self, event):
         """

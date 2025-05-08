@@ -6,6 +6,58 @@ from pygame.math import Vector2 as Vector
 ASSET_PATH = "../asset"
 UI_THEME_PATH = "../data/ui-theme.json"
 FONT_PATH = "../asset/font/font-regular-v2.ttf"
+MAPS = {
+    "0": {
+        "name": "hole1",
+        "par": 4,
+        "path": "../asset/TiledProject/maps/hole1.tmx"
+    },
+    "1": {
+        "name": "Entre les lacs",
+        "par": 4,
+        "path": "../asset/TiledProject/maps/Entre_les_lacs.tmx"
+    },
+    "2": {
+        "name": "Glissade mortelle",
+        "par": 4,
+        "path": "../asset/TiledProject/maps/Glissade_mortelle.tmx"
+    },
+    "3": {
+        "name": "Coeur",
+        "par": 4,
+        "path": "../asset/TiledProject/maps/Coeur.tmx"
+    },
+    "4": {
+        "name": "Détour obstrué",
+        "par": 4,
+        "path": "../asset/TiledProject/maps/Détour_obstrué.tmx"
+    },
+    "5": {
+        "name": "Dédale désertique",
+        "par": 4,
+        "path": "../asset/TiledProject/maps/Dédale_desertique.tmx"
+    },
+    "6": {
+        "name": "Descente aux enfers",
+        "par": 4,
+        "path": "../asset/TiledProject/maps/Descente_aux_enfers.tmx"
+    },
+    "7": {
+        "name": "Île spirale",
+        "par": 4,
+        "path": "../asset/TiledProject/maps/Île_spirale.tmx"
+    },
+    "8": {
+        "name": "Sablier du temps perdu",
+        "par": 4,
+        "path": "../asset/TiledProject/maps/Sablier_du_temps_perdu.tmx"
+    },
+    "9": {
+        "name": "Deux lunes",
+        "par": 4,
+        "path": "../asset/TiledProject/maps/Deux_lunes.tmx"
+    },
+}
 
 ## Paramètres de configuration du jeu
 GAME_NAME = "GOAT"
@@ -57,7 +109,7 @@ SPLASH_BG = pygame.transform.scale(
 
 # DEBUG
 DEBUG_MODE = False
-DEBUG_CONFIG = {'players':2,'holes':4,'names':["player0"]}
+DEBUG_CONFIG = {'players': 2, 'holes': 4, 'names': ["player0"]}
 
 ## Paramètres de la caméra
 MAX_ZOOM = 4
@@ -68,23 +120,23 @@ WINDOW_ERROR_WIDTH = PANEL_WIDTH - 100
 WINDOW_ERROR_HEIGHT = PANEL_HEIGHT // 2
 
 ## Dimensions du menu du score
-SCORE_CELL_WIDTH = 100 # Largeur d'une cellule
-SCORE_CELL_HEIGHT = 10 # Hauteur d'une cellule
-SCORE_CELL_GAP = 15 # Espace entre cellules
-SCORE_MENU_PADDING = 20 # Espace entre le contenu et le menu
-SCORE_MENU_MARGIN = 25 # Espace entre le menu et les bords de l'écran
-SCORE_MENU_FONT_SIZE = 11 # Taille de la police du menu
+SCORE_CELL_WIDTH = 100  # Largeur d'une cellule
+SCORE_CELL_HEIGHT = 10  # Hauteur d'une cellule
+SCORE_CELL_GAP = 15  # Espace entre cellules
+SCORE_MENU_PADDING = 20  # Espace entre le contenu et le menu
+SCORE_MENU_MARGIN = 25  # Espace entre le menu et les bords de l'écran
+SCORE_MENU_FONT_SIZE = 11  # Taille de la police du menu
 
 ## Musiques et sons
-MUSICS = {"launch":"../asset/musics/Lancement jeu.wav",
-          "game1":"../asset/musics/Musique_jeu.wav",
-          "game2":"../asset/musics/Musique_jeu-v2.wav",
+MUSICS = {"launch": "../asset/musics/Lancement jeu.wav",
+          "game1": "../asset/musics/Musique_Jeu.wav",
+          "game2": "../asset/musics/Musique_jeu-v2.wav",
           }
 
-SOUNDS = {"ball":"../asset/musics/Balle.wav",
-          "clic":"../asset/musics/Clic.wav",
-          "bounce":"../asset/musics/Rebond.wav",
-          "victory":"../asset/musics/Victoire !.wav",
+SOUNDS = {"ball": "../asset/musics/Balle.wav",
+          "clic": "../asset/musics/Clic.wav",
+          "bounce": "../asset/musics/Rebond.wav",
+          "victory": "../asset/musics/Victoire !.wav",
           }
 VOLUME_SOUND = 0.5
-VOLUME_MUSIC = 1
+VOLUME_MUSIC = 0.5

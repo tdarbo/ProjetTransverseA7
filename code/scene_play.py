@@ -28,6 +28,7 @@ class PlayScene(Scene):
         self.levels_played = 0
         self.current_level = None
 
+
     def on_enter(self):
         self.game_info = self.game.game_info
         self.players = self.create_players()
@@ -42,6 +43,7 @@ class PlayScene(Scene):
         self.current_level = None
         # Chargement du premier niveau
         self.load_next_level()
+        self.game.sound_manager.play_music(MUSICS["game1"])
 
     def create_players(self):
         """Instancie les joueurs en utilisant les noms fournis."""
@@ -58,9 +60,9 @@ class PlayScene(Scene):
 
         return players
 
-    def create_level(self, hole_number, map_path):
+    def create_level(self, hole_number, map_infos):
         """Crée un niveau à partir du path de la map."""
-        tiled_map = Map(map_path, self.screen)
+        tiled_map = Map(map_infos, self.screen)
         width, height = self.screen.get_size()
         level = Level(
             hole_number,
@@ -68,6 +70,7 @@ class PlayScene(Scene):
             self.players,
             self.score_manager,
             self.broadcast_manager,
+            self.game,
             width,
             height
         )
@@ -78,8 +81,8 @@ class PlayScene(Scene):
         if self.levels_played < self.hole_number:
             self.reset_players()
             map_key = random.choice(list(self.maps.keys()))
-            self.current_level = self.create_level(self.levels_played, self.maps[map_key])
-            print(self.maps[map_key])
+            map_infos = self.maps[map_key]
+            self.current_level = self.create_level(self.levels_played, map_infos)
             self.levels_played += 1
             self.score_manager.set_current_hole(self.levels_played - 1)
             print("Current hole : ", self.levels_played - 1)

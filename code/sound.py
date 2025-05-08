@@ -9,6 +9,7 @@ class SoundManager:
     def play_music(self, music_path: str, loops: int = -1, fade_ms: int = 1000):
             pygame.mixer.music.load(music_path)
             pygame.mixer.music.play(loops=loops, fade_ms=fade_ms)
+            pygame.mixer.music.set_volume(VOLUME_MUSIC)
             print(f"[SoundManager] Lecture musique: {music_path}")
 
 
