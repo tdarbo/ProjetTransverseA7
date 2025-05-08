@@ -44,6 +44,17 @@
                 "y": 1281.127504954856
             }
         },
+        "maps/Donut_dopé.tmx": {
+            "expandedObjectLayers": [
+                10
+            ],
+            "scale": 0.354765625,
+            "selectedLayer": 8,
+            "viewCenter": {
+                "x": 1171.1957718564195,
+                "y": 883.682008368201
+            }
+        },
         "maps/Dédale_desertique.tmx": {
             "expandedObjectLayers": [
                 6

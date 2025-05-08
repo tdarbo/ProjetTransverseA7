@@ -253,14 +253,14 @@ class Engine:
             player = self.players[i]
 
             #limitation de vitesse
-            if player.velocity.y > 1000:
-                player.velocity.y = 1000
-            if player.velocity.y < -1000:
-                player.velocity.y = -1000
-            if player.velocity.x > 1000:
-                player.velocity.x = 1000
-            if player.velocity.x < -1000:
-                player.velocity.x = -1000
+            if player.velocity.y > 1200:
+                player.velocity.y = 1200
+            if player.velocity.y < -1200:
+                player.velocity.y = -1200
+            if player.velocity.x > 1200:
+                player.velocity.x = 1200
+            if player.velocity.x < -1200:
+                player.velocity.x = -1200
 
             # Mise à jour de la position du joueur
             self.update_position(player, dt)
