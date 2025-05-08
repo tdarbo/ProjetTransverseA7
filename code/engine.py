@@ -213,9 +213,9 @@ class Engine:
         """
         self.level.game.sound_manager.play_sound(SOUNDS["boost"])
         if player.velocity.x > 0:
-            player.velocity.x = player.velocity.x + player.velocity.x * 0.1
+            player.velocity.x = player.velocity.x * 1.1
         else :
-            player.velocity.x = player.velocity.x + player.velocity.x * 0.1 * (-1) + 1
+            player.velocity.x = player.velocity.x * 0.9 + 10
 
     def resolve_player_speed_left(self, player: Player) -> None:
         """
@@ -223,9 +223,9 @@ class Engine:
         """
         self.level.game.sound_manager.play_sound(SOUNDS["boost"])
         if player.velocity.x > 0:
-            player.velocity.x = player.velocity.x + player.velocity.x * 0.1 * (-1) - 10
+            player.velocity.x = player.velocity.x * 0.9 - 10
         else :
-            player.velocity.x = player.velocity.x + player.velocity.x * 0.1
+            player.velocity.x = player.velocity.x * 1.1
 
     def resolve_player_speed_down(self, player: Player) -> None:
         """
@@ -233,9 +233,9 @@ class Engine:
         """
         self.level.game.sound_manager.play_sound(SOUNDS["boost"])
         if player.velocity.y > 0:
-            player.velocity.y = player.velocity.y + player.velocity.y * 0.1
+            player.velocity.y = player.velocity.y * 1.1
         else :
-            player.velocity.y = player.velocity.y + player.velocity.y * 0.1 * (-1) + 10
+            player.velocity.y = player.velocity.y * 0.9 + 10
 
     def resolve_player_speed_up(self, player: Player) -> None:
         """
@@ -243,9 +243,9 @@ class Engine:
         """
         self.level.game.sound_manager.play_sound(SOUNDS["boost"])
         if player.velocity.y > 0:
-            player.velocity.y = player.velocity.y + player.velocity.y * 0.1 * (-1) - 10
+            player.velocity.y = player.velocity.y * 0.9 - 10
         else :
-            player.velocity.y = player.velocity.y + player.velocity.y * 0.1
+            player.velocity.y = player.velocity.y * 1.1
 
     def update(self, dt: float) -> None:
         """Met à jour la physique du jeu pour tous les joueurs."""
