@@ -42,7 +42,6 @@ class Game:
         # Initialize sound
         self.sound_manager = SoundManager()
         self.sound_manager.play_music(MUSICS["launch"], loops=0)
-        self.sound_manager.play_sound(SOUNDS["victory"])
 
         self.ui_manager = pygame_gui.UIManager((WINDOW_WIDTH, WINDOW_HEIGHT), theme_path="../data/ui-theme.json")
         self.ui_manager.set_visual_debug_mode(DEBUG_MODE)
@@ -61,7 +60,7 @@ class Game:
         self.error_window = None
 
         # Attendre un court instant
-        pygame.time.wait(2000)
+        pygame.time.wait(3000)
 
     def run(self):
         clock = pygame.time.Clock()
