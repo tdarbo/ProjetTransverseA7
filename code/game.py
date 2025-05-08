@@ -32,16 +32,23 @@ class Game:
             }
         else:
             self.maps = {
+                #facile
                 "map1": "../asset/TiledProject/maps/hole1.tmx",
                 "map2": "../asset/TiledProject/maps/Entre_les_lacs.tmx",
                 "map3": "../asset/TiledProject/maps/Glissade_mortelle.tmx",
+
+                #moyen
                 "map4": "../asset/TiledProject/maps/Coeur.tmx",
                 "map5": "../asset/TiledProject/maps/Détour_obstrué.tmx",
                 "map6": "../asset/TiledProject/maps/Dédale_desertique.tmx",
-                "map7": "../asset/TiledProject/maps/Descente_aux_enfers.tmx",
+
+                #difficile
                 "map8": "../asset/TiledProject/maps/Île_spirale.tmx",
                 "map9": "../asset/TiledProject/maps/Sablier_du_temps_perdu.tmx",
                 "map10": "../asset/TiledProject/maps/Deux_lunes.tmx",
+
+                #très difficile
+                "map7": "../asset/TiledProject/maps/Descente_aux_enfers.tmx",
             }
 
         self.game_info = dict()
