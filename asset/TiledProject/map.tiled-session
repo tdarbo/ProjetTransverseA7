@@ -3,7 +3,7 @@
         "height": 4300,
         "width": 2
     },
-    "activeFile": "maps/Coeur.tmx",
+    "activeFile": "maps/hole2.tmx",
     "expandedProjectPaths": [
         ".",
         "maps"
@@ -63,7 +63,7 @@
             "selectedLayer": 0,
             "viewCenter": {
                 "x": 1180.3030303030303,
-                "y": 1328.7878787878785
+                "y": 1437.878787878788
             }
         },
         "maps/Entre_les_lacs.tmx": {
@@ -158,8 +158,8 @@
         },
         "tileSet.tsx": {
             "dynamicWrapping": true,
-            "scaleInDock": 0.5,
-            "scaleInEditor": 4
+            "scaleInDock": 1,
+            "scaleInEditor": 3
         }
     },
     "last.imagePath": "C:/Users/mathi/OneDrive/Images",
@@ -174,19 +174,30 @@
         "tileSet.tsx",
         "maps/Glissade_mortelle.tmx",
         "maps/Entre_les_lacs.tmx",
-        "maps/Coeur.tmx"
+        "maps/Coeur.tmx",
+        "maps/Détour_obstrué.tmx",
+        "maps/Dédale_desertique.tmx",
+        "maps/Descente_aux_enfers.tmx",
+        "maps/Île_Spirale.tmx",
+        "maps/Sablier_du_temps_perdu.tmx",
+        "maps/Deux_lunes.tmx",
+        "maps/debug_map.tmx",
+        "maps/hole2.tmx"
     ],
     "project": "map.tiled-project",
     "recentFiles": [
-        "maps/map_test.tmx",
         "maps/hole1.tmx",
         "tileSet.tsx",
         "maps/Glissade_mortelle.tmx",
         "maps/Entre_les_lacs.tmx",
         "maps/Coeur.tmx",
-        "maps/Map4.tmx",
-        "hole2.tmx",
-        "maps/hole2.tmx"
+        "maps/Détour_obstrué.tmx",
+        "maps/Dédale_desertique.tmx",
+        "maps/Descente_aux_enfers.tmx",
+        "maps/Île_Spirale.tmx",
+        "maps/Sablier_du_temps_perdu.tmx",
+        "maps/Deux_lunes.tmx",
+        "maps/debug_map.tmx"
     ],
     "tileset.lastUsedFormat": "tsx",
     "tileset.type": 1
