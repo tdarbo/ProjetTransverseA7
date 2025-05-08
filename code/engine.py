@@ -101,6 +101,7 @@ class Engine:
             print(f"Player:{player.name} has finished in x shots")
             player.velocity = Vector(0.0, 0.0)
             player.finished = True
+            self.level.game.sound_manager.play_sound(SOUNDS["victory"])
 
 
     def is_on_finish(self, player: Player) -> None:
@@ -163,6 +164,7 @@ class Engine:
         Gère la collision entre un joueur et une tuile bumper.
         """
         intersection = player.rect.clip(tile.rect)
+        self.level.game.sound_manager.play_sound(SOUNDS["bounce"])
 
         # On calcule les superpositions sur X et Y
         pen_x = intersection.width
