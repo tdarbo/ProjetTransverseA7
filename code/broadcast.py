@@ -6,7 +6,7 @@ class BroadcastManager(Text):
     def __init__(self):
         """Gère les messages à l'écran."""
         # On utilise Text dans ui_text pour gérer l'affichage du broadcast_manager
-        super().__init__(text="", pos=(WINDOW_WIDTH // 2, 20), font_size=15, font_name=FONT_PATH, align="midtop")
+        super().__init__(text="", pos=(WINDOW_WIDTH // 2, 20), font_size=15, color = (255,255,255) ,font_name=FONT_PATH, align="center")
         self.duration = 5
         self.begintimer = 0
         self.timeout = True
@@ -15,6 +15,11 @@ class BroadcastManager(Text):
         """Affiche le message si le timeout n'est pas écoulé."""
         if not self.timeout:
             # On draw le texte de l'objet Text (dans ui_text)
+            # gestion du fond
+            padding = 6  # arbitraire
+            background_rect = self.rect.inflate(padding * 2 , padding * 2 )
+            pygame.draw.rect(screen, (213, 85, 52), background_rect)
+            pygame.draw.rect(screen, '#3F170D', background_rect, width=1)
             super().draw(screen)
             # vérifie le timer
             self.timer()
