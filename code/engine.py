@@ -15,6 +15,19 @@ class Engine:
         self.players = level.players
         self.num_players = len(self.players)
 
+    def resolve_shot(self, player: Player, velocity_vector: Vector):
+        if isinstance(player.bonus, BonusSpeed):
+            player.bonus.consume_bonus(player, self.players)
+
+        # if self.current_player.speed_bonus:
+        #    new_velocity *= 2
+        #    new_velocity = min(new_velocity, MAX_PLAYER_VELOCITY.length()*1.5)
+
+        if velocity_vector.length() >= MAX_PLAYER_VELOCITY.length():
+            velocity_vector = velocity_vector.normalize() * MAX_PLAYER_VELOCITY.length()
+
+        player.velocity += velocity_vector
+
     def inversionX(self, player : Player) -> int:
         if player.velocity.x > 0:
             return -1
