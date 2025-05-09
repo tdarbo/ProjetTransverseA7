@@ -30,9 +30,9 @@
                 6
             ],
             "scale": 0.33,
-            "selectedLayer": 0,
+            "selectedLayer": 2,
             "viewCenter": {
-                "x": 665.1515151515152,
+                "x": 1283.3333333333335,
                 "y": 1271.212121212121
             }
         },
@@ -175,11 +175,11 @@
     },
     "last.imagePath": "C:/Users/mathi/OneDrive/Images",
     "map.fixedSize": true,
-    "map.height": 40,
+    "map.height": 25,
     "map.lastUsedFormat": "tmx",
     "map.tileHeight": 64,
     "map.tileWidth": 64,
-    "map.width": 40,
+    "map.width": 60,
     "openFiles": [
         "maps/hole1.tmx",
         "tileSet.tsx",
