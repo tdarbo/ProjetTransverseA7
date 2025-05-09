@@ -138,6 +138,14 @@
                 "y": 1728.7878787878785
             }
         },
+        "maps/Traversée_des_anneaux.tmx": {
+            "scale": 0.5,
+            "selectedLayer": 6,
+            "viewCenter": {
+                "x": 996,
+                "y": 1107
+            }
+        },
         "maps/debug_map.tmx": {
             "expandedObjectLayers": [
                 4
@@ -186,7 +194,7 @@
             "scale": 0.33,
             "selectedLayer": 10,
             "viewCenter": {
-                "x": 1224.2424242424242,
+                "x": 1021.2121212121212,
                 "y": 868.1818181818182
             }
         },
@@ -198,11 +206,11 @@
     },
     "last.imagePath": "C:/Users/mathi/OneDrive/Images",
     "map.fixedSize": true,
-    "map.height": 25,
+    "map.height": 40,
     "map.lastUsedFormat": "tmx",
     "map.tileHeight": 64,
     "map.tileWidth": 64,
-    "map.width": 60,
+    "map.width": 40,
     "openFiles": [
         "maps/hole1.tmx",
         "tileSet.tsx",
