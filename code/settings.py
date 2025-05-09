@@ -73,6 +73,12 @@ MAPS = {
         "path": "../asset/TiledProject/maps/Donut_dopé.tmx",
         "difficulty": "medium"
     },
+    "11": {
+        "name": "Long chemin",
+        "par": 6,
+        "path": "../asset/TiledProject/maps/Long_chemin.tmx",
+        "difficulty": "easy"
+    },
 }
 
 ## Paramètres de configuration du jeu
