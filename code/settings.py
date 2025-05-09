@@ -79,6 +79,18 @@ MAPS = {
         "path": "../asset/TiledProject/maps/Long_chemin.tmx",
         "difficulty": "easy"
     },
+    "12": {
+        "name": "Traversée des anneaux",
+        "par": 4,
+        "path": "../asset/TiledProject/maps/Traversée_des_anneaux.tmx",
+        "difficulty": "medium"
+    },
+    "13": {
+        "name": "Rétropédalage",
+        "par": 3,
+        "path": "../asset/TiledProject/maps/Rétropédalage.tmx",
+        "difficulty": "easy"
+    },
 }
 
 ## Paramètres de configuration du jeu
