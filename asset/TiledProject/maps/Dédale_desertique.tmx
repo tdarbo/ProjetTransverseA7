@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="45" height="45" tilewidth="64" tileheight="64" infinite="0" nextlayerid="11" nextobjectid="3">
+<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="45" height="45" tilewidth="64" tileheight="64" infinite="0" nextlayerid="11" nextobjectid="9">
  <tileset firstgid="1" source="../tileSet.tsx"/>
  <layer id="1" name="Grass" width="45" height="45">
   <data encoding="csv">
@@ -448,6 +448,24 @@
   </object>
   <object id="2" name="hole" x="2175.33" y="127.333" width="64" height="64">
    <ellipse/>
+  </object>
+  <object id="3" name="bonus" x="2175.76" y="1606.06">
+   <point/>
+  </object>
+  <object id="4" name="bonus" x="2500" y="1275.76">
+   <point/>
+  </object>
+  <object id="5" name="bonus" x="1021.21" y="1593.94">
+   <point/>
+  </object>
+  <object id="6" name="bonus" x="1215.15" y="645.455">
+   <point/>
+  </object>
+  <object id="7" name="bonus" x="1530.3" y="1272.73">
+   <point/>
+  </object>
+  <object id="8" name="bonus" x="1787.88" y="1790.91">
+   <point/>
   </object>
  </objectgroup>
 </map>

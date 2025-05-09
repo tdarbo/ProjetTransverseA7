@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="40" height="40" tilewidth="64" tileheight="64" infinite="0" nextlayerid="12" nextobjectid="3">
+<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="40" height="40" tilewidth="64" tileheight="64" infinite="0" nextlayerid="12" nextobjectid="11">
  <tileset firstgid="1" source="../tileSet.tsx"/>
  <layer id="1" name="Grass" width="40" height="40">
   <data encoding="csv">
@@ -447,6 +447,30 @@
   </object>
   <object id="2" name="hole" x="1152.87" y="1403.74" width="64" height="64">
    <ellipse/>
+  </object>
+  <object id="3" name="bonus" x="839.991" y="267.782">
+   <point/>
+  </object>
+  <object id="4" name="bonus" x="949.923" y="270.601">
+   <point/>
+  </object>
+  <object id="5" name="bonus" x="1068.31" y="273.42">
+   <point/>
+  </object>
+  <object id="6" name="bonus" x="1178.24" y="273.42">
+   <point/>
+  </object>
+  <object id="7" name="bonus" x="1293.81" y="279.057">
+   <point/>
+  </object>
+  <object id="8" name="bonus" x="1398.11" y="279.057">
+   <point/>
+  </object>
+  <object id="9" name="bonus" x="930.192" y="1505.22">
+   <point/>
+  </object>
+  <object id="10" name="bonus" x="927.373" y="1353.01">
+   <point/>
   </object>
  </objectgroup>
 </map>
