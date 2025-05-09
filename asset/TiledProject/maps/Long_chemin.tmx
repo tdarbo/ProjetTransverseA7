@@ -269,13 +269,13 @@
   <object id="5" name="hole" x="3646.71" y="833.032" width="64" height="64">
    <ellipse/>
   </object>
-  <object id="6" name="bonus" x="854.545" y="1290.91">
+  <object id="6" name="bonus" x="860.606" y="1275.76">
    <point/>
   </object>
-  <object id="7" name="bonus" x="2233.33" y="842.424">
+  <object id="7" name="bonus" x="2233.33" y="839.394">
    <point/>
   </object>
-  <object id="8" name="bonus" x="1500" y="1000">
+  <object id="8" name="bonus" x="1500" y="1012.12">
    <point/>
   </object>
   <object id="9" name="bonus" x="2654.55" y="1000">

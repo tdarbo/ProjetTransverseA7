@@ -448,7 +448,7 @@
   <object id="2" name="hole" x="1152.87" y="1403.74" width="64" height="64">
    <ellipse/>
   </object>
-  <object id="3" name="bonus" x="839.991" y="267.782">
+  <object id="3" name="bonus" x="834.354" y="267.782">
    <point/>
   </object>
   <object id="4" name="bonus" x="949.923" y="270.601">

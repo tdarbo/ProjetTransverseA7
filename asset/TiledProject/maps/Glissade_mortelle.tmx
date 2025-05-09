@@ -332,10 +332,10 @@
   <object id="2" name="hole" x="1535.67" y="896.5" width="64" height="64">
    <ellipse/>
   </object>
-  <object id="3" name="bonus" x="1700" y="1915.15">
+  <object id="3" name="bonus" x="1693.94" y="1860.61">
    <point/>
   </object>
-  <object id="4" name="bonus" x="1505.09" y="1919.88">
+  <object id="4" name="bonus" x="1505.09" y="1856.24">
    <point/>
   </object>
   <object id="5" name="bonus" x="1982.67" y="1149.33">

@@ -360,10 +360,10 @@
   <object id="2" name="hole" x="1345" y="864" width="64" height="64">
    <ellipse/>
   </object>
-  <object id="3" name="bonus" x="1590.91" y="2184.85">
+  <object id="3" name="bonus" x="1603.03" y="2178.79">
    <point/>
   </object>
-  <object id="4" name="bonus" x="1024.24" y="2118.18">
+  <object id="4" name="bonus" x="1024.24" y="2172.73">
    <point/>
   </object>
   <object id="5" name="bonus" x="1272.73" y="1790.91">
@@ -378,13 +378,13 @@
   <object id="8" name="bonus" x="1693.94" y="1087.88">
    <point/>
   </object>
-  <object id="9" name="bonus" x="806.061" y="1087.88">
+  <object id="9" name="bonus" x="803.03" y="1093.94">
    <point/>
   </object>
-  <object id="10" name="bonus" x="1854.55" y="2375.76">
+  <object id="10" name="bonus" x="1854.55" y="2372.73">
    <point/>
   </object>
-  <object id="11" name="bonus" x="703.03" y="2378.79">
+  <object id="11" name="bonus" x="703.03" y="2366.67">
    <point/>
   </object>
  </objectgroup>
