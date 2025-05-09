@@ -10,57 +10,68 @@ MAPS = {
     "0": {
         "name": "hole1",
         "par": 4,
-        "path": "../asset/TiledProject/maps/hole1.tmx"
+        "path": "../asset/TiledProject/maps/hole1.tmx",
+        "difficulty": "easy"
     },
     "1": {
         "name": "Entre les lacs",
         "par": 4,
-        "path": "../asset/TiledProject/maps/Entre_les_lacs.tmx"
+        "path": "../asset/TiledProject/maps/Entre_les_lacs.tmx",
+        "difficulty": "easy"
     },
     "2": {
         "name": "Glissade mortelle",
         "par": 4,
-        "path": "../asset/TiledProject/maps/Glissade_mortelle.tmx"
+        "path": "../asset/TiledProject/maps/Glissade_mortelle.tmx",
+        "difficulty": "easy"
     },
     "3": {
         "name": "Coeur",
         "par": 5,
-        "path": "../asset/TiledProject/maps/Coeur.tmx"
+        "path": "../asset/TiledProject/maps/Coeur.tmx",
+        "difficulty": "medium"
     },
     "4": {
         "name": "Détour obstrué",
         "par": 5,
-        "path": "../asset/TiledProject/maps/Détour_obstrué.tmx"
+        "path": "../asset/TiledProject/maps/Détour_obstrué.tmx",
+        "difficulty": "medium"
     },
     "5": {
         "name": "Dédale désertique",
         "par": 6,
-        "path": "../asset/TiledProject/maps/Dédale_desertique.tmx"
+        "path": "../asset/TiledProject/maps/Dédale_desertique.tmx",
+        "difficulty": "medium"
     },
     "6": {
         "name": "Descente aux enfers",
-        "par": 9,
-        "path": "../asset/TiledProject/maps/Descente_aux_enfers.tmx"
+        "par": 7,
+        "path": "../asset/TiledProject/maps/Descente_aux_enfers.tmx",
+        "difficulty": "hard"
     },
     "7": {
         "name": "Île spirale",
         "par": 8,
-        "path": "../asset/TiledProject/maps/Île_spirale.tmx"
+        "path": "../asset/TiledProject/maps/Île_spirale.tmx",
+        "difficulty": "hard"
     },
     "8": {
         "name": "Sablier du temps perdu",
         "par": 7,
-        "path": "../asset/TiledProject/maps/Sablier_du_temps_perdu.tmx"
+        "path": "../asset/TiledProject/maps/Sablier_du_temps_perdu.tmx",
+        "difficulty": "hard"
     },
     "9": {
         "name": "Deux lunes",
         "par": 7,
-        "path": "../asset/TiledProject/maps/Deux_lunes.tmx"
+        "path": "../asset/TiledProject/maps/Deux_lunes.tmx",
+        "difficulty": "hard"
     },
     "10": {
         "name": "Donut dopé",
         "par": 4,
-        "path": "../asset/TiledProject/maps/Donut_dopé.tmx"
+        "path": "../asset/TiledProject/maps/Donut_dopé.tmx",
+        "difficulty": "medium"
     },
 }
 
