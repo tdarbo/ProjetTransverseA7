@@ -87,7 +87,7 @@
         },
         "maps/Glissade_mortelle.tmx": {
             "scale": 0.33,
-            "selectedLayer": 1,
+            "selectedLayer": 0,
             "viewCenter": {
                 "x": 1604.5454545454543,
                 "y": 1534.848484848485
