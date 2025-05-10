@@ -1,5 +1,3 @@
-from pygame.examples.glcube import init_gl_stuff_old
-
 from bonus_manager import BonusSpeed
 from player import Player
 from settings import *
