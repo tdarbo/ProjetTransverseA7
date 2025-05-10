@@ -3,7 +3,7 @@ import time
 
 import pygame
 
-from settings import SCORE_MENU_MARGIN
+from settings import OVERLAY_MENU_MARGIN
 from gif_manager import Gif
 import settings
 from broadcast import BroadcastManager
@@ -22,7 +22,7 @@ class BonusType:
         self.color = color
         self.icon_id = icon_id
         self.broadcast = BroadcastManager()
-        self.gif = Gif(icon_id, SCORE_MENU_MARGIN, SCORE_MENU_MARGIN, .05, False, False)
+        self.gif = Gif(icon_id, OVERLAY_MENU_MARGIN, OVERLAY_MENU_MARGIN, .05, False, False)
 
     def apply_bonus(self, player: Player, players: [Player]) -> None:
         """
@@ -91,13 +91,12 @@ class BonusExplosion(BonusType):
             if target == player or target.hide:
                 continue
             diff = player.position - target.position
-            multiplier = min((1 / max(diff.length(),0.001)), EXPLOSION_MAX_POWER)
+            multiplier = min((1 / max(diff.length(), 0.001)), EXPLOSION_MAX_POWER)
             repulsion = diff.normalize() * multiplier * 100
             if settings.DEBUG_MODE: print(f"[DEBUG] PRE {target.name} : {target.position} : {target.velocity}")
             target.velocity -= repulsion * 1000
             if settings.DEBUG_MODE: print(f"[DEBUG] POS {target.name} : {target.position} : {target.velocity}")
         player.bonus = None
-
 
     def show_usage_message(self) -> None:
         self.broadcast.broadcast("Appuyez sur 'E' pour utiliser le bonus d'explosion !")
@@ -117,7 +116,7 @@ class Bonus:
         self.available = True
         self.last_pick = 0
 
-        self.gif = Gif("../asset/GIF/Bonus_V1.2.gif",self.x,self.y,.5,True,False)
+        self.gif = Gif("../asset/GIF/Bonus_V1.2.gif", self.x, self.y, .5, True, False)
 
     def pick_bonus(self, player: Player, players: [Player]) -> None:
         if not self.available or isinstance(player.bonus, BonusType):
@@ -140,7 +139,7 @@ class Bonus:
         self.available = True
         self.last_pick = 0
         self.gif.hide = False
-        #TODO: Make animation on respawn
+        # TODO: Make animation on respawn
 
     def draw_bonus(self, surface: pygame.Surface):
         if self.available:
@@ -159,7 +158,7 @@ Bonus :
         """)
 
 
-BonusList = [BonusExplosion,BonusSpeed]
+BonusList = [BonusExplosion, BonusSpeed]
 
 
 def get_random_bonus() -> BonusType:
