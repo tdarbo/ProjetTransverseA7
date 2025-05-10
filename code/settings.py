@@ -13,7 +13,7 @@ GAME_VERSION = "1.0"
 WINDOW_WIDTH = 1280
 WINDOW_HEIGHT = 720
 FPS = 60
-TILE_SIZE = 64
+TILE_SIZE = 63
 BALL_RADIUS = 15
 
 ## Paramètres de configuration d'une partie
