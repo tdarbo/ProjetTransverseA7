@@ -40,6 +40,7 @@ class Level:
 
         # self.gif_manager.add_gif("../asset/GIF/Cactus.gif", 1511, 153, .5, True, False)
         self.bonus_gifs = []
+        self.debug_collisions = []
 
         self.map.teleportPlayersToSpawn(self.players)
         self.centerOnCurrentPlayer()
@@ -66,7 +67,7 @@ class Level:
     def on_mouse_down(self, event):
         if self.shot_taken:
             return
-        adjusted_pos = self.map.camera.getAbsoluteCoord(event.pos)
+        adjusted_pos = self.map.camera.screen_to_world(event.pos)
         if self.current_player.rect.collidepoint(adjusted_pos):
             self.dragging = True
             self.drag_start = Vector(self.current_player.rect.center)
@@ -74,7 +75,7 @@ class Level:
 
     def on_mouse_motion(self, event):
         if self.dragging:
-            adjusted_pos = self.map.camera.getAbsoluteCoord(event.pos)
+            adjusted_pos = self.map.camera.screen_to_world(event.pos)
             self.drag_current = Vector(adjusted_pos)
 
     def on_mouse_up(self, event):
@@ -86,7 +87,7 @@ class Level:
             if isinstance(self.current_player.bonus, BonusSpeed):
                 self.current_player.bonus.consume_bonus(self.current_player, self.players)
 
-            adjusted_pos = self.map.camera.getAbsoluteCoord(event.pos)
+            adjusted_pos = self.map.camera.screen_to_world(event.pos)
             new_velocity = (self.drag_start - adjusted_pos) * self.force_multiplier
             # if self.current_player.speed_bonus:
             #    new_velocity *= 2
@@ -243,6 +244,7 @@ class Level:
         self.score_manager.draw(self.overlay_surf)
         self.broadcast_manager.draw(self.overlay_surf)
         self.current_player.update_gifs(self.overlay_surf)
+        self.render_debug_info(self.overlay_surf,self.map.camera)
         screen.blit(self.overlay_surf, (0, 0))
         # print(self.map.camera.is_world_position_on_screen(self.current_player.position.x, self.current_player.position.y))
 
@@ -271,3 +273,123 @@ class Level:
     def DEBUG_LOGS(self):
         if DEBUG_MODE:
             pass#if isinstance(self.current_player.bonus, BonusFantome): print(self.current_player.bonus)
+
+    def render_debug_info(self, screen, camera):
+        """
+        Renders debug information when DEBUG_MODE is enabled.
+        Accounts for camera position and zoom.
+        """
+        if not DEBUG_MODE:
+            return
+
+        # Draw debug info for all players
+        for player in self.players:
+            # Convert world position to screen position
+            screen_pos_x, screen_pos_y = camera.world_to_screen(player.position.x, player.position.y)
+
+            # Calculate velocity endpoint in screen space
+            velocity_end_x, velocity_end_y = camera.world_to_screen(
+                player.position.x + player.velocity.x,
+                player.position.y + player.velocity.y
+            )
+
+            # Draw velocity vector (only if on screen)
+            if (camera.is_position_on_screen(screen_pos_x, screen_pos_y) or
+                    camera.is_position_on_screen(velocity_end_x, velocity_end_y)):
+                pygame.draw.line(
+                    screen,
+                    (0, 255, 0),  # Green
+                    (screen_pos_x, screen_pos_y),
+                    (velocity_end_x, velocity_end_y),
+                    2
+                )
+
+            # Draw player hitbox (converted to screen space)
+            rect_screen = pygame.Rect(
+                camera.world_to_screen(player.rect.left, player.rect.top),
+                (player.rect.width * camera.zoom_factor, player.rect.height * camera.zoom_factor)
+            )
+            pygame.draw.rect(screen, (255, 0, 0), rect_screen, 1)
+
+        # Draw collision debug info
+        for collision in self.debug_collisions[:]:  # Use a copy of the list for safe removal
+            # Calculate age of collision for fade effect
+            age = pygame.time.get_ticks() - collision['time']
+            if age > 3000:  # Remove collisions older than 3 seconds
+                self.debug_collisions.remove(collision)
+                continue
+
+            # Fade based on age (255 to 0 over 3 seconds)
+            alpha = 255 - int(age / 3000 * 255)
+
+            pos = collision['position']
+            normal = collision['normal']
+            velocity = collision['velocity']
+
+            # Convert position to screen coordinates
+            screen_pos_x, screen_pos_y = camera.world_to_screen(pos.x, pos.y)
+
+            # Calculate normal vector endpoint in screen space
+            # Scale the length by zoom factor
+            normal_length = 50 * camera.zoom_factor
+            normal_end_x, normal_end_y = camera.world_to_screen(
+                pos.x + normal.x * 50,
+                pos.y + normal.y * 50
+            )
+
+            # Calculate velocity endpoint in screen space
+            velocity_scale = min(1.0, velocity.length() / 10)  # Normalize velocity display
+            velocity_end_x, velocity_end_y = camera.world_to_screen(
+                pos.x + velocity.x * velocity_scale,
+                pos.y + velocity.y * velocity_scale
+            )
+
+            # Only draw if at least part of the vectors are on screen
+            if (camera.is_position_on_screen(screen_pos_x, screen_pos_y) or
+                    camera.is_position_on_screen(normal_end_x, normal_end_y)):
+                # Create surface with alpha for fade effect
+                if pygame.version.vernum[0] >= 2:  # For pygame 2.0+
+                    # Draw normal vector (red)
+                    pygame.draw.line(
+                        screen,
+                        pygame.Color(255, 0, 0, alpha),  # Red with fade
+                        (screen_pos_x, screen_pos_y),
+                        (normal_end_x, normal_end_y),
+                        2
+                    )
+                else:
+                    # For older pygame versions that don't support alpha in color
+                    line_surf = pygame.Surface((WINDOW_WIDTH, WINDOW_HEIGHT), pygame.SRCALPHA)
+                    pygame.draw.line(
+                        line_surf,
+                        (255, 0, 0, alpha),  # Red with fade
+                        (screen_pos_x, screen_pos_y),
+                        (normal_end_x, normal_end_y),
+                        2
+                    )
+                    screen.blit(line_surf, (0, 0))
+
+            # Only draw if at least part of the vectors are on screen
+            if (camera.is_position_on_screen(screen_pos_x, screen_pos_y) or
+                    camera.is_position_on_screen(velocity_end_x, velocity_end_y)):
+                # Create surface with alpha for fade effect
+                if pygame.version.vernum[0] >= 2:  # For pygame 2.0+
+                    # Draw resulting velocity (green)
+                    pygame.draw.line(
+                        screen,
+                        pygame.Color(0, 255, 0, alpha),  # Green with fade
+                        (screen_pos_x, screen_pos_y),
+                        (velocity_end_x, velocity_end_y),
+                        2
+                    )
+                else:
+                    # For older pygame versions that don't support alpha in color
+                    line_surf = pygame.Surface((WINDOW_WIDTH, WINDOW_HEIGHT), pygame.SRCALPHA)
+                    pygame.draw.line(
+                        line_surf,
+                        (0, 255, 0, alpha),  # Green with fade
+                        (screen_pos_x, screen_pos_y),
+                        (velocity_end_x, velocity_end_y),
+                        2
+                    )
+                    screen.blit(line_surf, (0, 0))
