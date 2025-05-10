@@ -17,7 +17,6 @@ class ScoreManager:
         self.score = self.create_dictionary() # Dictionnaire contenant tous les scores par joueur
         # ex : self.score = {Player: {"score": [0,0,0], "total": 0}}
         self.collapsed = True # Utilisé pour masquer/afficher l'affichage du score
-
         # Dimensions totales du menu de score
         self.menu_width = (
                 SCORE_CELL_WIDTH * (self.players_number + 1) +
@@ -75,6 +74,7 @@ class ScoreManager:
             self.score[player]["total"] = 0
 
     def draw(self, screen):
+        """Appelée pour afficher le menu des scores en jeu"""
         # Position du menu en bas à droite de l'écran
         start_x = screen.get_width() - SCORE_MENU_MARGIN - self.menu_width
         start_y = screen.get_height() - SCORE_MENU_MARGIN - self.menu_height
@@ -87,6 +87,10 @@ class ScoreManager:
         start_x += SCORE_MENU_PADDING
         start_y += SCORE_MENU_PADDING
 
+        self.draw_menu(start_x, start_y, "white", screen)
+
+    def draw_menu(self, start_x: int, start_y: int, text_color: str, screen: pygame.Surface):
+        """Permet d'afficher le menu des scores à une position donnée"""
         for i in range(-1, self.players_number):
             # La colonne d'indice -1 est réservée aux en-têtes du tableau (numéros de trou, "Total", ...)
             # Toutes les autres colonnes affichent les scores de chaque joueur
@@ -102,17 +106,18 @@ class ScoreManager:
                 player = None
 
             # Dessin des 3 parties du tableau : en-tête, scores et total
-            self.draw_header(screen, i, player, current_cell_x, start_y)
-            self.draw_body(screen, i, player, current_cell_x, start_y)
-            self.draw_footer(screen, i, player, current_cell_x, start_y)
+            self.draw_header(screen, i, player, current_cell_x, start_y, text_color)
+            self.draw_body(screen, i, player, current_cell_x, start_y, text_color)
+            self.draw_footer(screen, i, player, current_cell_x, start_y, text_color)
 
-    def draw_header(self, screen, column_index, player, cell_x, cell_y):
+    def draw_header(self, screen: pygame.Surface, column_index: int, player: Player, cell_x: int, cell_y: int,
+                    text_color: str):
         if column_index == -1:
             # Première colonne : on affiche le texte de l’en-tête "Trou n°"
             Text(
                 text="Trou n°",
                 pos=(cell_x, cell_y),
-                color=(255, 255, 255),
+                color=text_color,
                 font_size=SCORE_MENU_FONT_SIZE
             ).draw(screen)
         else:
@@ -126,11 +131,12 @@ class ScoreManager:
             Text(
                 text=player.name if self.players[column_index].name else "Vous",
                 pos=(cell_x + 12, cell_y),
-                color=(255, 255, 255),
+                color=text_color,
                 font_size=SCORE_MENU_FONT_SIZE
             ).draw(screen)
 
-    def draw_body(self, screen, column_index, player, cell_x, start_y):
+    def draw_body(self, screen: pygame.Surface, column_index: int, player: Player, cell_x: int, start_y: int,
+                  text_color: str):
         for row_index in range(0, self.holes_number):
             # Position verticale de la cellule en fonction du trou (ligne)
             cell_y = start_y + (row_index + 1) * SCORE_CELL_HEIGHT + (row_index + 1) * SCORE_CELL_GAP
@@ -140,7 +146,7 @@ class ScoreManager:
                 Text(
                     text=str(row_index + 1),
                     pos=(cell_x, cell_y),
-                    color=(255, 255, 255),
+                    color=text_color,
                     font_size=SCORE_MENU_FONT_SIZE
                 ).draw(screen)
             else:
@@ -152,11 +158,12 @@ class ScoreManager:
                 Text(
                     text=score if score != "0" else "-",  # Affiche un tiret si le score est nul
                     pos=(cell_x, cell_y),
-                    color=(255, 255, 255),
+                    color=text_color,
                     font_size=SCORE_MENU_FONT_SIZE
                 ).draw(screen)
 
-    def draw_footer(self, screen, column_index, player, cell_x, start_y):
+    def draw_footer(self, screen: pygame.Surface, column_index: int, player: Player, cell_x: int, start_y: int,
+                    text_color: str):
         # Position verticale du footer (ligne "Total")
         cell_y = start_y + (self.holes_number + 1) * SCORE_CELL_HEIGHT + (self.holes_number + 1) * SCORE_CELL_GAP
 
@@ -165,7 +172,7 @@ class ScoreManager:
             Text(
                 text="Total",
                 pos=(cell_x, cell_y),
-                color=(255, 255, 255),
+                color=text_color,
                 font_size=SCORE_MENU_FONT_SIZE
             ).draw(screen)
         else:
@@ -176,7 +183,7 @@ class ScoreManager:
             Text(
                 text=total if total != "0" else "-",  # Tiret si score encore à 0
                 pos=(cell_x, cell_y),
-                color=(255, 255, 255),
+                color=text_color,
                 font_size=SCORE_MENU_FONT_SIZE
             ).draw(screen)
 
