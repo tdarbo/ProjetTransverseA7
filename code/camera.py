@@ -27,14 +27,6 @@ class Camera:
         self.offset_X -= dx / self.zoom_factor
         self.offset_Y -= dy / self.zoom_factor
 
-    def getAbsoluteCoord(self, screen_coord):
-        """Convertit une coordonnée à l'écran en coordonnée sur la carte."""
-        center_x = self.screen.get_width() / 2
-        center_y = self.screen.get_height() / 2
-        world_x = self.offset_X + (screen_coord[0] - center_x) / self.zoom_factor
-        world_y = self.offset_Y + (screen_coord[1] - center_y) / self.zoom_factor
-        return world_x, world_y
-
     def process_event(self, event):
         """
         Met à jour la caméra en fonction des événements.
@@ -69,24 +61,88 @@ class Camera:
         self.is_dragging = False
 
     def world_to_screen(self, world_x, world_y):
-        # Récupérer les coordonnées du centre de l'écran
-        center_x = WINDOW_WIDTH / 2
-        center_y = WINDOW_HEIGHT / 2
+        """
+        Converts world coordinates to screen coordinates.
 
-        # Appliquer le zoom et le décalage de la caméra
-        screen_x = center_x + (world_x - self.offset_X - center_x) * self.zoom_factor
-        screen_y = center_y + (world_y - self.offset_Y - center_y) * self.zoom_factor
+        Args:
+            world_x, world_y: Position in world space
+
+        Returns:
+            screen_x, screen_y: Position in screen space
+        """
+        # Get screen center
+        screen_width = self.screen.get_width()
+        screen_height = self.screen.get_height()
+
+        # Calculate the screen position
+        # 1. Subtract camera position to get position relative to camera
+        # 2. Apply zoom
+        # 3. Add screen center to position relative to screen center
+        screen_x = ((world_x - self.offset_X) * self.zoom_factor) + (screen_width / 2)
+        screen_y = ((world_y - self.offset_Y) * self.zoom_factor) + (screen_height / 2)
 
         return screen_x, screen_y
 
-    def is_position_on_screen(self,x:int,y:int) -> bool:
-        if x < 0 or x > WINDOW_WIDTH:
-            return False
-        elif y < 0 or y > WINDOW_HEIGHT:
-            return False
-        else:
-            return True
+    def screen_to_world_coords(self, screen_x, screen_y):
+        """
+        Converts screen coordinates to world coordinates.
 
-    def is_world_position_on_screen(self,world_x:int,world_y:int):
-        x,y = self.world_to_screen(world_x,world_y)
-        return self.is_position_on_screen(x,y)
+        Args:
+            screen_x, screen_y: Position in screen space
+
+        Returns:
+            world_x, world_y: Position in world space
+        """
+        # Get screen center
+        screen_width = self.screen.get_width()
+        screen_height = self.screen.get_height()
+
+        # Calculate the world position
+        # 1. Subtract screen center to get position relative to screen center
+        # 2. Divide by zoom to get unscaled position
+        # 3. Add camera position to get position in world space
+        world_x = ((screen_x - (screen_width / 2)) / self.zoom_factor) + self.offset_X
+        world_y = ((screen_y - (screen_height / 2)) / self.zoom_factor) + self.offset_Y
+
+        return world_x, world_y
+
+    def is_position_on_screen(self, screen_x, screen_y):
+        """
+        Checks if a screen position is visible.
+
+        Args:
+            screen_x, screen_y: Position in screen space
+
+        Returns:
+            bool: True if the position is on screen
+        """
+        screen_width = self.screen.get_width()
+        screen_height = self.screen.get_height()
+
+        return (0 <= screen_x <= screen_width and
+                0 <= screen_y <= screen_height)
+
+    def is_world_position_on_screen(self, world_x, world_y):
+        """
+        Checks if a world position is visible on screen.
+
+        Args:
+            world_x, world_y: Position in world space
+
+        Returns:
+            bool: True if the position is on screen
+        """
+        screen_x, screen_y = self.world_to_screen(world_x, world_y)
+        return self.is_position_on_screen(screen_x, screen_y)
+
+    def screen_to_world(self, screen_coord):
+        """
+        Converts a screen coordinate tuple to world coordinate.
+
+        Args:
+            screen_coord: (x, y) tuple of screen position
+
+        Returns:
+            (world_x, world_y): Position in world space
+        """
+        return self.screen_to_world_coords(screen_coord[0], screen_coord[1])

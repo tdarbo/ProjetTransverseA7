@@ -1,6 +1,7 @@
 from pygame.examples.glcube import init_gl_stuff_old
 
-from bonus_manager import BonusSpeed
+from bonus_manager import BonusSpeed, BonusFantome, BonusAimant
+
 from player import Player
 from settings import *
 from math import exp,sqrt
@@ -74,6 +75,9 @@ class Engine:
         if player1.finished or player2.finished:
             return
 
+        if isinstance(player1.bonus, BonusFantome) and player1.bonus.active:
+            return
+
         diff = player1.position - player2.position
         distance = diff.length()
         min_distance = player1.radius + player2.radius
@@ -97,6 +101,8 @@ class Engine:
 
     def resolve_out_of_bounds(self, player: Player) -> None:
         """Gère le cas où un joueur sort des limites de la carte."""
+        if isinstance(player.bonus, BonusFantome) and player.bonus.active:
+            return
         if self.is_out_of_bounds(player):
             self.level.game.sound_manager.play_sound(SOUNDS["water"])
             player.velocity = Vector(0.0, 0.0)
@@ -133,36 +139,106 @@ class Engine:
 
     def resolve_player_obstacle_collision(self, player: Player, tile) -> None:
         """
-        Gère la collision entre un joueur et une tuile obstacle.
+        Enhanced collision resolution that handles tile gaps and prevents oscillation.
         """
+
+
+        if isinstance(player.bonus, BonusFantome) and player.bonus.active:
+            return
+
+
+        original_velocity = player.velocity.copy()
+        original_position = player.position.copy()
+
+
         intersection = player.rect.clip(tile.rect)
 
-        # On calcule les superpositions sur X et Y
+        # Calculate penetration
         pen_x = intersection.width
         pen_y = intersection.height
 
-        # Résolution de la collision en X
-        if pen_x < pen_y:
-            if player.rect.centerx < tile.rect.centerx:
-                # Le joueur est à gauche de la tile, on le décale vers la gauche
-                player.position.x -= pen_x
-            else:
-                # Le joueur est à droite de la tile, on le décale vers la droite
-                player.position.x += pen_x
-            # On inverse la vélocité en X
-            player.velocity.x = -player.velocity.x
+        if pen_x == 0 and pen_y == 0:
+            return
 
-        # Résolution de la collision en Y
-        else:
-            if player.rect.centery < tile.rect.centery:
-                # Le joueur est au-dessus de la tile, on le décale vers le haut
-                player.position.y -= pen_y
-            else:
-                # Le joueur est en dessous de la tile, on le décale vers le bas
-                player.position.y += pen_y
+        # Calculs par face
+        dist_left = abs(player.rect.right - tile.rect.left)
+        dist_right = abs(player.rect.left - tile.rect.right)
+        dist_top = abs(player.rect.bottom - tile.rect.top)
+        dist_bottom = abs(player.rect.top - tile.rect.bottom)
 
-            # On Inverse la vélocité en Y
-            player.velocity.y = -player.velocity.y
+        min_dist = min(dist_left, dist_right, dist_top, dist_bottom)
+
+
+        normal = Vector(0, 0)
+        collision_type = ""
+
+        buffer = 1.0
+
+        # Résolution basé sur la face
+        if min_dist == dist_left:
+            player.position.x = tile.rect.left - player.radius - buffer
+            player.velocity.x = -abs(player.velocity.x)  # Ensure velocity is away from tile
+            normal = Vector(-1, 0)
+            collision_type = "left edge"
+
+        elif min_dist == dist_right:
+            player.position.x = tile.rect.right + player.radius + buffer
+            player.velocity.x = abs(player.velocity.x)  # Ensure velocity is away from tile
+            normal = Vector(1, 0)
+            collision_type = "right edge"
+
+        elif min_dist == dist_top:
+            player.position.y = tile.rect.top - player.radius - buffer
+            player.velocity.y = -abs(player.velocity.y)  # Ensure velocity is away from tile
+            normal = Vector(0, -1)
+            collision_type = "top edge"
+
+        elif min_dist == dist_bottom:
+            player.position.y = tile.rect.bottom + player.radius + buffer
+            player.velocity.y = abs(player.velocity.y)  # Ensure velocity is away from tile
+            normal = Vector(0, 1)
+            collision_type = "bottom edge"
+
+        min_escape_velocity = 20.0
+
+        # Vérification speed minimul sinon cancel pour éviter double hits
+        if normal.x != 0:
+            if abs(player.velocity.x) < min_escape_velocity:
+                player.velocity.x = normal.x * min_escape_velocity
+
+        if normal.y != 0:
+            if abs(player.velocity.y) < min_escape_velocity:
+                player.velocity.y = normal.y * min_escape_velocity
+
+        # Prevent excessive speed after collision
+        max_collision_speed = MAX_PLAYER_VELOCITY.length()
+        current_speed = player.velocity.length()
+
+        if current_speed > max_collision_speed:
+            player.velocity *= (max_collision_speed / current_speed) * .8 # speed redistribution
+
+        # IMPORTANT: Update the rect position after changing the player position
+        player.rect.x = int(player.position.x)
+        player.rect.y = int(player.position.y)
+
+        if DEBUG_MODE:
+            print(f"Collision: {player.name} hit {collision_type} - Pen X: {pen_x}, Pen Y: {pen_y}")
+            print(
+                f"  Original pos: ({original_position.x:.1f}, {original_position.y:.1f}) → New pos: ({player.position.x:.1f}, {player.position.y:.1f})")
+            print(
+                f"  Original vel: ({original_velocity.x:.1f}, {original_velocity.y:.1f}) → New vel: ({player.velocity.x:.1f}, {player.velocity.y:.1f})")
+
+            if not hasattr(self.level, 'debug_collisions'):
+                self.level.debug_collisions = []
+
+            # Store collision data for debug rendering
+            self.level.debug_collisions.append({
+                'position': original_position,
+                'normal': normal,
+                'velocity': player.velocity.copy(),
+                'original_velocity': original_velocity,
+                'time': pygame.time.get_ticks(),
+            })
 
     def resolve_bonus(self):
         for player in self.players:
@@ -248,11 +324,13 @@ class Engine:
             player.velocity.y = player.velocity.y * 1.1
 
     def update(self, dt: float) -> None:
-        """Met à jour la physique du jeu pour tous les joueurs."""
+        """Met à jour la physique du jeu pour tous les joueurs avec un système de collision robuste."""
 
-        for i in range(self.num_players):
-            player = self.players[i]
+        for player in self.players:
+            if player.finished:
+                continue
 
+            # 1. Update player physics
             #limitation de vitesse
             if player.velocity.y > 1200:
                 player.velocity.y = 1200
@@ -265,41 +343,90 @@ class Engine:
 
             # Mise à jour de la position du joueur
             self.update_position(player, dt)
-
-            player.update()
-
-            # Application de la friction
             self.apply_friction(player, dt)
 
-            # Gestion des collisions entre joueurs
-            for j in range(i + 1, self.num_players):
-                self.resolve_player_player_collision(player, self.players[j])
+            # Apply aimant bonus if active
+            if isinstance(player.bonus, BonusAimant) and player.bonus.isActive():
+                self.apply_bonus_aimant(player)
 
+            # Update player rect
             player.update()
 
+            # 2. Check for bonus pickups
+            self.resolve_bonus()
+
+            # 3. Handle tile collisions with a more robust approach
+            collision_detected = True
+            max_iterations = 3  # Limit resolution attempts to prevent infinite loops
+            iterations = 0
+
+            while collision_detected and iterations < max_iterations:
+                iterations += 1
+                collision_detected = False
+
+                # First handle obstacle collisions
+                for tile in self.level.map.tiles:
+                    if tile.id == "Collision" and player.rect.colliderect(tile.rect):
+                        self.resolve_player_obstacle_collision(player, tile)
+                        collision_detected = True
+                        # Update player rect after each resolution
+                        player.update()
             # Gestion des collisions/bounce/accélerateur avec la map
             for tile in self.level.map.tiles:
                 if tile.id == "Collision" and player.rect.colliderect(tile.rect):
                     self.resolve_player_obstacle_collision(player, tile)
 
-                elif tile.id == "Bounce" and player.rect.colliderect(tile.rect):
-                    self.resolve_player_bounce_collision(player, tile)
+                # Then handle bounce tiles
+                for tile in self.level.map.tiles:
+                    if tile.id == "Bounce" and player.rect.colliderect(tile.rect):
+                        self.resolve_player_bounce_collision(player, tile)
+                        collision_detected = True
+                        # Update player rect after each resolution
+                        player.update()
+                    elif tile.id == "Bounce" and player.rect.colliderect(tile.rect):
+                        self.resolve_player_bounce_collision(player, tile)
 
-                elif tile.id == "Speed_right" and player.rect.colliderect(tile.rect):
-                    self.resolve_player_speed_right(player)
+                    elif tile.id == "Speed_right" and player.rect.colliderect(tile.rect):
+                        self.resolve_player_speed_right(player)
 
-                elif tile.id == "Speed_left" and player.rect.colliderect(tile.rect):
-                    self.resolve_player_speed_left(player)
+                    elif tile.id == "Speed_left" and player.rect.colliderect(tile.rect):
+                        self.resolve_player_speed_left(player)
 
-                elif tile.id == "Speed_down" and player.rect.colliderect(tile.rect):
-                    self.resolve_player_speed_down(player)
+                    elif tile.id == "Speed_down" and player.rect.colliderect(tile.rect):
+                        self.resolve_player_speed_down(player)
 
-                elif tile.id == "Speed_up" and player.rect.colliderect(tile.rect):
-                    self.resolve_player_speed_up(player)
+                    elif tile.id == "Speed_up" and player.rect.colliderect(tile.rect):
+                        self.resolve_player_speed_up(player)
             player.update()
 
+            # If we hit max iterations, the player might be stuck - apply a small random impulse
+            if iterations == max_iterations and collision_detected:
+                # Apply a small random impulse to help escape
+                import random
+                player.velocity.x += random.uniform(-50, 50)
+                player.velocity.y += random.uniform(-50, 50)
+                player.update()
+
+            # 4. Check for out of bounds and finish conditions
             self.resolve_out_of_bounds(player)
             self.is_on_finish(player)
-            self.resolve_bonus()
 
+        # 5. Handle player-player collisions after all individual physics
+        for i in range(len(self.players)):
+            for j in range(i + 1, len(self.players)):
+                self.resolve_player_player_collision(self.players[i], self.players[j])
+
+        # 6. Final update for all players
+        for player in self.players:
             player.update()
+
+    def apply_bonus_aimant(self, player:Player):
+        """
+        Applique le bonus d'aimant à un joueur.
+        """
+        hole_x, hole_y = self.level.map.hole.x, self.level.map.hole.y
+        hole = pygame.math.Vector2(hole_x, hole_y)
+        pos = player.position  # Supposé être un Vector2 aussi
+        direction = hole - pos
+        attraction_force = direction.normalize() * (1 / max(direction.length(), 0.001)*5) * 100
+        player.velocity += attraction_force
