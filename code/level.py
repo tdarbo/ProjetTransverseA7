@@ -1,3 +1,4 @@
+import math
 from time import sleep
 
 import pygame
@@ -41,6 +42,7 @@ class Level:
         # self.gif_manager.add_gif("../asset/GIF/Cactus.gif", 1511, 153, .5, True, False)
         self.bonus_gifs = []
         self.debug_collisions = []
+        self.debug_grid = False
 
         self.map.teleportPlayersToSpawn(self.players)
         self.centerOnCurrentPlayer()
@@ -57,6 +59,8 @@ class Level:
             elif event.key == pygame.K_e:
                 if isinstance(self.current_player.bonus, BonusType):
                     self.current_player.bonus.consume_bonus(self.current_player, self.players, self.overlay_surf)
+            elif event.key == pygame.K_o:
+                self.debug_grid = not self.debug_grid
         elif event.type == pygame.MOUSEBUTTONDOWN:
             self.on_mouse_down(event)
         elif event.type == pygame.MOUSEMOTION:
@@ -245,6 +249,8 @@ class Level:
         self.broadcast_manager.draw(self.overlay_surf)
         self.current_player.update_gifs(self.overlay_surf)
         self.render_debug_info(self.overlay_surf,self.map.camera)
+        self.render_physics_inspector(self.overlay_surf,self.map.camera,self.current_player)
+        if self.debug_grid: self.render_tile_grid(self.overlay_surf,self.map.camera)
         screen.blit(self.overlay_surf, (0, 0))
         # print(self.map.camera.is_world_position_on_screen(self.current_player.position.x, self.current_player.position.y))
 
@@ -393,3 +399,80 @@ class Level:
                         2
                     )
                     screen.blit(line_surf, (0, 0))
+
+    def render_physics_inspector(self, screen, camera, selected_player=None):
+        """Displays detailed physics information for selected objects"""
+        if not DEBUG_MODE:
+            return
+
+        # Default to first player if none selected
+        if selected_player is None and self.players:
+            selected_player = self.players[0]
+
+        if selected_player:
+            # Create background panel
+            panel_width, panel_height = 300, 220
+            panel_surf = pygame.Surface((panel_width, panel_height), pygame.SRCALPHA)
+            panel_surf.fill((0, 0, 0, 180))
+
+            # Render physics data
+            font = pygame.font.Font(None, 24)
+
+            # Player basic info
+            texts = [
+                f"Object: {selected_player.name}",
+                f"Position: ({selected_player.position.x:.1f}, {selected_player.position.y:.1f})",
+                f"Velocity: ({selected_player.velocity.x:.2f}, {selected_player.velocity.y:.2f})",
+                f"Speed: {selected_player.velocity.length():.2f}",
+                f"Direction: {math.degrees(math.atan2(selected_player.velocity.y, selected_player.velocity.x)):.1f}°",
+            ]
+
+            # Add bonus info if present
+            if hasattr(selected_player, 'bonus') and selected_player.bonus:
+                texts.append(f"Bonus: {selected_player.bonus.__class__.__name__}")
+
+            # Render each text line
+            y_offset = 10
+            for text in texts:
+                text_surf = font.render(text, True, (255, 255, 255))
+                panel_surf.blit(text_surf, (10, y_offset))
+                y_offset += 28
+
+            # Position panel in top-right corner
+            screen.blit(panel_surf, (screen.get_width() - panel_width - 10, 10))
+
+    def render_tile_grid(self, screen, camera):
+        """Shows the tile grid with tile IDs for debugging map issues"""
+        if not DEBUG_MODE:
+            return
+
+        # Only render tiles that are visible
+        for tile in self.map.tiles:
+            if camera.is_world_position_on_screen(tile.rect.centerx, tile.rect.centery):
+                # Convert to screen coordinates
+                screen_rect = pygame.Rect(
+                    *camera.world_to_screen(tile.rect.left, tile.rect.top),
+                    tile.rect.width * camera.zoom_factor,
+                    tile.rect.height * camera.zoom_factor
+                )
+
+                # Draw tile outline
+                color = (255, 0, 0) if tile.id == "Collision" else (
+                    (0, 0, 255) if tile.id == "Water" else
+                    (0, 255, 0) if tile.id == "Grass" else (100, 100, 100))
+
+                pygame.draw.rect(screen, color, screen_rect, 1)
+
+                # Render tile ID for debugging - only when zoomed in enough
+                if camera.zoom_factor > 0.7:
+                    font = pygame.font.Font(None, 18)
+                    text = font.render(tile.id, True, (255, 255, 255))
+                    text_rect = text.get_rect(center=screen_rect.center)
+
+                    # Add semi-transparent background for text
+                    bg_rect = text_rect.inflate(4, 4)
+                    bg_surf = pygame.Surface((bg_rect.width, bg_rect.height), pygame.SRCALPHA)
+                    bg_surf.fill((0, 0, 0, 128))
+                    screen.blit(bg_surf, bg_rect)
+
+                    screen.blit(text, text_rect)
