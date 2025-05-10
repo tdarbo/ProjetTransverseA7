@@ -23,7 +23,7 @@ class Game:
 
         if not DEBUG_MODE:
             # Charger et afficher le splash screen
-            self.screen.blit(SPLASH_BG, (0, 0))
+            self.screen.blit(SPLASH_SCREEN, (0, 0))
             pygame.display.flip()
 
         if DEBUG_MODE:
