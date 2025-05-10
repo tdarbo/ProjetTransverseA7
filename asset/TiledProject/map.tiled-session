@@ -112,7 +112,7 @@
             "scale": 0.33,
             "selectedLayer": 9,
             "viewCenter": {
-                "x": 2154.545454545455,
+                "x": 1036.3636363636363,
                 "y": 768.1818181818182
             }
         },
@@ -127,6 +127,17 @@
                 "y": 1611
             }
         },
+        "maps/Rétropédalage.tmx": {
+            "expandedObjectLayers": [
+                8
+            ],
+            "scale": 0.48093749999999996,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 960.6237816764135,
+                "y": 959.584145549058
+            }
+        },
         "maps/Sablier_du_temps_perdu.tmx": {
             "expandedObjectLayers": [
                 7
@@ -134,16 +145,19 @@
             "scale": 0.33,
             "selectedLayer": 8,
             "viewCenter": {
-                "x": 1809.090909090909,
+                "x": 1606.060606060606,
                 "y": 1728.7878787878785
             }
         },
         "maps/Traversée_des_anneaux.tmx": {
-            "scale": 0.5,
+            "expandedObjectLayers": [
+                6
+            ],
+            "scale": 0.33,
             "selectedLayer": 6,
             "viewCenter": {
-                "x": 996,
-                "y": 1107
+                "x": 1360.6060606060605,
+                "y": 543.939393939394
             }
         },
         "maps/debug_map.tmx": {
@@ -206,11 +220,11 @@
     },
     "last.imagePath": "C:/Users/mathi/OneDrive/Images",
     "map.fixedSize": true,
-    "map.height": 40,
+    "map.height": 30,
     "map.lastUsedFormat": "tmx",
     "map.tileHeight": 64,
     "map.tileWidth": 64,
-    "map.width": 40,
+    "map.width": 30,
     "openFiles": [
         "maps/hole1.tmx",
         "tileSet.tsx",
