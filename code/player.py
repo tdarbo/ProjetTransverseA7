@@ -1,4 +1,6 @@
 from settings import *
+import time
+
 
 
 class Player(pygame.sprite.Sprite):
@@ -44,15 +46,29 @@ class Player(pygame.sprite.Sprite):
         self.radius = BALL_RADIUS
 
     def update_gifs(self, overlay:pygame.Surface) -> None:
+
         if self.bonus is None:
             return
+
+        if self.bonus.name == "BonusExplosion" and self.bonus.active:
+            current_alpha = 255
+            if self.bonus.start_time == -1:
+                self.bonus.start_time = time.time()
+                self.bonus.endtime = time.time() + 1
+            if time.time() < self.bonus.endtime:
+                progress = (time.time() - self.bonus.start_time) / (1000 / 1000.0)
+                current_alpha = int(255 * (1.0 - progress))
+                if current_alpha < 0:
+                    current_alpha = 0
+                overlay.fill((255, 255, 255, current_alpha))
+            else:
+                self.bonus.active = False
+                self.bonus.start_time = -1
+                self.bonus.endtime = -1
+                self.bonus = None
+                overlay.fill((255, 255, 255, 0))
+                return
+
+
 
         self.bonus.gif.update(overlay)
-
-    def update_map_gifs(self, map:pygame.Surface) -> None:
-        if self.bonus is None:
-            return
-
-        if self.bonus.name == "BonusExplosion" and self.bonus.gif_active is not None:
-            self.bonus.gif_update(map)
-

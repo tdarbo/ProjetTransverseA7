@@ -45,6 +45,7 @@ PANEL_MARGINS = {
     "bottom": 50,
     "left": 50,
     "right": 50
+    
 }
 SCENE_BG_IMAGE = pygame.transform.scale(
     pygame.image.load('../asset/image/terrain_bg.jpg'),
@@ -57,7 +58,7 @@ SPLASH_BG = pygame.transform.scale(
 
 # DEBUG
 DEBUG_MODE = True
-DEBUG_CONFIG = {'players':2,'holes':4,'names':["player0"]}
+DEBUG_CONFIG = {'players':2,'holes':4,'names':["player0","player1"]}
 
 ## Paramètres de la caméra
 MAX_ZOOM = 4

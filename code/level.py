@@ -55,7 +55,7 @@ class Level:
                 self.current_player.position.y = self.map.hole.y
             elif event.key == pygame.K_e:
                 if isinstance(self.current_player.bonus, BonusType):
-                    self.current_player.bonus.consume_bonus(self.current_player, self.players)
+                    self.current_player.bonus.consume_bonus(self.current_player, self.players, self.overlay_surf)
         elif event.type == pygame.MOUSEBUTTONDOWN:
             self.on_mouse_down(event)
         elif event.type == pygame.MOUSEMOTION:
@@ -121,7 +121,8 @@ class Level:
         if isinstance(self.current_player.bonus, BonusType):
             self.bonus_gifs.append(self.current_player.bonus.icon_id)
         else:
-            if DEBUG_MODE: self.current_player.bonus = BonusExplosion()
+             if DEBUG_MODE: self.current_player.bonus = BonusExplosion()
+
 
     def check_turn_end(self):
         """Vérifie si le tour est terminé et passe au joueur suivant."""
@@ -195,7 +196,6 @@ class Level:
 
         self.map.load_gif_bonuses(self.map_surf)
 
-        self.current_player.update_map_gifs(self.map_surf)
 
         for bonus in self.map.bonuses:
             bonus.draw_bonus(self.map_surf)
@@ -266,6 +266,7 @@ class Level:
         y /= p_count
 
         camera.animator.posToPosAndZoom(camera, (x, y), 0.5, 15)
+
 
     def DEBUG_LOGS(self):
         if DEBUG_MODE:
