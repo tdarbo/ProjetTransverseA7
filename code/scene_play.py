@@ -79,7 +79,7 @@ class PlayScene(Scene):
         """Crée un niveau à partir d'une map."""
         return Level(
             hole_index=hole_index,
-            tiled_map=Map(map_info, self.game.screen),
+            map_obj=Map(map_info, self.game.screen),
             players=self.players,
             score_manager=self.score_manager,
             broadcast_manager=self.broadcast_manager,
@@ -201,7 +201,7 @@ class PlayScene(Scene):
             text="Partie terminée !",
             pos=(
                 self.game.screen.get_width() // 2,
-                self.game.screen.get_height() // 2 - 115
+                self.game.screen.get_height() // 2 - 125
             ),
             font_size=40,
             color="#D55534",
@@ -209,19 +209,19 @@ class PlayScene(Scene):
         ).draw(self.end_info_surface)
 
         Text(
-            text="Tableau récapitulatif des scores",
+            text="Tableau récapitulatif des scores :",
             pos=(
                 self.game.screen.get_width() // 2,
-                self.game.screen.get_height() // 2 - 70
+                self.game.screen.get_height() // 2 - 60
             ),
-            font_size=16,
+            font_size=14,
             color="black",
             align="center"
         ).draw(self.end_info_surface)
 
         self.score_manager.draw_menu(
-            start_x=self.game.screen.get_width() // 2 - self.score_manager.menu_width // 2 + 20,
-            start_y=self.game.screen.get_height() // 2 - self.score_manager.menu_height // 2 + 70,
+            start_x=self.game.screen.get_width() // 2 - (self.score_manager.menu_width // 2) + 50,
+            start_y=self.game.screen.get_height() // 2 - self.score_manager.menu_height // 2 + 60,
             text_color="black",
             screen=self.end_info_surface
         )
