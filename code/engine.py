@@ -126,77 +126,67 @@ class Engine:
         """
         Enhanced collision resolution that handles tile gaps and prevents oscillation.
         """
-        import pygame
-        from math import sqrt
 
-        # Skip if ghost bonus is active
+
         if isinstance(player.bonus, BonusFantome) and player.bonus.active:
             return
 
-        # Store original data for debug and comparison
+
         original_velocity = player.velocity.copy()
         original_position = player.position.copy()
 
-        # Get the intersection rectangle between player and tile
+
         intersection = player.rect.clip(tile.rect)
 
-        # Calculate penetration in X and Y directions
+        # Calculate penetration
         pen_x = intersection.width
         pen_y = intersection.height
 
-        # Skip if there's no actual penetration (prevents oscillation)
         if pen_x == 0 and pen_y == 0:
             return
 
-        # Calculate distances to each edge of the tile
+        # Calculs par face
         dist_left = abs(player.rect.right - tile.rect.left)
         dist_right = abs(player.rect.left - tile.rect.right)
         dist_top = abs(player.rect.bottom - tile.rect.top)
         dist_bottom = abs(player.rect.top - tile.rect.bottom)
 
-        # Find the minimum distance to determine the collision side
         min_dist = min(dist_left, dist_right, dist_top, dist_bottom)
 
-        # Set default collision information
+
         normal = Vector(0, 0)
         collision_type = ""
 
-        # Add a small buffer to prevent getting stuck in gaps
         buffer = 1.0
 
-        # Resolve based on the minimum distance
+        # Résolution basé sur la face
         if min_dist == dist_left:
-            # Colliding with left edge of tile
             player.position.x = tile.rect.left - player.radius - buffer
             player.velocity.x = -abs(player.velocity.x)  # Ensure velocity is away from tile
             normal = Vector(-1, 0)
             collision_type = "left edge"
 
         elif min_dist == dist_right:
-            # Colliding with right edge of tile
             player.position.x = tile.rect.right + player.radius + buffer
             player.velocity.x = abs(player.velocity.x)  # Ensure velocity is away from tile
             normal = Vector(1, 0)
             collision_type = "right edge"
 
         elif min_dist == dist_top:
-            # Colliding with top edge of tile
             player.position.y = tile.rect.top - player.radius - buffer
             player.velocity.y = -abs(player.velocity.y)  # Ensure velocity is away from tile
             normal = Vector(0, -1)
             collision_type = "top edge"
 
         elif min_dist == dist_bottom:
-            # Colliding with bottom edge of tile
             player.position.y = tile.rect.bottom + player.radius + buffer
             player.velocity.y = abs(player.velocity.y)  # Ensure velocity is away from tile
             normal = Vector(0, 1)
             collision_type = "bottom edge"
 
-        # Apply a minimum velocity to escape the collision
         min_escape_velocity = 20.0
 
-        # Ensure the velocity is sufficient to escape the collision
+        # Vérification speed minimul sinon cancel pour éviter double hits
         if normal.x != 0:
             if abs(player.velocity.x) < min_escape_velocity:
                 player.velocity.x = normal.x * min_escape_velocity
@@ -210,22 +200,19 @@ class Engine:
         current_speed = player.velocity.length()
 
         if current_speed > max_collision_speed:
-            player.velocity *= (max_collision_speed / current_speed)
+            player.velocity *= (max_collision_speed / current_speed) * .8 # speed redistribution
 
         # IMPORTANT: Update the rect position after changing the player position
         player.rect.x = int(player.position.x)
         player.rect.y = int(player.position.y)
 
-        # Add debug visualization if DEBUG_MODE is enabled
         if DEBUG_MODE:
-            # Print collision information
             print(f"Collision: {player.name} hit {collision_type} - Pen X: {pen_x}, Pen Y: {pen_y}")
             print(
                 f"  Original pos: ({original_position.x:.1f}, {original_position.y:.1f}) → New pos: ({player.position.x:.1f}, {player.position.y:.1f})")
             print(
                 f"  Original vel: ({original_velocity.x:.1f}, {original_velocity.y:.1f}) → New vel: ({player.velocity.x:.1f}, {player.velocity.y:.1f})")
 
-            # Ensure the debug_collisions list exists
             if not hasattr(self.level, 'debug_collisions'):
                 self.level.debug_collisions = []
 
