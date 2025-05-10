@@ -151,7 +151,8 @@ DEBUG_MODE = False
 DEBUG_CONFIG = {'players': 2, 'holes': 4, 'names': ["player0","player1"]}
 
 ## Paramètres de la caméra
-MAX_ZOOM = 4
+DEFAULT_ZOOM = 1
+MAX_ZOOM = 2
 MIN_ZOOM = 0.5
 
 ## Dimensions de la fenêtre d'erreur
@@ -159,26 +160,28 @@ WINDOW_ERROR_WIDTH = PANEL_WIDTH - 100
 WINDOW_ERROR_HEIGHT = PANEL_HEIGHT // 2
 
 ## Dimensions du menu du score
-SCORE_CELL_WIDTH = 100  # Largeur d'une cellule
-SCORE_CELL_HEIGHT = 10  # Hauteur d'une cellule
-SCORE_CELL_GAP = 15  # Espace entre cellules
-SCORE_MENU_PADDING = 20  # Espace entre le contenu et le menu
-SCORE_MENU_MARGIN = 25  # Espace entre le menu et les bords de l'écran
-SCORE_MENU_FONT_SIZE = 11  # Taille de la police du menu
+OVERLAY_CELL_WIDTH = 100  # Largeur d'une cellule
+OVERLAY_CELL_HEIGHT = 10  # Hauteur d'une cellule
+OVERLAY_CELL_GAP = 15  # Espace entre cellules
+OVERLAY_MENU_PADDING = 20  # Espace entre le contenu et le menu
+OVERLAY_MENU_MARGIN = 20  # Espace entre le menu et les bords de l'écran
+OVERLAY_MENU_FONT_SIZE = 11  # Taille de la police du menu
 
 ## Musiques et sons
-MUSICS = {"launch": "../asset/musics/Lancement jeu.wav",
-          "game1": "../asset/musics/Musique_Jeu.wav",
-          "game2": "../asset/musics/Musique_jeu-v2.wav",
-          }
+MUSICS = {
+    "launch": "../asset/musics/Lancement jeu.wav",
+    "game1": "../asset/musics/Musique_Jeu.wav",
+    "game2": "../asset/musics/Musique_jeu-v2.wav",
+}
 
-SOUNDS = {"ball": "../asset/musics/Balle.wav",
-          "clic": "../asset/musics/Clic.wav",
-          "bounce": "../asset/musics/Rebond.wav",
-          "victory": "../asset/musics/Victoire !.wav",
-          "boost":"../asset/musics/boost.wav",
-          "magnet":"../asset/musics/aimant.wav",
-          "water":"../asset/musics/eau.wav"
-          }
+SOUNDS = {
+    "ball": "../asset/musics/Balle.wav",
+    "clic": "../asset/musics/Clic.wav",
+    "bounce": "../asset/musics/Rebond.wav",
+    "victory": "../asset/musics/Victoire !.wav",
+    "boost": "../asset/musics/boost.wav",
+    "magnet": "../asset/musics/aimant.wav",
+    "water": "../asset/musics/eau.wav"
+}
 VOLUME_SOUND = 0.5
 VOLUME_MUSIC = 0.5
