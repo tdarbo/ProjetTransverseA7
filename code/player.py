@@ -28,7 +28,7 @@ class Player(pygame.sprite.Sprite):
         self.rect.center = (int(self.position.x), int(self.position.y))
 
     def draw(self, surface):
-        if self.bonus is not None and self.bonus.active:
+        if self.bonus is not None and self.bonus.name == "BonusFantome" and self.bonus.active:
             # Draw a transparent circle for the ghost bonus
             transparent_color = (*self.color[:3], 100)  # Adjust alpha to make it less opaque
             pygame.draw.circle(self.image, transparent_color, (self.radius, self.radius), self.radius)
@@ -48,3 +48,11 @@ class Player(pygame.sprite.Sprite):
             return
 
         self.bonus.gif.update(overlay)
+
+    def update_map_gifs(self, map:pygame.Surface) -> None:
+        if self.bonus is None:
+            return
+
+        if self.bonus.name == "BonusExplosion" and self.bonus.gif_active is not None:
+            self.bonus.gif_update(map)
+

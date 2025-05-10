@@ -53,6 +53,7 @@ class GifManager:
 """
 class Gif:
     def __init__(self, gif_path:str, x:int, y:int, scale_factor:float, map_anchored:bool, hide:bool) -> None:
+        self.one_use = False
         self.frames = get_gif_frames(gif_path)
         self.path = gif_path
 
@@ -64,6 +65,7 @@ class Gif:
         self.map_anchored = map_anchored
         self.last_update = 0
         self.hide = hide
+        self.time = 500
 
 
     def update(self,surface:pygame.Surface):
@@ -78,18 +80,27 @@ class Gif:
 
         surface.blit(final_frame,(self.x,self.y))
 
-        if abs(self.last_update - pygame.time.get_ticks()) < 500:
+        if abs(self.last_update - pygame.time.get_ticks()) < self.time:
             return
 
         self.last_update = pygame.time.get_ticks()
 
         self.current_frame += 1
         if self.current_frame >= self.max_frame:
-            self.current_frame = 0
+            if self.one_use:
+                self.hide = True
+            else:
+                self.current_frame = 0
+
 
     def reset(self):
         self.current_frame = 0
 
+    def setOneUse(self, value:bool):
+        self.one_use = value
+
+    def setTime(self, time:int):
+        self.time = time
 
 def get_gif_frames(path):
     gif = Image.open(path)

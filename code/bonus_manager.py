@@ -80,12 +80,17 @@ class BonusSpeed(BonusType):
 
 class BonusExplosion(BonusType):
     def __init__(self):
-        super().__init__("BonusExplosion", "red", "../asset/GIF/Bonus_V1.2.gif")
+        super().__init__("BonusExplosion", "red", "../asset/GIF/malus_explosion.gif")
+        self.gif_active = None
 
     def apply_bonus(self, player: Player, players: [Player]) -> None:
         player.bonus = self
 
     def consume_bonus(self, player: Player, players: [Player]) -> None:
+        self.gif_active = Gif("../asset/GIF/explosion.gif", player.position.x - 1500, player.position.y - 1500, 2, True, True)
+        self.gif_active.setTime(350)
+        self.gif_active.reset()
+        self.gif_active.setOneUse(True)
         for target in players:
             if target == player or target.hide:
                 continue
@@ -97,6 +102,8 @@ class BonusExplosion(BonusType):
             if settings.DEBUG_MODE: print(f"[DEBUG] POS {target.name} : {target.position} : {target.velocity}")
         player.bonus = None
 
+    def gif_update(self, surface: pygame.Surface):
+        self.gif_active.update(surface)
 
     def show_usage_message(self) -> None:
         self.broadcast.broadcast("Appuyez sur 'E' pour utiliser le bonus d'explosion !")
@@ -151,6 +158,20 @@ class BonusAimant(BonusType):
 
     def show_usage_message(self) -> None:
         self.broadcast.broadcast("Appuyez sur 'E' pour utiliser le bonus d'aimant pendant ce tour !")
+
+class BonusTeleport(BonusType):
+    def __init__(self):
+        super().__init__("BonusTeleport", "purple", "../asset/GIF/Bonus_V1.2.gif")
+
+    def apply_bonus(self, player: Player, players: [Player]) -> None:
+        player.bonus = self
+
+    def consume_bonus(self, player: Player, players: [Player]) -> None:
+
+        player.bonus = None
+
+    def show_usage_message(self) -> None:
+        self.broadcast.broadcast("Appuyez sur 'E' pour utiliser le bonus de téléportation !")
 
 
 class Bonus:

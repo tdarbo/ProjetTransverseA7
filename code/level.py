@@ -2,7 +2,7 @@ from time import sleep
 
 import pygame
 
-from bonus_manager import BonusSpeed, BonusType, BonusFantome, BonusAimant
+from bonus_manager import BonusSpeed, BonusType, BonusFantome, BonusAimant, BonusExplosion
 from settings import *
 from engine import Engine
 from broadcast import BroadcastManager
@@ -121,7 +121,7 @@ class Level:
         if isinstance(self.current_player.bonus, BonusType):
             self.bonus_gifs.append(self.current_player.bonus.icon_id)
         else:
-            pass#if DEBUG_MODE: self.current_player.bonus = BonusSpeed()
+            if DEBUG_MODE: self.current_player.bonus = BonusExplosion()
 
     def check_turn_end(self):
         """Vérifie si le tour est terminé et passe au joueur suivant."""
@@ -194,6 +194,8 @@ class Level:
         )
 
         self.map.load_gif_bonuses(self.map_surf)
+
+        self.current_player.update_map_gifs(self.map_surf)
 
         for bonus in self.map.bonuses:
             bonus.draw_bonus(self.map_surf)
