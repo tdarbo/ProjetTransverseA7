@@ -21,7 +21,7 @@ class Text:
 
         self.rendered_text = self.font.render(self.text, True, self.color)
         self.rect = self.rendered_text.get_rect()
-        self.set_position(pos, align)
+        self.set_position(self.pos, self.align)
 
     def draw(self, screen):
         """Affiche le texte sur l'écran."""
