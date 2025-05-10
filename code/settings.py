@@ -136,8 +136,12 @@ SCENE_BG_IMAGE = pygame.transform.scale(
     pygame.image.load('../asset/image/terrain_bg.jpg'),
     (WINDOW_WIDTH, WINDOW_HEIGHT)
 )
-SPLASH_BG = pygame.transform.scale(
+SPLASH_SCREEN = pygame.transform.scale(
     pygame.image.load('../asset/image/splash_bg.png'),
+    (WINDOW_WIDTH, WINDOW_HEIGHT)
+)
+SPLASH_BG = pygame.transform.scale(
+    pygame.image.load('../asset/image/empty_splash_bg.png'),
     (WINDOW_WIDTH, WINDOW_HEIGHT)
 )
 
