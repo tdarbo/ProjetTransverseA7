@@ -29,19 +29,6 @@ class Engine:
 
         player.velocity += velocity_vector
 
-    def inversionX(self, player : Player) -> int:
-        if player.velocity.x > 0:
-            return -1
-        else :
-            return 1
-
-    def inversionY(self, player : Player) -> int:
-        if player.velocity.y > 0:
-            return -1
-        else :
-            return 1
-
-
     def update_position(self, player: Player, dt: float) -> None:
         """Met à jour la position du joueur en fonction de sa vitesse."""
         bonus_modifier = 1
@@ -269,7 +256,7 @@ class Engine:
                 # Le joueur est à droite de la tile, on le décale vers la droite
                 player.position.x += pen_x
             # On inverse la vélocité en X
-            player.velocity.x = self.inversionX(player) * MAX_PLAYER_VELOCITY.length()
+            player.velocity.x = -2 * player.velocity.x
 
         # Résolution de la collision en Y
         else:
@@ -281,7 +268,7 @@ class Engine:
                 player.position.y += pen_y
 
             # On Inverse la vélocité en Y
-            player.velocity.y = self.inversionY(player) * MAX_PLAYER_VELOCITY.length()
+            player.velocity.y = -2 * player.velocity.y
 
     def resolve_player_speed_right(self, player: Player) -> None:
         """
