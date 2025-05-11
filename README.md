@@ -47,5 +47,5 @@ Il y a :
 - ```tile``` qui permet de représenter les différentes surfaces comme l'herbe, le sable ou la glace.
 - ```ui_text``` qui permet la création des textes.
 
-## ⛳Comment lancer le jeu
+## ⛳Comment installer et lancer le jeu
 (à faire)
