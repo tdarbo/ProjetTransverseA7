@@ -17,7 +17,6 @@ class Game:
         pygame.mixer.init()  # Initialisation du système audio de pygame
         pygame.display.set_caption(GAME_NAME)  # Titre de la fenêtre
         pygame.event.set_allowed([QUIT, KEYDOWN, KEYUP, K_SPACE, K_h, K_e, MOUSEBUTTONDOWN, MOUSEMOTION, MOUSEBUTTONUP])
-        # flags = FULLSCREEN | DOUBLEBUF
 
         # Chargez l'image du logo
         logo_path = '../asset/image/goat_logo.png'  # Chemin direct vers le logo
