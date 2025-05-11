@@ -171,8 +171,9 @@ class BonusAimant(BonusType):
         self.start_time = 0
 
     def isActive(self):
-        if time.time() - self.start_time > 10:
+        if time.time() - self.start_time > 5:
             self.active = False
+
 
         return self.active
 
@@ -185,7 +186,7 @@ class BonusAimant(BonusType):
         self.start_time = time.time()
 
     def next_turn(self,player: Player):
-        if self.active:
+        if self.start_time != 0:
             player.bonus = None
 
     def show_usage_message(self) -> None:
@@ -201,7 +202,7 @@ class Bonus:
         self.x = obj.x
         self.y = obj.y
 
-        self.bonus = random.choice(BonusList)()
+        self.bonus = BonusAimant()#random.choice(BonusList)()
 
         self.available = True
         self.last_pick = 0
