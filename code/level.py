@@ -137,8 +137,8 @@ class Level:
             if not self.cur_player.finished:
                 self.broadcast_manager.broadcast(f"Tour du joueur {self.cur_player_index + 1}")
                 print(f"Tour du joueur {self.cur_player_index + 1}")
-                if isinstance(self.current_player.bonus, BonusFantome) or isinstance(self.current_player.bonus, BonusAimant):
-                    self.current_player.bonus.next_turn(self.current_player)
+                if isinstance(self.cur_player.bonus, BonusFantome) or isinstance(self.cur_player.bonus, BonusAimant):
+                    self.cur_player.bonus.next_turn(self.cur_player)
                 self.centerOnPlayer(self.cur_player)
                 return
         # Aucun joueur actif
@@ -239,9 +239,9 @@ class Level:
         self.draw_map(screen)
         self.score_manager.draw(self.overlay_surf)
         self.broadcast_manager.draw(self.overlay_surf)
-        self.current_player.update_gifs(self.overlay_surf)
+        self.cur_player.update_gifs(self.overlay_surf)
         self.render_debug_info(self.overlay_surf,self.map.camera)
-        self.render_physics_inspector(self.overlay_surf,self.map.camera,self.current_player)
+        self.render_physics_inspector(self.overlay_surf,self.map.camera,self.cur_player)
         if self.debug_grid: self.render_tile_grid(self.overlay_surf,self.map.camera)
         screen.blit(self.overlay_surf, (0, 0))
         # print(self.map.camera.is_world_position_on_screen(self.cur_player.position.x, self.cur_player.position.y))
@@ -269,7 +269,7 @@ class Level:
 
     def DEBUG_LOGS(self):
         if DEBUG_MODE:
-            pass#if isinstance(self.current_player.bonus, BonusFantome): print(self.current_player.bonus)
+            pass#if isinstance(self.cur_player.bonus, BonusFantome): print(self.cur_player.bonus)
 
     def render_debug_info(self, screen, camera):
         """

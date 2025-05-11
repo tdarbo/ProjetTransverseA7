@@ -57,7 +57,8 @@ class PlayScene(Scene):
     def select_maps(self, count):
         """Sélectionne 'count' maps uniques aléatoirement."""
         maps = list(self.game.maps.values())
-        self.selected_maps = random.sample(maps, count)
+        if DEBUG_MODE: self.selected_maps = maps
+        else: self.selected_maps = random.sample(maps, count)
 
     def create_players(self, names):
         """Instancie les joueurs avec leur couleur et nom."""
