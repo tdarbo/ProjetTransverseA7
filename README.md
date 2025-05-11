@@ -2,7 +2,6 @@
 
 ***GOAT*** est un jeu de golf en 2D en tour par tour et jouable jusqu'à 5. Dans ce jeu, votre réfléxion sera mise à l'épreuve, à vous d'éviter les obstacles, de récupérer les bonus, et surtout, d'atteindre le trou en faisant le moins de coup possible !
 
-
 ## 🏌🏻Notre projet
 
 **L'objectif :**
@@ -27,7 +26,7 @@
 - Activer les bonus *E*
 
 ## 💻 Organisation du code
-Notre code est composé de **19** classes différentes.
+Notre code est composé de **18** classes différentes.
 Il y a :
 - ```bonus_manager``` qui permet de gérer les bonus et les malus.
 - ```broadcast``` qui permet d'afficher des messages dans le jeu.
@@ -48,3 +47,5 @@ Il y a :
 - ```tile``` qui permet de représenter les différentes surfaces comme l'herbe, le sable ou la glace.
 - ```ui_text``` qui permet la création des textes.
 
+## ⛳Comment lancer le jeu
+(à faire)
