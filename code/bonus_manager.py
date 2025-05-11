@@ -3,7 +3,7 @@ import time
 
 import pygame
 
-from code.settings import DEBUG_MODE
+from settings import DEBUG_MODE
 from settings import OVERLAY_MENU_MARGIN, SOUNDS
 from gif_manager import Gif
 import settings
