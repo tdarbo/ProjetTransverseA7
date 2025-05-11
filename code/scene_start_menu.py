@@ -11,6 +11,7 @@ class StartMenuScene(Scene):
         aux autres scènes : configuration, règles, paramètres ou quitter.
         """
         super().__init__(height_index, game)
+        self.game = game
         self.build_main_menu_panel()  # Construction de l'interface du menu principal
 
 
@@ -73,9 +74,9 @@ class StartMenuScene(Scene):
         )
 
         # Bouton "Paramètres" positionné sous "Règles"
-        settings_btn = pygame_gui.elements.UIButton(
+        credits_btn = pygame_gui.elements.UIButton(
             relative_rect=pygame.Rect((0, INPUTS_GAP), (INPUT_WIDTH, INPUT_HEIGHT)),
-            text='Paramètres',
+            text='Crédits',
             manager=self.ui_manager,
             container=panel,
             anchors={
@@ -84,7 +85,7 @@ class StartMenuScene(Scene):
                 'centerx': 'centerx',
                 'top_target': rules_btn
             },
-            object_id=ObjectID(class_id='button_primary', object_id='#main_menu_settings_btn')
+            object_id=ObjectID(class_id='button_primary', object_id='#main_menu_credits_btn')
         )
 
         # Bouton "Quitter" positionné sous "Paramètres"
@@ -97,16 +98,10 @@ class StartMenuScene(Scene):
                 'top': 'top',
                 'bottom': 'top',
                 'centerx': 'centerx',
-                'top_target': settings_btn
+                'top_target': credits_btn
             },
             object_id=ObjectID(class_id='button_secondary', object_id='#main_menu_exit_btn')
         )
-
-
-        # Affichage console utile en mode debug
-        if DEBUG_MODE:
-            print(f"[{self.__class__.__name__}] Main menu UI created.")
-
 
     def process_event(self, event):
         """
@@ -120,9 +115,9 @@ class StartMenuScene(Scene):
                     print("Play button pressed.")
                 self.scene_manager.change("config_scene")  # Transition vers la scène de configuration
             elif "#main_menu_rules_btn" in ids:
-                self.scene_manager.change("rules_scene")  # Transition vers la scène des règles
-            elif "#main_menu_settings_btn" in ids:
-                self.scene_manager.change("settings_scene")  # Transition vers la scène des paramètres
+                self.game.toggle_rules_window()  # Affiche de la fenêtre des règles
+            elif "#main_menu_credits_btn" in ids:
+                self.game.toggle_credits_window()  # Affiche de la fenêtre des crédits
             elif "#main_menu_exit_btn" in ids:
                 self.game.running = False
 

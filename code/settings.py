@@ -146,6 +146,16 @@ SPLASH_BG = pygame.transform.scale(
     (WINDOW_WIDTH, WINDOW_HEIGHT)
 )
 
+RULES_IMAGE = pygame.transform.scale(
+    pygame.image.load('../asset/image/rules_image.png'),
+    (WINDOW_WIDTH, WINDOW_HEIGHT)
+)
+
+CREDITS_IMAGE = pygame.transform.scale(
+    pygame.image.load('../asset/image/credits_image.png'),
+    (WINDOW_WIDTH, WINDOW_HEIGHT)
+)
+
 # DEBUG
 DEBUG_MODE = False
 DEBUG_CONFIG = {'players': 2, 'holes': 4, 'names': ["player0","player1"]}

@@ -75,7 +75,7 @@ class InterfaceManager:
         :param interface_name: Identifier of the interface to toggle.
         """
         if interface_name in self.interfaces:
-            if self.interfaces[interface_name].is_visible:
+            if self.interfaces[interface_name].visible:
                 self.hide(interface_name)
                 if DEBUG_MODE:
                     print(f"[InterfaceManager] Interface {interface_name} hidden.")
