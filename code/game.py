@@ -1,3 +1,5 @@
+import os
+
 from settings import *
 from pygame.locals import *
 from scene_config import ConfigurationScene
@@ -16,6 +18,13 @@ class Game:
         pygame.display.set_caption(GAME_NAME)  # Titre de la fenêtre
         pygame.event.set_allowed([QUIT, KEYDOWN, KEYUP, K_SPACE, K_h, K_e, MOUSEBUTTONDOWN, MOUSEMOTION, MOUSEBUTTONUP])
         # flags = FULLSCREEN | DOUBLEBUF
+
+        # Chargez l'image du logo
+        icon_path = '../asset/image/goat_logo.png'  # Chemin direct vers le logo
+        icon = pygame.image.load(icon_path)
+
+        # Définissez l'icône de la fenêtre (doit être fait AVANT set_mode)
+        pygame.display.set_icon(icon)
 
         flags = DOUBLEBUF
         self.screen = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT), flags, 24)
