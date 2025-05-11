@@ -10,24 +10,22 @@ class ScoreManager:
     """
 
     def __init__(self, players: list[Player], holes_number: int):
-        self.players: list[Player] = players # Liste des "objets" joueurs
-        self.players_number = len(players) # Nombre total de joueurs
-        self.holes_number = holes_number # Nombre de trous à jouer
-        self.current_hole = 0 # Numéro du trou en train d'être joué
-        self.score = self.create_dictionary() # Dictionnaire contenant tous les scores par joueur
+        self.players: list[Player] = players  # Liste des "objets" joueurs
+        self.players_number = len(players)  # Nombre total de joueurs
+        self.holes_number = holes_number  # Nombre de trous à jouer
+        self.current_hole = 0  # Numéro du trou en train d'être joué
+        self.score = self.create_dictionary()  # Dictionnaire contenant tous les scores par joueur
         # ex : self.score = {Player: {"score": [0,0,0], "total": 0}}
-        self.collapsed = True # Utilisé pour masquer/afficher l'affichage du score
+        self.collapsed = True  # Utilisé pour masquer/afficher l'affichage du score
         # Dimensions totales du menu de score
-        self.menu_width = (
-                OVERLAY_CELL_WIDTH * (self.players_number + 1) +
-                OVERLAY_CELL_GAP * self.players_number +
-                OVERLAY_MENU_PADDING * 2
-        )
-        self.menu_height = (
-                OVERLAY_CELL_HEIGHT * (self.holes_number + 2) +
-                OVERLAY_CELL_GAP * (self.holes_number + 1) +
-                OVERLAY_MENU_PADDING * 2
-        )
+        self.menu_width = (OVERLAY_CELL_WIDTH * (self.players_number + 1) +
+                           OVERLAY_CELL_GAP * self.players_number +
+                           OVERLAY_MENU_PADDING * 2
+                           )
+        self.menu_height = (OVERLAY_CELL_HEIGHT * (self.holes_number + 2) +
+                            OVERLAY_CELL_GAP * (self.holes_number + 1) +
+                            OVERLAY_MENU_PADDING * 2
+                            )
 
     def set_current_hole(self, hole_number):
         self.current_hole = hole_number
@@ -114,26 +112,23 @@ class ScoreManager:
                     text_color: str):
         if column_index == -1:
             # Première colonne : on affiche le texte de l’en-tête "Trou n°"
-            Text(
-                text="Trou n°",
-                pos=(cell_x, cell_y),
-                color=text_color,
-                font_size=OVERLAY_MENU_FONT_SIZE
-            ).draw(screen)
+            Text(text="Trou n°",
+                 pos=(cell_x, cell_y),
+                 color=text_color,
+                 font_size=OVERLAY_MENU_FONT_SIZE
+                 ).draw(screen)
         else:
             # En-tête joueur : on affiche un cercle de couleur et son nom (ou "Vous" par défaut)
-            pygame.draw.circle(
-                surface=screen,
-                color=player.color,
-                center=(cell_x, cell_y + 5),
-                radius=5
-            )
-            Text(
-                text=player.name if self.players[column_index].name else "Vous",
-                pos=(cell_x + 12, cell_y),
-                color=text_color,
-                font_size=OVERLAY_MENU_FONT_SIZE
-            ).draw(screen)
+            pygame.draw.circle(surface=screen,
+                               color=player.color,
+                               center=(cell_x, cell_y + 5),
+                               radius=6
+                               )
+            Text(text=player.name if self.players[column_index].name else "Vous",
+                 pos=(cell_x + 13, cell_y),
+                 color=text_color,
+                 font_size=OVERLAY_MENU_FONT_SIZE
+                 ).draw(screen)
 
     def draw_body(self, screen: pygame.Surface, column_index: int, player: Player, cell_x: int, start_y: int,
                   text_color: str):
@@ -143,24 +138,22 @@ class ScoreManager:
 
             if column_index == -1:
                 # Première colonne : on affiche le numéro de chaque trou
-                Text(
-                    text=str(row_index + 1),
-                    pos=(cell_x, cell_y),
-                    color=text_color,
-                    font_size=OVERLAY_MENU_FONT_SIZE
-                ).draw(screen)
+                Text(text=str(row_index + 1),
+                     pos=(cell_x, cell_y),
+                     color=text_color,
+                     font_size=OVERLAY_MENU_FONT_SIZE
+                     ).draw(screen)
             else:
                 # Cellule score du joueur pour ce trou
                 # Le score du joueur à un trou est une valeur dans le tableau à la clé "score" dans le dico associé au joueur
                 # On récupère ce score à l'index du numéro du trou dans le tableau (ici row_index).
                 # Rappel de la structure : score = {Player1: {"score": [...], "total": 0}, Player2: ...}
                 score = str(self.score[player]["score"][row_index])
-                Text(
-                    text=score if score != "0" else "-",  # Affiche un tiret si le score est nul
-                    pos=(cell_x, cell_y),
-                    color=text_color,
-                    font_size=OVERLAY_MENU_FONT_SIZE
-                ).draw(screen)
+                Text(text=score if score != "0" else "-",  # Affiche un tiret si le score est nul
+                     pos=(cell_x, cell_y),
+                     color=text_color,
+                     font_size=OVERLAY_MENU_FONT_SIZE
+                     ).draw(screen)
 
     def draw_footer(self, screen: pygame.Surface, column_index: int, player: Player, cell_x: int, start_y: int,
                     text_color: str):
@@ -169,23 +162,21 @@ class ScoreManager:
 
         if column_index == -1:
             # Première colonne : on affiche "Total" en bas
-            Text(
-                text="Total",
-                pos=(cell_x, cell_y),
-                color=text_color,
-                font_size=OVERLAY_MENU_FONT_SIZE
-            ).draw(screen)
+            Text(text="Total",
+                 pos=(cell_x, cell_y),
+                 color=text_color,
+                 font_size=OVERLAY_MENU_FONT_SIZE
+                 ).draw(screen)
         else:
             # Affichage du total du joueur
             # Le total est une valeur à la clé "total" dans le dico associé au joueur
             # Rappel de la structure : score = {Player1: {"score": [...], "total": 0}, Player2: ...}
             total = str(self.score[player]["total"])
-            Text(
-                text=total if total != "0" else "-",  # Tiret si score encore à 0
-                pos=(cell_x, cell_y),
-                color=text_color,
-                font_size=OVERLAY_MENU_FONT_SIZE
-            ).draw(screen)
+            Text(text=total if total != "0" else "-",  # Tiret si score encore à 0
+                 pos=(cell_x, cell_y),
+                 color=text_color,
+                 font_size=OVERLAY_MENU_FONT_SIZE
+                 ).draw(screen)
 
 
 if __name__ == '__main__':
