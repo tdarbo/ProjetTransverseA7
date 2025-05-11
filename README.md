@@ -53,7 +53,7 @@ Il y a :
 Pour récupérer le code du jeu, ouvrez votre terminal et exécutez la commande suivante :
 
 ```bash
-git clone https://github.com/GardeDeNuitComplete/GOAT.git
+git clone https://github.com/tdarbo/ProjetTransverseA7.git
 cd GOAT
 ```
 
