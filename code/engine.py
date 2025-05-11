@@ -18,7 +18,7 @@ class Engine:
 
     def resolve_shot(self, player: Player, velocity_vector: Vector):
         if isinstance(player.bonus, BonusSpeed):
-            player.bonus.consume_bonus(player, self.players)
+            player.bonus.consume_bonus(player, self.players, self.level.overlay_surf)
 
         # if self.current_player.speed_bonus:
         #    new_velocity *= 2

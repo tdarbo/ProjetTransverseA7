@@ -152,7 +152,7 @@ class BonusFantome(BonusType):
     def next_turn(self,player: Player):
         if self.active:
             self.active = False
-            self.consume_bonus(player, [])
+            self.consume_bonus(player, [], None)
             self.broadcast.broadcast("Vous n'êtes plus invisible !")
         else:
             self.active = True
