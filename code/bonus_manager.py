@@ -207,7 +207,7 @@ class Bonus:
         self.x = obj.x
         self.y = obj.y
 
-        self.bonus = BonusAimant(self.broadcast)#random.choice(BonusList)(self.broadcast)
+        self.bonus = random.choice(BonusList)(self.broadcast)
 
         self.available = True
         self.last_pick = 0
