@@ -201,7 +201,7 @@ class Bonus:
         self.x = obj.x
         self.y = obj.y
 
-        self.bonus = get_random_bonus()
+        self.bonus = random.choice(BonusList)()
 
         self.available = True
         self.last_pick = 0
@@ -225,14 +225,14 @@ class Bonus:
             self.respawn_bonus()
 
     def respawn_bonus(self) -> None:
-        self.bonus = get_random_bonus()
+        self.bonus = random.choice(BonusList)() # Chaque slot à bonus à un bonus aléatoire
         self.available = True
         self.last_pick = 0
         self.gif.hide = False
 
     def draw_bonus(self, surface: pygame.Surface):
         if self.available:
-            self.bonus.draw_bonus(surface, self.x, self.y)
+            self.gif.update(surface)
 
     def print_bonus_log(self):
         print(f"""
@@ -249,6 +249,3 @@ Bonus :
 
 BonusList = [BonusExplosion,BonusSpeed,BonusAimant, BonusFantome]
 
-
-def get_random_bonus() -> BonusType:
-    return random.choice(BonusList)()
