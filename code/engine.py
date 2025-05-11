@@ -1,3 +1,6 @@
+import math
+import random
+
 from pygame.examples.glcube import init_gl_stuff_old
 
 from bonus_manager import BonusSpeed, BonusFantome, BonusAimant
@@ -251,6 +254,9 @@ class Engine:
         pen_x = intersection.width
         pen_y = intersection.height
 
+        # Variation aléatoire de l'angle (± 1 degré)
+        angle_variation = random.uniform(-1, 1) * (math.pi / 180)  # Conversion degrés -> radians
+
         # Résolution de la collision en X
         if pen_x < pen_y:
             if player.rect.centerx < tile.rect.centerx:
@@ -259,8 +265,21 @@ class Engine:
             else:
                 # Le joueur est à droite de la tile, on le décale vers la droite
                 player.position.x += pen_x
-            # On inverse la vélocité en X
-            player.velocity.x = -2 * player.velocity.x
+
+            # On inverse la vélocité en X avec une légère variation d'angle
+            vx = -2 * player.velocity.x
+            vy = player.velocity.y
+
+            # Calcul de l'amplitude et de l'angle actuel
+            speed = math.sqrt(vx ** 2 + vy ** 2)
+            angle = math.atan2(vy, vx)
+
+            # Application de la variation d'angle
+            angle += angle_variation
+
+            # Recalcul des composantes de la vélocité
+            player.velocity.x = speed * math.cos(angle)
+            player.velocity.y = speed * math.sin(angle)
 
         # Résolution de la collision en Y
         else:
@@ -271,8 +290,20 @@ class Engine:
                 # Le joueur est en dessous de la tile, on le décale vers le bas
                 player.position.y += pen_y
 
-            # On Inverse la vélocité en Y
-            player.velocity.y = -2 * player.velocity.y
+            # On inverse la vélocité en Y avec une légère variation d'angle
+            vx = player.velocity.x
+            vy = -2 * player.velocity.y
+
+            # Calcul de l'amplitude et de l'angle actuel
+            speed = math.sqrt(vx ** 2 + vy ** 2)
+            angle = math.atan2(vy, vx)
+
+            # Application de la variation d'angle
+            angle += angle_variation
+
+            # Recalcul des composantes de la vélocité
+            player.velocity.x = speed * math.cos(angle)
+            player.velocity.y = speed * math.sin(angle)
 
     def resolve_player_speed_right(self, player: Player) -> None:
         """
