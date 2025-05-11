@@ -2,7 +2,7 @@ from math import cos, pi
 
 
 class CameraAnimator:
-    def __init__(self, speed_factor=2.0):
+    def __init__(self, speed_factor=2.00):
         self.animations = []
         self.speed_factor = speed_factor  # Facteur de vitesse par défaut (2x plus rapide)
 

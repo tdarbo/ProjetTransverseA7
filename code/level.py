@@ -343,7 +343,7 @@ class Level:
         x /= p_count
         y /= p_count
 
-        camera.animator.posToPosAndZoom(camera, (x, y), MIN_ZOOM, 7)
+        camera.animator.posToPosAndZoom(camera, (x, y), MIN_ZOOM, 15)
 
     def DEBUG_LOGS(self):
         if DEBUG_MODE:
