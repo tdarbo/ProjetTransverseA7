@@ -2,9 +2,9 @@ from math import cos, pi
 
 
 class CameraAnimator:
-    def __init__(self, speed_factor=2.0):
+    def __init__(self, speed_factor=2.00):
         self.animations = []
-        self.speed_factor = speed_factor  # Default speed factor is 1.0 (normal speed)
+        self.speed_factor = speed_factor  # Facteur de vitesse par défaut (2x plus rapide)
 
     def set_speed_factor(self, speed_factor):
         """Sets the global speed factor for all animations."""
@@ -17,7 +17,7 @@ class CameraAnimator:
     def update(self):
         """Met à jour toutes les animations actives."""
         for animation in self.animations[:]:
-            # Pass the speed factor to the animation update
+            # On passe le facteur de vitesse à chaque animation
             animation.update(self.speed_factor)
             if animation.is_finished():
                 self.animations.remove(animation)
@@ -46,10 +46,10 @@ class CameraMoveAnimation:
         self.elapsed_time = 0
 
     def update(self, speed_factor=1.0):
-        # Increment by speed_factor instead of just 1
+        # On augmente le temps écoulé selon le facteur de vitesse
         self.elapsed_time += speed_factor
         t = min(self.elapsed_time / self.duration, 1)
-        # Gestion accélération/décélération du mouvement
+        # Formule pour avoir un mouvement fluide avec accélération/décélération
         t = 0.5 - 0.5 * cos(t * pi)
         self.camera.offset_X = self.start_x + (self.target_x - self.start_x) * t
         self.camera.offset_Y = self.start_y + (self.target_y - self.start_y) * t
@@ -67,7 +67,7 @@ class CameraZoomAnimation:
         self.elapsed_time = 0
 
     def update(self, speed_factor=1.0):
-        # Increment by speed_factor instead of just 1
+        # On accélère l'animation selon le facteur de vitesse global
         self.elapsed_time += speed_factor
         t = min(self.elapsed_time / self.duration, 1)
         t = 0.5 - 0.5 * cos(t * pi)
@@ -79,11 +79,12 @@ class CameraZoomAnimation:
 
 class CameraMoveZoomAnimation:
     def __init__(self, camera, target_pos, target_zoom, duration):
+        # On combine les deux animations pour un effet simultané
         self.move_anim = CameraMoveAnimation(camera, target_pos, duration)
         self.zoom_anim = CameraZoomAnimation(camera, target_zoom, duration)
 
     def update(self, speed_factor=1.0):
-        # Pass the speed factor to both animations
+        # Application du même facteur aux deux animations
         self.move_anim.update(speed_factor)
         self.zoom_anim.update(speed_factor)
 

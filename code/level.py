@@ -1,7 +1,13 @@
 from settings import *
-from bonus_manager import BonusSpeed, BonusType, BonusFantome, BonusAimant, BonusExplosion
-from engine import Engine
+from bonus_manager import BonusSpeed, BonusType
 import math
+from time import sleep
+
+import pygame
+
+from bonus_manager import BonusSpeed, BonusType, BonusFantome, BonusAimant, BonusExplosion
+from bonus_manager import BonusSpeed, BonusType
+from engine import Engine
 from score import ScoreManager
 from broadcast import BroadcastManager
 from player import Player
@@ -134,7 +140,6 @@ class Level:
 
     def update_game_elements(self, dt):
         """Met à jour les différents éléments du jeu"""
-        self.DEBUG_LOGS()
         self.update_bonuses()
         self.map.camera.animator.update()
         self.engine.update(dt)
@@ -152,8 +157,6 @@ class Level:
         # Gestion des bonus du joueur actuel
         if isinstance(self.cur_player.bonus, BonusType):
             self.bonus_gifs.append(self.cur_player.bonus.icon_id)
-        else:
-             if DEBUG_MODE: self.cur_player.bonus = BonusExplosion()
 
     def check_turn_end(self):
         """Vérifie si le tour est terminé et passe au joueur suivant."""
@@ -179,12 +182,12 @@ class Level:
             self.cur_player = self.players[self.cur_player_index]
             if not self.cur_player.finished:
                 # Si le joueur trouvé n'a pas terminé, on démarre son tour
-                self.start_player_turn()
-                if isinstance(self.cur_player.bonus, BonusFantome) or isinstance(self.cur_player.bonus, BonusAimant):
+                if isinstance(self.cur_player.bonus, BonusFantome) or isinstance(self.cur_player.bonus, BonusAimant) or isinstance(self.cur_player.bonus, BonusSpeed):
                     self.cur_player.bonus.next_turn(self.cur_player)
+                self.start_player_turn()
                 return
-
         # Si on arrive ici, c'est que tous les joueurs ont terminé
+        self.reset_bonuses()
         self.finished = True
 
     def start_player_turn(self):
@@ -255,6 +258,7 @@ class Level:
             radius=20
         )
 
+
         # Dessiner les bonus
         for bonus in self.map.bonuses:
             bonus.draw_bonus(self.map_surf)
@@ -315,6 +319,10 @@ class Level:
         screen.blit(self.overlay_surf, (0, 0))
         # print(self.map.camera.is_world_position_on_screen(self.cur_player.position.x, self.cur_player.position.y))
 
+    def reset_bonuses(self):
+        for player in self.players:
+            player.bonus = None
+
     def centerOnPlayer(self, player: Player):
         """Centre la caméra sur un joueur"""
         x = player.position.x
@@ -335,8 +343,7 @@ class Level:
         x /= p_count
         y /= p_count
 
-        camera.animator.posToPosAndZoom(camera, (x, y), MIN_ZOOM, 7)
-
+        camera.animator.posToPosAndZoom(camera, (x, y), MIN_ZOOM, 15)
 
     def DEBUG_LOGS(self):
         if DEBUG_MODE:

@@ -1,117 +1,89 @@
-
-from PIL import Image
 import pygame
-from PIL.ImageOps import scale
+import pygame.image
+# Il faut utiliser PIL pour la lecture des GIFs, car pygame
+# ne peut pas lire directement plusieurs frames d'un GIF
+from PIL import Image
 
-"""
-class GifManager:
-    def __init__(self):
-        self.gifs = []
-        self.unique_gifs = {}
+# Dictionnaire de cache pour ne pas recharger les mêmes GIFs plusieurs fois
+GIF_CACHE = {}
+
+def get_gif_frames(path: str, scale_factor: float = 1.0):
+    """Charge les frames d'un GIF avec mise en cache et préscaling en utilisant seulement pygame"""
+
+    cache_key = f"{path}_{scale_factor}"
+    # Si le GIF est déjà chargé, on le réutilise
+    if cache_key in GIF_CACHE:
+        return GIF_CACHE[cache_key]
+
+    try:
+        gif = Image.open(path)  # On ouvre le fichier GIF avec Pillow
+        frame_data = []  # Liste des frames (surface pygame)
+        duration = []  # Liste des durées pour chaque frame (en ms)
+
+        for frame in range(gif.n_frames):
+            gif.seek(frame)  # On se "positionne" sur la frame n
+            frame = gif.convert("RGBA")
+
+            # Conversion de l'image PIL en Surface Pygame
+            pygame_image = pygame.image.frombytes(frame.tobytes(), frame.size, "RGBA")
+
+            # On redimensionne la frame si nécessaire
+            if scale_factor != 1.0:
+                pygame_image = pygame.transform.scale_by(pygame_image, scale_factor)
+
+            frame_data.append(pygame_image)
+            duration.append(gif.info.get('duration', 100))  # 100 ms par défaut
+
+        frames = {'data': frame_data, 'duration': duration}
+        GIF_CACHE[cache_key] = frames  # Mise en cache de la frame
+        return frames
+
+    except Exception as e:
+        print(f"Erreur lors du chargement du GIF {path}: {str(e)}")
+        return {'data': [], 'duration': []}
 
 
-    def show_gif(self,path:str, x:int, y:int, scale_factor:float, map_anchored:bool):
-        s_gif = self.gifs.get(path)
-        if isinstance(s_gif,Gif):
-            s_gif.hide = False
-            s_gif.x = x
-            s_gif.y = y
-            s_gif.scale = scale_factor
-            s_gif.map_anchored = map_anchored
-        else:
-            n_gif = Gif(path, x, y, scale_factor, map_anchored, False)
-            self.gifs[path] = n_gif
-
-    def hide_gif(self,path:str):
-        s_gif = self.gifs.get(path)
-        if isinstance(s_gif,Gif):
-            s_gif.hide = True
-
-
-    def add_gif(self, gif) -> None:
-        self.gifs.append(gif)
-
-
-    def update_all(self, map_surf:pygame.Surface, overlay_surf:pygame.Surface) -> None:
-        for gif in self.gifs:
-            if gif.map_anchored:
-                gif.update(map_surf)
-            else:
-                gif.update(overlay_surf)
-
-    def hide_all(self):
-        for gif in self.gifs:
-            gif.hide = True
-
-    def show_all(self):
-        for gif in self.gifs:
-            gif.hide = False
-
-    def reset_all(self):
-        for gif in self.gifs:
-            gif.reset()
-"""
 class Gif:
-    def __init__(self, gif_path:str, x:int, y:int, scale_factor:float, map_anchored:bool, hide:bool) -> None:
-        self.one_use = False
-        self.frames = get_gif_frames(gif_path)
+    def __init__(self, gif_path: str, x: int, y: int, scale_factor: float, map_anchored: bool, hide: bool) -> None:
+        self.gif_data = get_gif_frames(gif_path, scale_factor)
+        self.frames = self.gif_data['data']
+        self.durations = self.gif_data['duration']
         self.path = gif_path
 
         self.current_frame = 0
-        self.max_frame = len(self.frames)
+        self.max_frame = len(self.frames) if self.frames else 0
 
-        self.x, self.y, self.scale = x,y,scale_factor
-
+        self.x, self.y = x, y
         self.map_anchored = map_anchored
-        self.last_update = 0
         self.hide = hide
-        self.time = 500
-
-
-    def update(self,surface:pygame.Surface):
-
-
-        if self.hide:
-            return
-
-        frame = self.frames[self.current_frame]
-
-        final_frame = pygame.transform.scale_by(frame, self.scale)
-
-        surface.blit(final_frame,(self.x,self.y))
-
-        if abs(self.last_update - pygame.time.get_ticks()) < self.time:
-            return
 
         self.last_update = pygame.time.get_ticks()
 
-        self.current_frame += 1
-        if self.current_frame >= self.max_frame:
-            if self.one_use:
-                self.hide = True
-            else:
-                self.current_frame = 0
+        self.current_duration = self.durations[0] if self.max_frame > 0 else 100
 
+    def update(self, surface: pygame.Surface):
+        if self.hide or self.max_frame == 0:
+            return
+
+        # Afficher la frame actuelle
+        surface.blit(self.frames[self.current_frame], (self.x, self.y))
+
+        current_time = pygame.time.get_ticks()
+        if current_time - self.last_update < self.current_duration:
+            return
+
+        self.last_update = current_time
+
+        # Passer à la frame suivante
+        self.current_frame = (self.current_frame + 1) % self.max_frame
+        # Mettre à jour la durée pour la prochaine frame
+        self.current_duration = self.durations[self.current_frame]
 
     def reset(self):
+        """Réinitialise l'animation"""
         self.current_frame = 0
+        self.last_update = pygame.time.get_ticks()
 
-    def setOneUse(self, value:bool):
-        self.one_use = value
-
-    def setTime(self, time:int):
-        self.time = time
-
-def get_gif_frames(path):
-    gif = Image.open(path)
-    frames = []
-
-    try:
-        while True:
-            frame = gif.convert("RGBA")
-            pygame_image = pygame.image.fromstring(frame.tobytes(), frame.size, frame.mode)
-            frames.append(pygame_image)
-            gif.seek(gif.tell() + 1)
-    except:
-        pass
-    return frames
+    def set_position(self, x: int, y: int):
+        """Permet de repositionner le GIF"""
+        self.x, self.y = x, y
