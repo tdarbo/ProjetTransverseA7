@@ -15,6 +15,10 @@ class Game:
         pygame.mixer.init()  # Initialisation du système audio de pygame
         pygame.display.set_caption(GAME_NAME)  # Titre de la fenêtre
         pygame.event.set_allowed([QUIT, KEYDOWN, KEYUP, K_SPACE, K_h, K_e, MOUSEBUTTONDOWN, MOUSEMOTION, MOUSEBUTTONUP])
+        # flags = FULLSCREEN | DOUBLEBUF
+        flags = DOUBLEBUF
+        self.screen = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT), flags | NOFRAME, 24)
+
 
         self.screen = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT), DOUBLEBUF, 24)
         self.running = True
@@ -157,7 +161,6 @@ class Game:
         self.interface_manager.add("rules", container)
 
     def toggle_rules_window(self):
-        """Affiche ou masque la fenêtre des règles"""
         self.interface_manager.toggle("rules")
 
     def build_credits_window(self):

@@ -173,7 +173,7 @@ class BonusAimant(BonusType):
     def __init__(self, broadcast_manager:BroadcastManager):
         super().__init__("BonusAimant", "yellow", "../asset/GIF/Bonus_aimant.gif", broadcast_manager)
         self.active = False
-        self.start_time = 0
+        self.start_time = -1
 
     def isActive(self):
         if time.time() - self.start_time > 5:
@@ -184,13 +184,13 @@ class BonusAimant(BonusType):
         player.bonus = self
 
     def consume_bonus(self, player: Player, players: [Player], overlay:pygame.Surface) -> None:
-        if self.active:
+        if not self.active:
             self.active = True
             self.sound.play_sound(SOUNDS["magnet"])
             self.start_time = time.time()
 
     def next_turn(self,player: Player):
-        if self.start_time != 0:
+        if self.start_time != -1:
             player.bonus = None
 
     def show_usage_message(self) -> None:
@@ -207,7 +207,7 @@ class Bonus:
         self.x = obj.x
         self.y = obj.y
 
-        self.bonus = BonusFantome(self.broadcast)#random.choice(BonusList)()
+        self.bonus = BonusAimant(self.broadcast)#random.choice(BonusList)(self.broadcast)
 
         self.available = True
         self.last_pick = 0
