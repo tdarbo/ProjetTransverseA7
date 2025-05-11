@@ -16,7 +16,8 @@ class Game:
         pygame.event.set_allowed([QUIT, KEYDOWN, KEYUP, K_SPACE, K_h, K_e, MOUSEBUTTONDOWN, MOUSEMOTION, MOUSEBUTTONUP])
         # flags = FULLSCREEN | DOUBLEBUF
         flags = DOUBLEBUF
-        self.screen = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT), flags, 24)
+        self.screen = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT), flags | NOFRAME, 24)
+
         self.running = True
         self.clock = pygame.time.Clock()
         self.dt = DELTA_TIME
