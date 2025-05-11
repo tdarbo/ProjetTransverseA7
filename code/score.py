@@ -19,14 +19,14 @@ class ScoreManager:
         self.collapsed = True # Utilisé pour masquer/afficher l'affichage du score
         # Dimensions totales du menu de score
         self.menu_width = (
-                SCORE_CELL_WIDTH * (self.players_number + 1) +
-                SCORE_CELL_GAP * self.players_number +
-                SCORE_MENU_PADDING * 2
+                OVERLAY_CELL_WIDTH * (self.players_number + 1) +
+                OVERLAY_CELL_GAP * self.players_number +
+                OVERLAY_MENU_PADDING * 2
         )
         self.menu_height = (
-                SCORE_CELL_HEIGHT * (self.holes_number + 2) +
-                SCORE_CELL_GAP * (self.holes_number + 1) +
-                SCORE_MENU_PADDING * 2
+                OVERLAY_CELL_HEIGHT * (self.holes_number + 2) +
+                OVERLAY_CELL_GAP * (self.holes_number + 1) +
+                OVERLAY_MENU_PADDING * 2
         )
 
     def set_current_hole(self, hole_number):
@@ -76,16 +76,16 @@ class ScoreManager:
     def draw(self, screen):
         """Appelée pour afficher le menu des scores en jeu"""
         # Position du menu en bas à droite de l'écran
-        start_x = screen.get_width() - SCORE_MENU_MARGIN - self.menu_width
-        start_y = screen.get_height() - SCORE_MENU_MARGIN - self.menu_height
+        start_x = screen.get_width() - OVERLAY_MENU_MARGIN - self.menu_width
+        start_y = screen.get_height() - OVERLAY_MENU_MARGIN - self.menu_height
 
         # Dessin du fond du menu (rectangle orange) et de sa bordure
         pygame.draw.rect(screen, (213, 85, 52), (start_x, start_y, self.menu_width, self.menu_height))
         pygame.draw.rect(screen, '#3F170D', (start_x, start_y, self.menu_width, self.menu_height), 3)
 
         # Décalage interne pour ne pas coller le contenu aux bords du menu
-        start_x += SCORE_MENU_PADDING
-        start_y += SCORE_MENU_PADDING
+        start_x += OVERLAY_MENU_PADDING
+        start_y += OVERLAY_MENU_PADDING
 
         self.draw_menu(start_x, start_y, "white", screen)
 
@@ -96,7 +96,7 @@ class ScoreManager:
             # Toutes les autres colonnes affichent les scores de chaque joueur
 
             # Calcul position horizontale de la cellule
-            current_cell_x = start_x + (i + 1) * SCORE_CELL_WIDTH + (i + 1) * SCORE_CELL_GAP
+            current_cell_x = start_x + (i + 1) * OVERLAY_CELL_WIDTH + (i + 1) * OVERLAY_CELL_GAP
 
             if i != -1:
                 # On récupère le joueur associé à cette colonne
@@ -118,7 +118,7 @@ class ScoreManager:
                 text="Trou n°",
                 pos=(cell_x, cell_y),
                 color=text_color,
-                font_size=SCORE_MENU_FONT_SIZE
+                font_size=OVERLAY_MENU_FONT_SIZE
             ).draw(screen)
         else:
             # En-tête joueur : on affiche un cercle de couleur et son nom (ou "Vous" par défaut)
@@ -132,14 +132,14 @@ class ScoreManager:
                 text=player.name if self.players[column_index].name else "Vous",
                 pos=(cell_x + 12, cell_y),
                 color=text_color,
-                font_size=SCORE_MENU_FONT_SIZE
+                font_size=OVERLAY_MENU_FONT_SIZE
             ).draw(screen)
 
     def draw_body(self, screen: pygame.Surface, column_index: int, player: Player, cell_x: int, start_y: int,
                   text_color: str):
         for row_index in range(0, self.holes_number):
             # Position verticale de la cellule en fonction du trou (ligne)
-            cell_y = start_y + (row_index + 1) * SCORE_CELL_HEIGHT + (row_index + 1) * SCORE_CELL_GAP
+            cell_y = start_y + (row_index + 1) * OVERLAY_CELL_HEIGHT + (row_index + 1) * OVERLAY_CELL_GAP
 
             if column_index == -1:
                 # Première colonne : on affiche le numéro de chaque trou
@@ -147,7 +147,7 @@ class ScoreManager:
                     text=str(row_index + 1),
                     pos=(cell_x, cell_y),
                     color=text_color,
-                    font_size=SCORE_MENU_FONT_SIZE
+                    font_size=OVERLAY_MENU_FONT_SIZE
                 ).draw(screen)
             else:
                 # Cellule score du joueur pour ce trou
@@ -159,13 +159,13 @@ class ScoreManager:
                     text=score if score != "0" else "-",  # Affiche un tiret si le score est nul
                     pos=(cell_x, cell_y),
                     color=text_color,
-                    font_size=SCORE_MENU_FONT_SIZE
+                    font_size=OVERLAY_MENU_FONT_SIZE
                 ).draw(screen)
 
     def draw_footer(self, screen: pygame.Surface, column_index: int, player: Player, cell_x: int, start_y: int,
                     text_color: str):
         # Position verticale du footer (ligne "Total")
-        cell_y = start_y + (self.holes_number + 1) * SCORE_CELL_HEIGHT + (self.holes_number + 1) * SCORE_CELL_GAP
+        cell_y = start_y + (self.holes_number + 1) * OVERLAY_CELL_HEIGHT + (self.holes_number + 1) * OVERLAY_CELL_GAP
 
         if column_index == -1:
             # Première colonne : on affiche "Total" en bas
@@ -173,7 +173,7 @@ class ScoreManager:
                 text="Total",
                 pos=(cell_x, cell_y),
                 color=text_color,
-                font_size=SCORE_MENU_FONT_SIZE
+                font_size=OVERLAY_MENU_FONT_SIZE
             ).draw(screen)
         else:
             # Affichage du total du joueur
@@ -184,7 +184,7 @@ class ScoreManager:
                 text=total if total != "0" else "-",  # Tiret si score encore à 0
                 pos=(cell_x, cell_y),
                 color=text_color,
-                font_size=SCORE_MENU_FONT_SIZE
+                font_size=OVERLAY_MENU_FONT_SIZE
             ).draw(screen)
 
 

@@ -3,7 +3,7 @@ import time
 
 import pygame
 
-from settings import SCORE_MENU_MARGIN
+from settings import OVERLAY_MENU_MARGIN
 from gif_manager import Gif
 import settings
 from broadcast import BroadcastManager
@@ -22,7 +22,7 @@ class BonusType:
         self.color = color
         self.icon_id = icon_id
         self.broadcast = BroadcastManager()
-        self.gif = Gif(icon_id, SCORE_MENU_MARGIN, SCORE_MENU_MARGIN, .05, False, False)
+        self.gif = Gif(icon_id, OVERLAY_MENU_MARGIN, OVERLAY_MENU_MARGIN, .05, False, False)
 
     def apply_bonus(self, player: Player, players: [Player]) -> None:
         """
