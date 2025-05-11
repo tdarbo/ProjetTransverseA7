@@ -365,10 +365,13 @@ class Engine:
                 continue
 
             #limitation de vitesse
-            if not isinstance(player.bonus,BonusSpeed):
+            if not isinstance(player.bonus,BonusSpeed) and player.bonus.active:
                 max_velocity = 1200
-                player.velocity.x = max(-max_velocity, min(player.velocity.x, max_velocity))
-                player.velocity.y = max(-max_velocity, min(player.velocity.y, max_velocity))
+            else:
+                max_velocity = 2500
+
+            player.velocity.x = max(-max_velocity, min(player.velocity.x, max_velocity))
+            player.velocity.y = max(-max_velocity, min(player.velocity.y, max_velocity))
 
 
             # Mise à jour de la position du joueur
