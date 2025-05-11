@@ -1,15 +1,24 @@
 from math import cos, pi
 
-CAM_SPEED = 1
 
 class CameraAnimator:
-    def __init__(self):
+    def __init__(self, speed_factor=2.0):
         self.animations = []
+        self.speed_factor = speed_factor  # Default speed factor is 1.0 (normal speed)
+
+    def set_speed_factor(self, speed_factor):
+        """Sets the global speed factor for all animations."""
+        self.speed_factor = speed_factor
+
+    def get_speed_factor(self):
+        """Returns the current speed factor."""
+        return self.speed_factor
 
     def update(self):
         """Met à jour toutes les animations actives."""
         for animation in self.animations[:]:
-            animation.update()
+            # Pass the speed factor to the animation update
+            animation.update(self.speed_factor)
             if animation.is_finished():
                 self.animations.remove(animation)
 
@@ -36,13 +45,14 @@ class CameraMoveAnimation:
         self.duration = duration
         self.elapsed_time = 0
 
-    def update(self):
-        self.elapsed_time += 1
+    def update(self, speed_factor=1.0):
+        # Increment by speed_factor instead of just 1
+        self.elapsed_time += speed_factor
         t = min(self.elapsed_time / self.duration, 1)
         # Gestion accélération/décélération du mouvement
         t = 0.5 - 0.5 * cos(t * pi)
-        self.camera.offset_X = self.start_x + (self.target_x - self.start_x) * t * CAM_SPEED
-        self.camera.offset_Y = self.start_y + (self.target_y - self.start_y) * t * CAM_SPEED
+        self.camera.offset_X = self.start_x + (self.target_x - self.start_x) * t
+        self.camera.offset_Y = self.start_y + (self.target_y - self.start_y) * t
 
     def is_finished(self):
         return self.elapsed_time >= self.duration
@@ -56,11 +66,12 @@ class CameraZoomAnimation:
         self.duration = duration
         self.elapsed_time = 0
 
-    def update(self):
-        self.elapsed_time += 1
+    def update(self, speed_factor=1.0):
+        # Increment by speed_factor instead of just 1
+        self.elapsed_time += speed_factor
         t = min(self.elapsed_time / self.duration, 1)
         t = 0.5 - 0.5 * cos(t * pi)
-        self.camera.zoom_factor = self.start_zoom + (self.target_zoom - self.start_zoom) * t * CAM_SPEED
+        self.camera.zoom_factor = self.start_zoom + (self.target_zoom - self.start_zoom) * t
 
     def is_finished(self):
         return self.elapsed_time >= self.duration
@@ -71,9 +82,10 @@ class CameraMoveZoomAnimation:
         self.move_anim = CameraMoveAnimation(camera, target_pos, duration)
         self.zoom_anim = CameraZoomAnimation(camera, target_zoom, duration)
 
-    def update(self):
-        self.move_anim.update()
-        self.zoom_anim.update()
+    def update(self, speed_factor=1.0):
+        # Pass the speed factor to both animations
+        self.move_anim.update(speed_factor)
+        self.zoom_anim.update(speed_factor)
 
     def is_finished(self):
         return self.move_anim.is_finished() and self.zoom_anim.is_finished()
