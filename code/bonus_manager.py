@@ -3,15 +3,16 @@ import time
 
 import pygame
 
-from settings import OVERLAY_MENU_MARGIN
+from settings import OVERLAY_MENU_MARGIN, SOUNDS
 from gif_manager import Gif
 import settings
 from broadcast import BroadcastManager
 from player import Player
+from sound import SoundManager
 
 # Dev vars
 RESPAWN = False
-RESPAWN_TIME = 15  # time in seconds
+RESPAWN_TIME = 15  # temps en sec
 
 EXPLOSION_MAX_POWER = 1
 
@@ -23,6 +24,7 @@ class BonusType:
         self.icon_id = icon_id
         self.broadcast = BroadcastManager()
         self.gif = Gif(icon_id, OVERLAY_MENU_MARGIN, OVERLAY_MENU_MARGIN, .05, False, False)
+        self.sound = SoundManager()
 
     def apply_bonus(self, player: Player, players: [Player]) -> None:
         """
@@ -92,6 +94,7 @@ class BonusExplosion(BonusType):
     def consume_bonus(self, player: Player, players: [Player], overlay:pygame.Surface) -> None:
 
         self.active = True
+        self.sound.play_sound(SOUNDS["clic"])
 
         player_pos = player.position
         MAX_REPULSION_DISTANCE = 500
@@ -123,17 +126,14 @@ class BonusExplosion(BonusType):
                 else:
                     norm_x, norm_y = 1.0, 0.0
 
-                # Calculate repulsion vector
+                # Clalcul repulsion vector
                 repulsion_x = norm_x * multiplier * 100
                 repulsion_y = norm_y * multiplier * 100
 
-                # Apply velocity change
+                # Apply vecteur
                 target.velocity.x -= repulsion_x * REPULSION_FORCE
                 target.velocity.y -= repulsion_y * REPULSION_FORCE
 
-        # Clear bonus after use
-        # player.bonus = None
-        # self.active = False
 
     def show_usage_message(self) -> None:
         self.broadcast.broadcast("Appuyez sur 'E' pour utiliser le bonus d'explosion !")
@@ -160,6 +160,7 @@ class BonusFantome(BonusType):
 
 
 
+
     def show_usage_message(self) -> None:
         self.broadcast.broadcast("Vous serez invisible au prochain tour !")
 
@@ -180,6 +181,7 @@ class BonusAimant(BonusType):
 
     def consume_bonus(self, player: Player, players: [Player], overlay:pygame.Surface) -> None:
         self.active = True
+        self.sound.play_sound(SOUNDS["magnet"])
         self.start_time = time.time()
 
     def next_turn(self,player: Player):
@@ -189,38 +191,6 @@ class BonusAimant(BonusType):
     def show_usage_message(self) -> None:
         self.broadcast.broadcast("Appuyez sur 'E' pour utiliser le bonus d'aimant pendant ce tour !")
 
-class BonusTeleport(BonusType):
-    def __init__(self):
-        super().__init__("BonusTeleport", "purple", "../asset/GIF/Bonus_V1.2.gif")
-
-    def apply_bonus(self, player: Player, players: [Player]) -> None:
-        player.bonus = self
-
-    def consume_bonus(self, player: Player, players: [Player], overlay:pygame.Surface) -> None:
-
-        player.bonus = None
-
-    def show_usage_message(self) -> None:
-        self.broadcast.broadcast("Appuyez sur 'E' pour utiliser le bonus de téléportation !")
-
-
-def create_explosion_flash(overlay:pygame.Surface, duration_ms=250, max_alpha=200):
-
-    width, height = overlay.get_size()
-    flash_surface = pygame.Surface((width, height), pygame.SRCALPHA)
-
-    start_time = time.time()
-    end_time = start_time + (duration_ms / 1000.0)
-
-    while time.time() < end_time:
-        progress = (time.time() - start_time) / (duration_ms / 1000.0)
-        current_alpha = int(max_alpha * (1.0 - progress))
-
-        flash_surface.fill((255, 255, 255, current_alpha))
-        overlay.blit(flash_surface, (0, 0))
-
-        time.sleep(0.01)
-        pygame.display.update()
 
 class Bonus:
     def __init__(self, obj) -> None:
@@ -259,7 +229,6 @@ class Bonus:
         self.available = True
         self.last_pick = 0
         self.gif.hide = False
-        #TODO: Make animation on respawn
 
     def draw_bonus(self, surface: pygame.Surface):
         if self.available:
@@ -278,8 +247,8 @@ Bonus :
         """)
 
 
-BonusList = [BonusExplosion,BonusSpeed]
+BonusList = [BonusExplosion,BonusSpeed,BonusAimant, BonusFantome]
 
 
 def get_random_bonus() -> BonusType:
-    return (BonusExplosion())#random.choice(BonusList)()
+    return random.choice(BonusList)()
