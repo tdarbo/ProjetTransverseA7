@@ -9,9 +9,20 @@
 - Développer un jeu 2D en **Python** avec *Pygame* incluant des **notions de physique**
 - Travailler en groupe de 5 grâce à Github
 
-**👤 Qui sommes-nous ?**
+### 👤 Qui sommes-nous ?
 - Thomas Darbo
 - Louis Lemonnier
 - Mathias Leroy
 - Bastien Pommard
 - Mattéo Spindler
+
+## ⚪ Fonctionnalités du jeu
+- Mode solo ou multijoueur jusqu'à **5** joueurs
+- Bonus et Malus
+
+## ❔Comment jouer 
+- Jouer un coup *Clic gauche*
+- Déplacer la caméra *Clic droit*
+- Régler le zoom *Molette*
+- Activer les bonus *E*
+
