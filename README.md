@@ -48,4 +48,42 @@ Il y a :
 - ```ui_text``` qui permet la création des textes.
 
 ## ⛳Comment installer et lancer le jeu
-(à faire)
+
+### 1. Cloner le dépôt
+Pour récupérer le code du jeu, ouvrez votre terminal et exécutez la commande suivante :
+
+```bash
+git clone https://github.com/GardeDeNuitComplete/GOAT.git
+cd GOAT
+```
+
+### 2. Installer les dépendances
+Le jeu utilise plusieurs bibliothèques Python, notamment Pygame pour le rendu graphique. Pour installer toutes les dépendances nécessaires, exécutez :
+
+```bash
+pip install -r requirements.txt
+```
+
+Les dépendances principales incluent :
+- pygame (pour le rendu graphique 2D)
+- pygamegui (pour les interfaces et les boutons)
+- PyTMX (pour les cartes)
+- numpy (pour les calculs de physique)
+- pillow (pour le traitement d'images, notamment les GIFs)
+- pygamegui (pour les interfaces et les boutons)
+
+### 3. Lancer le jeu
+Une fois les dépendances installées, vous pouvez lancer le jeu avec la commande suivante :
+
+```bash
+python main.py
+```
+
+Vous pouvez maintenant profiter du jeu GOAT et défier vos amis dans des parties de golf endiablées !
+
+### Configuration requise
+- Python 3.7 ou supérieur
+- Les bibliothèques mentionnées ci-dessus
+- Un système d'exploitation compatible avec Pygame (Windows, macOS, Linux)
+
+Bon jeu !
