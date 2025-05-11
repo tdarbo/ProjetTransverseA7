@@ -100,7 +100,7 @@ class Level:
 
     def on_mouse_down(self, event):
         if not self.shot_taken:
-            adjusted_pos = self.map.camera.getAbsoluteCoord(event.pos)
+            adjusted_pos = self.map.camera.screen_to_world(event.pos)
             if self.cur_player.rect.collidepoint(adjusted_pos):
                 self.dragging = True
                 self.drag_start = Vector(self.cur_player.rect.center)
@@ -108,13 +108,13 @@ class Level:
 
     def on_mouse_motion(self, event):
         if self.dragging:
-            adjusted_pos = self.map.camera.getAbsoluteCoord(event.pos)
+            adjusted_pos = self.map.camera.screen_to_world(event.pos)
             self.drag_current = Vector(adjusted_pos)
 
     def handle_shot(self, event):
         if self.dragging:
             self.game.sound_manager.play_sound(SOUNDS["ball"])
-            adjusted_pos = self.map.camera.getAbsoluteCoord(event.pos)
+            adjusted_pos = self.map.camera.screen_to_world(event.pos)
             velocity_vector = (self.drag_start - adjusted_pos) * FORCE_MULTIPLIER
             self.engine.resolve_shot(self.cur_player, velocity_vector)
             self.score_manager.add_points(self.cur_player, self.hole_index)
@@ -308,9 +308,9 @@ class Level:
         self.draw_map(screen)
         self.score_manager.draw(self.overlay_surf)
         self.broadcast_manager.draw(self.overlay_surf)
-        self.current_player.update_gifs(self.overlay_surf)
+        self.cur_player.update_gifs(self.overlay_surf)
         self.render_debug_info(self.overlay_surf,self.map.camera)
-        self.render_physics_inspector(self.overlay_surf,self.map.camera,self.current_player)
+        self.render_physics_inspector(self.overlay_surf,self.map.camera,self.cur_player)
         if self.debug_grid: self.render_tile_grid(self.overlay_surf,self.map.camera)
         screen.blit(self.overlay_surf, (0, 0))
         # print(self.map.camera.is_world_position_on_screen(self.cur_player.position.x, self.cur_player.position.y))
@@ -340,7 +340,7 @@ class Level:
 
     def DEBUG_LOGS(self):
         if DEBUG_MODE:
-            pass#if isinstance(self.current_player.bonus, BonusFantome): print(self.current_player.bonus)
+            pass#if isinstance(self.cur_player.bonus, BonusFantome): print(self.cur_player.bonus)
 
     def render_debug_info(self, screen, camera):
         """

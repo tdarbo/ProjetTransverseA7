@@ -57,6 +57,8 @@ class PlayScene(Scene):
     def select_maps(self, count):
         """Sélectionne 'count' maps uniques aléatoirement."""
         maps = list(self.game.maps.values())
+        # Limiter le nombre de cartes à sélectionner au nombre disponible
+        count = min(count, len(maps))
         self.selected_maps = random.sample(maps, count)
 
     def create_players(self, names):
@@ -75,6 +77,7 @@ class PlayScene(Scene):
             )
         return players
 
+
     def create_level(self, hole_index, map_info):
         """Crée un niveau à partir d'une map."""
         return Level(
@@ -84,7 +87,7 @@ class PlayScene(Scene):
             score_manager=self.score_manager,
             broadcast_manager=self.broadcast_manager,
             game=self.game,
-        )
+            )
 
     def load_level(self):
         """Charge le niveau suivant ou termine la partie."""
