@@ -50,7 +50,7 @@ class BonusType:
         """
         Generic message when bonus picked up
         """
-        self.broadcast_manager.broadcast(f"Vous avez récupéré {self.name} !")
+        self.broadcast_manager.broadcast(f"Vous avez récupéré {self.name} ! Appuyez sur 'E' pour l'utiliser !")
 
     def show_usage_message(self) -> None:
         """
