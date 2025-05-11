@@ -26,3 +26,25 @@
 - Régler le zoom *Molette*
 - Activer les bonus *E*
 
+## 💻 Organisation du code
+Notre code est composé de **19** classes différentes.
+Il y a :
+- ```bonus_manager``` qui permet de gérer les bonus et les malus.
+- ```broadcast``` qui permet d'afficher des messages dans le jeu.
+- ```camera``` qui gère le déplacement de la caméra sur le joueur dont c'est le tour et qui permet de déplacer librement la caméra sur la carte.
+- ```engine``` qui gère la physique du jeu.
+- ```game``` qui est la classe principale qui contient la boucle Pygame.
+- ```gif_manager``` qui récupère les fichiers GIF et les transforme dans un format exploitable. 
+- ```interface_manager``` qui gère les différentes interfaces du jeu.
+- ```level``` qui gère le tour des joueurs.
+- ```map``` qui contient tous les éléments de la carte : surface, bonus, gifs.
+- ```player``` qui s'occupe de la gestion des joueurs tout au long du jeu.
+- ```scene_config``` qui gère les interfaces pour le paramétrage du jeu.
+- ```scene_manager``` qui gère les différentes scènes du jeu : menu, configuration, jeu.
+- ```scene_play``` qui permet de gérer les niveaux.
+- ```scene_start_menu``` qui s'occupe de l'affichage du menu d'accueil.
+- ```score``` qui gère le tableau des scores tout au long de la partie.
+- ```sound``` qui permet d'avoir de la musique et différents bruitages tout au long du jeu.
+- ```tile``` qui permet de représenter les différentes surfaces comme l'herbe, le sable ou la glace.
+- ```ui_text``` qui permet la création des textes.
+
