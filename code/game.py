@@ -1,6 +1,3 @@
-import pygame.transform
-import pygame_gui.core
-
 from settings import *
 from pygame.locals import *
 from scene_config import ConfigurationScene
@@ -29,16 +26,7 @@ class Game:
             self.screen.blit(SPLASH_SCREEN, (0, 0))
             pygame.display.flip()
 
-        if DEBUG_MODE:
-            self.maps = {
-                "0": {
-                    "name": "Test",
-                    "par": 0,
-                    "path": "../asset/TiledProject/maps/hole1.tmx"
-                },
-            }
-        else:
-            self.maps = MAPS
+        self.maps = MAPS
 
         self.game_info = dict()
 
@@ -197,7 +185,6 @@ class Game:
 
     def toggle_credits_window(self):
         self.interface_manager.toggle("credits")
-
 
 if __name__ == "__main__":
     # Create a game instance
