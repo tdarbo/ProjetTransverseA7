@@ -80,7 +80,7 @@ class PlayScene(Scene):
         """Crée un niveau à partir d'une map."""
         return Level(
             hole_index=hole_index,
-            map_obj=Map(map_info, self.game.screen),
+            map_obj=Map(map_info, self.game.screen,self.broadcast_manager),
             players=self.players,
             score_manager=self.score_manager,
             broadcast_manager=self.broadcast_manager,

@@ -17,8 +17,6 @@ class Engine:
         self.num_players = len(self.players)
 
     def resolve_shot(self, player: Player, velocity_vector: Vector):
-        if isinstance(player.bonus, BonusSpeed):
-            player.bonus.consume_bonus(player, self.players, self.level.overlay_surf)
 
         # if self.current_player.speed_bonus:
         #    new_velocity *= 2
@@ -45,13 +43,15 @@ class Engine:
     def update_position(self, player: Player, dt: float) -> None:
         """Met à jour la position du joueur en fonction de sa vitesse."""
         bonus_modifier = 1
-        if isinstance(player.bonus, BonusSpeed):
-            bonus_modifier = 2
+        if isinstance(player.bonus, BonusSpeed) and player.bonus.active:
+            bonus_modifier = 3
 
         player.position += player.velocity * dt * bonus_modifier
 
     def apply_friction(self, player: Player, dt: float) -> None:
         """Applique la friction du sol à un joueur."""
+        if isinstance(player.bonus, BonusFantome) and player.bonus.active:
+            player.velocity *= exp(-(GROUND_ICE_FRICTION / BALL_MASS) * dt)
         friction = self.get_friction_at_point(player.position)
         # Formule exponentielle : simule une décroissance naturelle de la vitesse due à la friction
         player.velocity *= exp(-(friction / BALL_MASS) * dt)
@@ -108,6 +108,7 @@ class Engine:
             player.velocity = Vector(0.0, 0.0)
             self.level.map.teleportPlayerToSpawn(player)
             print(f"Player:{player.name} is out of bounds")
+            self.level.centerOnPlayer(player)
 
     def is_out_of_bounds(self, player: Player) -> bool:
         for tile in self.level.map.tiles:
@@ -122,7 +123,6 @@ class Engine:
             player.velocity = Vector(0.0, 0.0)
             player.finished = True
             self.level.game.sound_manager.play_sound(SOUNDS["victory"])
-
 
     def is_on_finish(self, player: Player) -> None:
         """Vérifie si un joueur a atteint le trou."""
@@ -253,6 +253,10 @@ class Engine:
         """
         Gère la collision entre un joueur et une tuile bumper.
         """
+
+        if isinstance(player.bonus, BonusFantome) and player.bonus.active:
+            return
+
         intersection = player.rect.clip(tile.rect)
         self.level.game.sound_manager.play_sound(SOUNDS["bounce"])
 
@@ -287,6 +291,9 @@ class Engine:
         """
         Accelere le joueur vers la droite
         """
+        if isinstance(player.bonus, BonusFantome) and player.bonus.active:
+            return
+
         self.level.game.sound_manager.play_sound(SOUNDS["boost"])
         if player.velocity.x > 0:
             player.velocity.x = player.velocity.x * 1.1
@@ -297,6 +304,9 @@ class Engine:
         """
         Accelere le joueur vers la gauche
         """
+        if isinstance(player.bonus, BonusFantome) and player.bonus.active:
+            return
+
         self.level.game.sound_manager.play_sound(SOUNDS["boost"])
         if player.velocity.x > 0:
             player.velocity.x = player.velocity.x * 0.9 - 10
@@ -307,6 +317,9 @@ class Engine:
         """
         Accelere le joueur vers le bas
         """
+        if isinstance(player.bonus, BonusFantome) and player.bonus.active:
+            return
+
         self.level.game.sound_manager.play_sound(SOUNDS["boost"])
         if player.velocity.y > 0:
             player.velocity.y = player.velocity.y * 1.1
@@ -317,6 +330,9 @@ class Engine:
         """
         Accelere le joueur vers le haut
         """
+        if isinstance(player.bonus, BonusFantome) and player.bonus.active:
+            return
+
         self.level.game.sound_manager.play_sound(SOUNDS["boost"])
         if player.velocity.y > 0:
             player.velocity.y = player.velocity.y * 0.9 - 10
@@ -331,14 +347,11 @@ class Engine:
                 continue
 
             #limitation de vitesse
-            if player.velocity.y > 1200:
-                player.velocity.y = 1200
-            if player.velocity.y < -1200:
-                player.velocity.y = -1200
-            if player.velocity.x > 1200:
-                player.velocity.x = 1200
-            if player.velocity.x < -1200:
-                player.velocity.x = -1200
+            if not isinstance(player.bonus,BonusSpeed):
+                max_velocity = 1200
+                player.velocity.x = max(-max_velocity, min(player.velocity.x, max_velocity))
+                player.velocity.y = max(-max_velocity, min(player.velocity.y, max_velocity))
+
 
             # Mise à jour de la position du joueur
             # 1. Update player physics

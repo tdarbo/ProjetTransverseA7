@@ -1,10 +1,11 @@
 from bonus_manager import Bonus
+from broadcast import BroadcastManager
 from settings import *
 import pytmx
 from camera import Camera
 from tile import Tile
 
-def load_tiled_map(map_path: str, tile_size: int):
+def load_tiled_map(map_path: str, tile_size: int,broadcast:BroadcastManager):
     """
     Charge une carte Tiled à partir d'un fichier et crée des objets Tile pour chaque tuile de la carte.
 
@@ -32,7 +33,7 @@ def load_tiled_map(map_path: str, tile_size: int):
                 elif obj.name == "hole":
                     hole = obj
                 elif obj.name == "bonus":
-                    b = Bonus(obj)
+                    b = Bonus(obj,broadcast)
                     b.print_bonus_log()
                     bonuses.append(b)
 
@@ -60,7 +61,7 @@ def load_tiled_map(map_path: str, tile_size: int):
 
 
 class Map:
-    def __init__(self, infos: dict, screen: pygame.Surface):
+    def __init__(self, infos: dict, screen: pygame.Surface,broadcast:BroadcastManager):
         """
         Création d'une nouvelle Map.
 
@@ -69,7 +70,7 @@ class Map:
         """
         self.infos = infos
         # Chargement des tuiles, du point de spawn et du trou à partir de la carte
-        self.tiles, self.spawn, self.hole, self.bonuses = load_tiled_map(self.infos["path"], TILE_SIZE)
+        self.tiles, self.spawn, self.hole, self.bonuses = load_tiled_map(self.infos["path"], TILE_SIZE, broadcast)
 
         # On initialise la caméra
         self.camera = Camera(screen)

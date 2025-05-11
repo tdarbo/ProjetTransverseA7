@@ -186,11 +186,12 @@ class Level:
             self.cur_player = self.players[self.cur_player_index]
             if not self.cur_player.finished:
                 # Si le joueur trouvé n'a pas terminé, on démarre son tour
-                if isinstance(self.cur_player.bonus, BonusFantome) or isinstance(self.cur_player.bonus, BonusAimant):
+                if isinstance(self.cur_player.bonus, BonusFantome) or isinstance(self.cur_player.bonus, BonusAimant) or isinstance(self.cur_player.bonus, BonusSpeed):
                     self.cur_player.bonus.next_turn(self.cur_player)
                 self.start_player_turn()
                 return
         # Si on arrive ici, c'est que tous les joueurs ont terminé
+        self.reset_bonuses()
         self.finished = True
 
     def start_player_turn(self):
@@ -322,6 +323,10 @@ class Level:
         screen.blit(self.overlay_surf, (0, 0))
         # print(self.map.camera.is_world_position_on_screen(self.cur_player.position.x, self.cur_player.position.y))
 
+    def reset_bonuses(self):
+        for player in self.players:
+            player.bonus = None
+
     def centerOnPlayer(self, player: Player):
         """Centre la caméra sur un joueur"""
         x = player.position.x
@@ -343,7 +348,6 @@ class Level:
         y /= p_count
 
         camera.animator.posToPosAndZoom(camera, (x, y), MIN_ZOOM, 7)
-
 
     def DEBUG_LOGS(self):
         if DEBUG_MODE:
