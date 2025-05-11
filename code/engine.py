@@ -453,7 +453,7 @@ class Engine:
                 continue
 
             #limitation de vitesse
-            if not isinstance(player.bonus,BonusSpeed) and player.bonus.active:
+            if not isinstance(player.bonus,BonusSpeed):
                 max_velocity = 1200
             else:
                 max_velocity = 2500
