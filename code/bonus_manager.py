@@ -3,6 +3,7 @@ import time
 
 import pygame
 
+from code.settings import DEBUG_MODE
 from settings import OVERLAY_MENU_MARGIN, SOUNDS
 from gif_manager import Gif
 import settings
@@ -241,16 +242,17 @@ class Bonus:
             self.gif.update(surface)
 
     def print_bonus_log(self):
-        print(f"""
-Bonus : 
-  x : {self.x}
-  y : {self.y}
-  bonus :
-    type : {self.bonus.name} 
-    icon_id : {self.bonus.icon_id}
-  available : {self.available}
-  last_pick : {self.last_pick}
-        """)
+        if DEBUG_MODE:
+            print(f"""
+    Bonus : 
+      x : {self.x}
+      y : {self.y}
+      bonus :
+        type : {self.bonus.name} 
+        icon_id : {self.bonus.icon_id}
+      available : {self.available}
+      last_pick : {self.last_pick}
+            """)
 
 
 BonusList = [BonusExplosion,BonusSpeed,BonusAimant, BonusFantome]
