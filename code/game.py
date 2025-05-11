@@ -20,11 +20,14 @@ class Game:
         # flags = FULLSCREEN | DOUBLEBUF
 
         # Chargez l'image du logo
-        icon_path = '../asset/image/goat_logo.png'  # Chemin direct vers le logo
+        logo_path = '../asset/image/goat_logo.png'  # Chemin direct vers le logo
+        logo = pygame.image.load(logo_path)
+
+        icon_path = '../asset/image/goat_icon.ico'  # Chemin direct vers le logo
         icon = pygame.image.load(icon_path)
 
         # Définissez l'icône de la fenêtre (doit être fait AVANT set_mode)
-        pygame.display.set_icon(icon)
+        pygame.display.set_icon(logo)
 
         flags = DOUBLEBUF
         self.screen = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT), flags, 24)
