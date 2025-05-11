@@ -1,5 +1,5 @@
-from settings import *  # Importe toutes les constantes et paramètres du fichier settings.py
-import time  # Permet de mesurer le temps pour gérer les effets temporaires (comme les bonus)
+from settings import *
+import time
 
 
 # Class Player qui représente un joueur dans le jeu.
