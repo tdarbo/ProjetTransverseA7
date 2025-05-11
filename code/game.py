@@ -8,67 +8,72 @@ from sound import SoundManager
 from pygame_gui.core import ObjectID
 from interface_manager import InterfaceManager
 
+
 class Game:
     def __init__(self):
         pygame.init()
-        pygame.mixer.init()
-        pygame.display.set_caption(GAME_NAME)
+        pygame.mixer.init()  # Initialisation du système audio de pygame
+        pygame.display.set_caption(GAME_NAME)  # Titre de la fenêtre
         pygame.event.set_allowed([QUIT, KEYDOWN, KEYUP, K_SPACE, K_h, K_e, MOUSEBUTTONDOWN, MOUSEMOTION, MOUSEBUTTONUP])
-        # flags = FULLSCREEN | DOUBLEBUF
-        flags = DOUBLEBUF
-        self.screen = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT), flags, 24)
+
+        self.screen = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT), DOUBLEBUF, 24)
         self.running = True
         self.clock = pygame.time.Clock()
-        self.dt = DELTA_TIME
+        self.dt = DELTA_TIME  # Temps entre les updates de pygame
 
         if not DEBUG_MODE:
-            # Charger et afficher le splash screen
+            # Affichage du splash screen de lancement
             self.screen.blit(SPLASH_SCREEN, (0, 0))
             pygame.display.flip()
 
         self.maps = MAPS
+        self.game_info = dict()  # Infos d'une partie
 
-        self.game_info = dict()
-
-        # Initialize sound
+        # Audio : lance la musique de lancement
         self.sound_manager = SoundManager()
         self.sound_manager.play_music(MUSICS["launch"], loops=0)
 
+        # Gestionnaire d'interface UI avec pygame_gui
         self.ui_manager = pygame_gui.UIManager((WINDOW_WIDTH, WINDOW_HEIGHT), theme_path="../data/ui-theme.json")
         self.ui_manager.set_visual_debug_mode(DEBUG_MODE)
 
+        # Gestionnaire de scènes
+        # On charge les trois scènes principales
         self.scene_manager = SceneManager()
         self.scene_manager.add("start_menu_scene", StartMenuScene(1, self))
         self.scene_manager.add("config_scene", ConfigurationScene(2, self))
         self.scene_manager.add("play_scene", PlayScene(3, self))
 
-        self.interface_manager = InterfaceManager()
-
+        # En mode debug on saute le menu et on va directement dans la scène de jeu
         if DEBUG_MODE:
             self.game_info = DEBUG_CONFIG
             self.scene_manager.change("play_scene")
         else:
             self.scene_manager.change("start_menu_scene")
 
-        self.error_window = None
+        self.error_window = None  # Pour afficher des messages d'erreur
 
-        # Attendre un court instant
+        # Petite pause avant avant d'afficher le menu principal
+        # C'est utile pour afficher le splash screen
         pygame.time.wait(3000)
 
-        # Création des menus accessible dans tout le jeu
+        # Création des interfaces "règles" et "crédits"
+        self.interface_manager = InterfaceManager()
         self.build_rules_window()
         self.build_credits_window()
 
     def run(self):
+        # Boucle principale du jeu
         clock = pygame.time.Clock()
 
-        # Main game loop
         while self.running:
-            # Calculate time delta
+            # Mise à jour du delta time
+            # Permet de gérer la physique de manière "constante"
             self.dt = self.clock.tick(FPS) / 1000
 
-            # Event handling
+            # Gestion des événements pygame
             for event in pygame.event.get():
+                # On gère les boutons de l'interface règles et crédits
                 if event.type == pygame_gui.UI_BUTTON_PRESSED:
                     ids = event.ui_element.get_object_ids()
                     if "#rules_menu_close_btn" in ids:
@@ -77,33 +82,31 @@ class Game:
                         self.toggle_credits_window()
                 if event.type == pygame.QUIT:
                     self.running = False
+
+                # On propage les events aux scènes
+                # et aussi à pygame_gui pour les interfaces
                 self.scene_manager.process_event(event)
                 self.ui_manager.process_events(event)
 
-            # Update and draw the current scene
+            # Mise à jour et affichage de la scène actuelle
             self.scene_manager.update(self.dt)
             self.scene_manager.draw(self.screen)
 
-            # Update and draw the user interface
+            # Mise à jour et affichage de l'interface utilisateur
             self.ui_manager.update(self.dt)
             self.ui_manager.draw_ui(self.screen)
-            # Update the display
+
             pygame.display.flip()
 
     def manage_error(self, error_message, title="Erreur"):
         """
-        Affiche une fenêtre d'erreur avec le message fourni.
-        Si une fenêtre d'erreur est déjà affichée, elle est remplacée par la nouvelle.
-
-        :param error_message: Message d'erreur à afficher (peut contenir du HTML).
-        :param title: Titre de la fenêtre d'erreur.
+        Crée et affiche une fenêtre d'erreur au centre de l'écran.
+        Une seule fenêtre peut être affichée à la fois.
         """
-        # Si une fenêtre d'erreur existe déjà, la détruire
         if self.error_window is not None:
             self.error_window.kill()
             self.error_window = None
 
-        # Définir une zone pour la fenêtre d'erreur (ici, centrée sur l'écran)
         error_rect = pygame.rect.Rect(
             WINDOW_WIDTH // 2 - WINDOW_ERROR_WIDTH // 2,
             WINDOW_HEIGHT // 2 - WINDOW_ERROR_HEIGHT // 2,
@@ -111,7 +114,6 @@ class Game:
             WINDOW_ERROR_HEIGHT
         )
 
-        # Créer la fenêtre d'erreur et la stocker
         self.error_window = pygame_gui.windows.UIMessageWindow(
             rect=error_rect,
             html_message=error_message,
@@ -121,6 +123,10 @@ class Game:
         )
 
     def build_rules_window(self):
+        """
+        Construction de la fenêtre des règles du jeu.
+        Elle est invisible par défaut
+        """
         container = pygame_gui.core.UIContainer(
             starting_height=10,
             relative_rect=(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT),
@@ -151,9 +157,14 @@ class Game:
         self.interface_manager.add("rules", container)
 
     def toggle_rules_window(self):
+        """Affiche ou masque la fenêtre des règles"""
         self.interface_manager.toggle("rules")
 
     def build_credits_window(self):
+        """
+        Construction de la fenêtre des crédits du jeu.
+        Ell est aussi invisible par défaut
+        """
         container = pygame_gui.core.UIContainer(
             starting_height=13,
             relative_rect=(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT),
@@ -184,9 +195,5 @@ class Game:
         self.interface_manager.add("credits", container)
 
     def toggle_credits_window(self):
+        """Affiche ou masque la fenêtre des crédits"""
         self.interface_manager.toggle("credits")
-
-if __name__ == "__main__":
-    # Create a game instance
-    game = Game()
-    game.run()

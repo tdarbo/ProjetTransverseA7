@@ -1,47 +1,41 @@
 import pygame
 import pygame.image
-# Il faut toujours utiliser PIL pour la lecture initiale des GIFs, car pygame
+# Il faut utiliser PIL pour la lecture des GIFs, car pygame
 # ne peut pas lire directement plusieurs frames d'un GIF
 from PIL import Image
 
-# Cache pour éviter de recharger les mêmes GIFs
+# Dictionnaire de cache pour ne pas recharger les mêmes GIFs plusieurs fois
 GIF_CACHE = {}
-
 
 def get_gif_frames(path: str, scale_factor: float = 1.0):
     """Charge les frames d'un GIF avec mise en cache et préscaling en utilisant seulement pygame"""
 
     cache_key = f"{path}_{scale_factor}"
-    # On retourne les frames du cache si disponibles
+    # Si le GIF est déjà chargé, on le réutilise
     if cache_key in GIF_CACHE:
         return GIF_CACHE[cache_key]
 
     try:
-        gif = Image.open(path)
-        frame_data = []
-        duration = []
+        gif = Image.open(path)  # On ouvre le fichier GIF avec Pillow
+        frame_data = []  # Liste des frames (surface pygame)
+        duration = []  # Liste des durées pour chaque frame (en ms)
 
         for frame in range(gif.n_frames):
-            gif.seek(frame)
+            gif.seek(frame)  # On se "positionne" sur la frame n
             frame = gif.convert("RGBA")
 
-            # Convertir en surface pygame
+            # Conversion de l'image PIL en Surface Pygame
             pygame_image = pygame.image.frombytes(frame.tobytes(), frame.size, "RGBA")
 
-            # Redimensionner avec pygame
+            # On redimensionne la frame si nécessaire
             if scale_factor != 1.0:
                 pygame_image = pygame.transform.scale_by(pygame_image, scale_factor)
 
             frame_data.append(pygame_image)
+            duration.append(gif.info.get('duration', 100))  # 100 ms par défaut
 
-            # On récupère la durée de la frame (en ms)
-            duration.append(gif.info.get('duration', 100))
-
-        # On stocke les frames avec leur durée
         frames = {'data': frame_data, 'duration': duration}
-
-        # On termine par la mise en cache
-        GIF_CACHE[cache_key] = frames
+        GIF_CACHE[cache_key] = frames  # Mise en cache de la frame
         return frames
 
     except Exception as e:

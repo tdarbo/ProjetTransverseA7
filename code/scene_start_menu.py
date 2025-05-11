@@ -18,7 +18,7 @@ class StartMenuScene(Scene):
     def build_main_menu_panel(self):
         """
         Construit les éléments d'interface du menu principal.
-        Cette interface contient : le nom du jeu, et 4 boutons (Jouer, Règles, Paramètres, Quitter).
+        Cette interface contient : le nom du jeu et 4 boutons (Jouer, Règles, Paramètres, Quitter).
         """
         elements_number = 5  # Nombre total d'éléments empilés verticalement
         elements_height = INPUT_HEIGHT * elements_number + INPUTS_GAP * (elements_number - 1)

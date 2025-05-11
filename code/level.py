@@ -157,10 +157,6 @@ class Level:
         # Gestion des bonus du joueur actuel
         if isinstance(self.cur_player.bonus, BonusType):
             self.bonus_gifs.append(self.cur_player.bonus.icon_id)
-        else:
-            pass
-             # if DEBUG_MODE:
-             #    self.cur_player.bonus = BonusExplosion()
 
     def check_turn_end(self):
         """Vérifie si le tour est terminé et passe au joueur suivant."""
