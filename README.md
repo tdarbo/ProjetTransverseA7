@@ -27,6 +27,7 @@ Pour récupérer le code du jeu, ouvrez votre terminal et exécutez la commande 
 ```bash
 git clone https://github.com/tdarbo/ProjetTransverseA7.git
 cd GOAT
+cd code
 ```
 
 ### 2. Installer les dépendances
