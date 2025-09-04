@@ -39,7 +39,7 @@ class Engine:
         """
         bonus_modifier = 1  # Facteur multiplicateur normal
         if isinstance(player.bonus, BonusSpeed) and player.bonus.active:
-            bonus_modifier = 3  # Triple la vitesse si le bonus de vitesse est actif
+            bonus_modifier = 2  # Triple la vitesse si le bonus de vitesse est actif
 
         player.position += player.velocity * dt * bonus_modifier
 
@@ -54,16 +54,18 @@ class Engine:
             player.velocity *= exp(-(GROUND_ICE_FRICTION / BALL_MASS) * dt)
 
         # Récupère le coefficient de friction selon la surface
-        friction = self.get_friction_at_point(player.position)
+        friction = self.get_friction_at_point(player.position, player)
 
         # Application de la formule exponentielle: v(t) = v0·e^(-kt)
         # Où k = friction/masse
         player.velocity *= exp(-(friction / BALL_MASS) * dt)
 
-    def get_friction_at_point(self, point: tuple[float, float]) -> float:
+    def get_friction_at_point(self, point: tuple[float, float], player) -> float:
         """
         Détermine le coefficient de friction à une position donnée selon le type de terrain.
         """
+        if isinstance(player.bonus, BonusFantome) and player.bonus.active:
+            return GROUND_GRASS_FRICTION
         for tile in self.level.map.tiles:
             if tile.rect.collidepoint(point):
                 # Différentes surfaces ont différents coefficients de friction
@@ -115,13 +117,12 @@ class Engine:
             player2.velocity += normal * (v1 - v2)
 
     def resolve_out_of_bounds(self, player: Player) -> None:
+
         """
         Gère le cas où un joueur sort des limites de la carte.
         Équivalent à une condition aux limites avec repositionnement.
         """
-        # Le bonus fantôme permet de sortir des limites
-        if isinstance(player.bonus, BonusFantome) and player.bonus.active:
-            return
+        # Le bonus fantôme permet de sortir des limite
 
         if self.is_out_of_bounds(player):
             # Effet sonore pour signaler la sortie
@@ -558,7 +559,7 @@ class Engine:
 
         # La force d'attraction est inversement proportionnelle à la distance
         # (plus proche = force plus intense)
-        attraction_force = direction.normalize() * (1 / max(direction.length(), 0.001) * 5) * 100
+        attraction_force = direction.normalize() * (1 / max(direction.length(), 0.001) * 5) * 500
 
         # Application de la force
         player.velocity += attraction_force

@@ -54,6 +54,15 @@ class SceneManager:
         if self.current_scene:
             self.current_scene.process_event(event)
 
+    def process_BOOST(self, event):
+        """
+        Process an event in the current scene.
+
+        :param event: The event to process.
+        """
+        if self.current_scene:
+            self.current_scene.BOOST_event(event)
+
     def update(self, dt):
         """
         Met à jour la scène courante.
